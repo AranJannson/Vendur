@@ -1,4 +1,4 @@
-import MotionWrapper from "@/app/Components/Animation/MotionWrapper";
+import MotionWrapper from "@/app/components/animation/MotionWrapper";
 
 export default function Home() {
   return (
