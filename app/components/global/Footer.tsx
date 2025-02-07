@@ -6,7 +6,7 @@ export default function Footer() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20">
                 <div className="flex flex-row">
                     <div className="flex flex-col gap-4 ml-4">
-                        <h2 className="text-4xl font-bold text-left">The Project Title</h2>
+                        <h2 className="text-4xl font-bold text-left">Vendur</h2>
                         <p className="md:text-left text-center md:border-b-0 border-b-2 pb-4 md:pb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                             Quisque at quam tincidunt felis gravida commodo.
                         </p>

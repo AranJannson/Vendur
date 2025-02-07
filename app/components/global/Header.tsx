@@ -6,7 +6,7 @@ export default function Header() {
             <div className="grid grid-cols-2 ">
 
                 <div className="flex justify-start p-6">
-                    <h3 className="font-bold">Title</h3>
+                    <h3 className="font-bold">Vendur</h3>
                 </div>
 
                 <div className="flex justify-end font-bold">
