@@ -11,10 +11,10 @@ export default function Footer() {
                             Quisque at quam tincidunt felis gravida commodo.
                         </p>
                     </div>
-                    <span className="border-l-2 border-gray-500 h-36 block md:visible invisible"/>
+                    <span className="border-l-2 ml-4 border-gray-500 h-36 block md:visible invisible"/>
                 </div>
 
-                <div className="md:ml-6 md:mt-0 mt-6 grid md:grid-cols-3 md:gap-10 gap-8">
+                <div className="md:ml-6 md:mt-0 mt-6 grid md:grid-cols-3 md:gap-5 gap-8">
 
                     <ul className="flex flex-col gap-5 justify-start md:text-left text-center">
                         <h3 className="font-bold text-2xl">Pages</h3>

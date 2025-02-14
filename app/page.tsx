@@ -1,11 +1,30 @@
-import MotionWrapper from "@/app/components/animation/MotionWrapper";
+// import MotionWrapper from "@/app/components/animation/MotionWrapper";
+import Hero from "@/app/components/home/Hero";
+import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="flex flex-col justify-center items-center content-center h-[78vh] gap-5">
-        <MotionWrapper>
-            <h1 className="text-5xl">Placeholder Text</h1>
-        </MotionWrapper>
+    <div className="flex flex-col gap-5 bg-background-950">
+        <Hero />
+
+        <div className="grid grid-cols-2 gap-5">
+
+            <div className="width-full flex justify-end">
+                <div className=" bg-accent-900 w-fit h-fit p-5 rounded-2xl">
+                    <Image src="https://dummyimage.com/500x500/fcf9fc/000000" alt="temp_image" height="500" width="500"
+                           className="rounded-xl"/>
+                </div>
+
+            </div>
+            <div className="width-full flex justify-start">
+                <div className=" bg-accent-900 w-fit h-fit p-5 rounded-2xl">
+                    <Image src="https://dummyimage.com/500x500/fcf9fc/000000" alt="temp_image" height="500" width="500"
+                           className="rounded-xl"/>
+                </div>
+
+            </div>
+
+        </div>
     </div>
   );
 }
