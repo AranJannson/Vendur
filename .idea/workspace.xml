@@ -5,9 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a6b12bb-b771-4c4c-8677-827c4b595596" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/AdvancedWeb.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Microservices/Admin/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Microservices/Admin/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Microservices/Admin/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Microservices/Admin/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Microservices/Admin/src/drizzle/schema.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Microservices/Admin/src/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Microservices/Admin/src/utils/dbConnect.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Microservices/Admin/src/utils/management.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Microservices/Admin/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Microservices/Admin/yarn.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignIn.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignUp.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/ui/Pill.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/handler/[...stack]/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/loading.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/signin/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/signup/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/stack.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/utils/frontend/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Microservices/Catalog/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Microservices/Catalog/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Microservices/Catalog/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Microservices/Catalog/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Microservices/Catalog/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Microservices/Catalog/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Microservices/Catalog/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Microservices/Catalog/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Microservices/Catalog/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Microservices/Catalog/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Microservices/Catalog/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Microservices/Catalog/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/yarn.lock" afterDir="false" />
+    </list>
+    <list id="af11ce6c-dc19-406a-ab88-4037f72c3fee" name="Changes by aranj" comment="">
+      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/ui/VerificationTick.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,31 +61,49 @@
     &quot;accountId&quot;: &quot;d8f18755-032f-47c1-a0aa-32f264d684f9&quot;
   }
 }</component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/Microservices/Catalog/package.json" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
   <component name="ProjectId" id="2scmlsJkSRRUgN5vzEQkBfdUceD" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/aranj/WebstormProjects/AdvancedWeb/microservices/Catalog",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "C:\\Users\\aranj\\WebstormProjects\\AdvancedWeb\\Microservices\\Catalog\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Ismae/Desktop/Advanced Web Tech/AdvancedWeb/Microservices&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Ismae\\Desktop\\Advanced Web Tech\\AdvancedWeb\\Microservices\\Catalog\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="ReactDesignerToolWindowState">
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.intellij.reactbuddy.reactComponents" value="false" />
+        <entry key="com.intellij.reactbuddy.reactInspector" value="false" />
+      </map>
+    </option>
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Ismae\Desktop\Advanced Web Tech\AdvancedWeb\Microservices" />
       <recent name="C:\Users\aranj\WebstormProjects\AdvancedWeb\microservices\Catalog" />
       <recent name="C:\Users\aranj\WebstormProjects\AdvancedWeb\microservices" />
     </key>
@@ -64,7 +114,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-WS-243.21565.180" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-WS-241.14494.235" />
       </set>
     </attachedChunks>
   </component>
@@ -85,10 +135,25 @@
       <workItem from="1739303945223" duration="3493000" />
       <workItem from="1739531164968" duration="1076000" />
       <workItem from="1739532319129" duration="2324000" />
+      <workItem from="1739552023941" duration="9672000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
