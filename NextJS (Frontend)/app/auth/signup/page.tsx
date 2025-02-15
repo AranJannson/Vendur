@@ -12,8 +12,6 @@ export default function SignUpPage() {
         router.push('/');
     }
   return (
-    <div className="flex flex-col gap-5 bg-background-950">
-      <SignUp />
-    </div>
+        <SignUp />
   )
 }
