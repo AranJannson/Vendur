@@ -4,7 +4,7 @@ import { UserButton } from "@stackframe/stack";
 
 export default function Header() {
     return (
-        <header className="text-center bg-background-main border-b-2 border-background-900">
+        <header className="text-center bg-background-main border-b-2 border-background-900 ">
             <div className="grid grid-cols-2 ">
 
                 <div className="flex justify-start p-6">

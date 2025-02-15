@@ -5,19 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a6b12bb-b771-4c4c-8677-827c4b595596" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/auth/layout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/auth/signin/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/auth/template.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/AuthPageWrapper.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/template.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignIn.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignUp.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignUp.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/ui/Pill.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/ui/Pill.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/signin/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/signup/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/auth/signup/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/stack.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/stack.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/home/Hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/home/Hero.tsx" afterDir="false" />
     </list>
     <list id="af11ce6c-dc19-406a-ab88-4037f72c3fee" name="Changes by aranj" comment="" />
     <option name="SHOW_DIALOG" value="false" />
