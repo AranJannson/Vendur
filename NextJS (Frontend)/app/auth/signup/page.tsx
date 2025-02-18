@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
     const user = useUser();
+    const router = useRouter();
   //   Redirect if user is already signed in
     if (user) {
         //  Redirect to home page
-        const router = useRouter();
+
         router.push('/');
     }
   return (

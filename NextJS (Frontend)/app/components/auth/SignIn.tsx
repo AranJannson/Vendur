@@ -22,7 +22,7 @@ export default function SignIn() {
     };
 
     return (
-        <div className="bg-primary-900 p-10 rounded-lg m-2 md:m-0 w-fit">
+        <div className="bg-primary-900 p-10 rounded-lg md:rounded-r-lg md:rounded-l-none m-2 md:m-0">
             <div className="flex flex-col gap-4 mb-5 ">
                 <span className="flex flex-col gap-2">
                     <h1 className="text-2xl font-bold text-center">

@@ -1,52 +1,77 @@
-import Image from "next/image";
 import MotionWrapper from "@/app/components/animation/MotionWrapper";
 import NavButton from "@/app/components/ui/NavButton";
+import BouncingArrow from "@/app/components/ui/BouncingArrow";
+
 
 export default function Hero() {
-
-    return(
-        <div className="bg-background-main">
-            <div className="grid md:grid-cols-2 grid-cols-1 w-[90vw] h-screen m-10 ">
-                <div className="m-40">
+    return (
+        <div className="bg-background-main h-screen w-screen">
+            <div className="grid md:grid-cols-2 grid-cols-1 h-full relative">
+                <div className="m-40 z-50">
                     <h1 className="text-5xl text-text-100 font-bold">
-                        Welcome to <MotionWrapper><p className="text-accent-400">Vendur</p></MotionWrapper>
-
+                        Welcome to{" "}
+                        <MotionWrapper>
+                            <p className="text-accent-400">Vendur</p>
+                        </MotionWrapper>
                     </h1>
-
                     <p className="text-text-200">The best clothing vendor around</p>
-
-                    <div>
-                        <NavButton title="View Our Catalog" href="\"/>
+                    <div className="z-50">
+                        <NavButton title="View Our Catalog" href="/"/>
                     </div>
+                    <div className="flex flex-col w-full h-full justify-center items-center">
+                        <BouncingArrow/>
+                    </div>
+
+
                 </div>
-                <div
-                    className="absolute top-20 right-0 w-1/2 h-full bg-background-200"
-                    style={{clipPath: 'polygon(30% 0, 100% 0, 100% 100%, 0 100%)'}}
+                <svg
+                    preserveAspectRatio="none"
+                    viewBox="0 0 1000 100"
+                    className="absolute z-20 top-0 left-0 w-full h-full"
+                    xmlns="http://www.w3.org/2000/svg"
                 >
-                    <div className="relative w-full h-full flex justify-center items-center">
-                        <Image
-                            src="https://dummyimage.com/600x300/fcf9fc/000000"
-                            alt="Image"
-                            width={300}
-                            height={300}
-                            className="absolute inset-0 m-auto rounded-xl shadow-lg"
-                        />
-                    </div>
+                    <polygon fill="#7426ed" points="0,87 1000,87 1000,100 0,100"/>
+                    <polygon fill="#5d1ebe" points="0,89 1000,89 1000,100 0,100"/>
+                    <polygon fill="#20024e" points="0,91 1000,91 1000,100 0,100"/>
+                </svg>
+
+                <div className="relative overflow-hidden">
+                    <svg
+                        preserveAspectRatio="none"
+                        viewBox="0 0 100 100"
+                        className="absolute top-0 left-0 w-full h-full z-30"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+
+                        <polygon fill="#20024e" points="29,0 100,0 100,140 4,91"/>
+
+
+                    </svg>
+                    <svg
+                        preserveAspectRatio="none"
+                        viewBox="0 0 100 100"
+                        className="absolute top-0 left-0 w-full h-full z-20"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+
+                        <polygon fill="#5d1ebe" points="27,0 100,0 100,90 2,90"/>
+
+                    </svg>
+                    <svg
+                        preserveAspectRatio="none"
+                        viewBox="0 0 100 100"
+                        className="absolute top-0 left-0 w-full h-full"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <polygon fill="#7426ed" points="25,0 100,0 100,90 0,90"/>
+                        <polygon fill="#5d1ebe" points="27,0 100,0 100,90 2,90"/>
+                        <polygon fill="#20024e" points="29,0 100,0 100,90 4,90"/>
+
+                    </svg>
                 </div>
-
-
-                {/*<div className="flex md:justify-end justify-center">*/}
-                {/*    <MotionWrapper>*/}
-                {/*        /!*<Image src="/HeroImage.svg" alt="Hero Image" width={600} height={600}/>*!/*/}
-                {/*        <Image src="/SVG/Artboard 1.svg" alt="Hero Image" width={600} height={600}/>*/}
-                {/*    </MotionWrapper>*/}
-                {/*</div>*/}
             </div>
-            <div className="width-full bg-gradient-to-b from-[#02020d] to-[#040317] h-20">
 
-            </div>
+            <div className="w-full bg-gradient-to-b from-[#20024e] to-[#040317] h-96"></div>
         </div>
-
-
     );
 }

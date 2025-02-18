@@ -14,12 +14,11 @@ export default function AuthPageWrapper({children}: AuthPageWrapperProps) {
             <div className="grid md:grid-cols-2 grid-cols-1 gap-4 md:m-0 m-4">
                 <div className="flex justify-center items-center bg-background-400 shadow-xl md:rounded-r-xl rounded-xl md:rounded-l-none">
                     <div className="bg-background-300 my-4 mx-4 md:mr-4 md:ml-0 w-full py-4 shadow-xl md:rounded-r-xl rounded-xl md:rounded-l-none flex justify-center">
-                        <div className="bg-background-200 mx-4 md:mr-4 md:ml-0 w-full py-20 shadow-xl md:rounded-r-xl rounded-xl md:rounded-l-none flex justify-center">
+                        <div className="bg-background-200 relative mx-4 md:mr-4 md:ml-0 w-full py-20 shadow-xl md:rounded-r-xl rounded-xl md:rounded-l-none flex justify-start">
                             {children}
                         </div>
                     </div>
                 </div>
-
                     <div>
                         <div className="grid grid-cols-4 gap-2 grid-flow-row auto-rows-fr">
                         {Array.from({length: 16}).map((_, index) => (

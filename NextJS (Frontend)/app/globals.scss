@@ -31,3 +31,31 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #333333;
 }
+
+.admin-dashboard {
+  display: grid;
+  grid-template-areas:
+  'admin-analytics admin-analytics admin-analytics'
+  'admin-products admin-products admin-organisations'
+  'admin-verification admin-verification admin-organisations';
+}
+
+.admin-analytics {
+  grid-area: admin-analytics;
+}
+
+.admin-products {
+  grid-area: admin-products;
+}
+
+.admin-organisations {
+  grid-area: admin-organisations;
+}
+
+.admin-verification {
+  grid-area: admin-verification;
+}
+
+.admin-block {
+  @apply bg-red-400
+}
