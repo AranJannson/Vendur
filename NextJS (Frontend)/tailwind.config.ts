@@ -21,7 +21,7 @@ export default {
           800: 'var(--text-800)',
           900: 'var(--text-900)',
           950: 'var(--text-950)',
-          main: 'var(--text-main)',
+          1000: 'var(--text-1000)',
         },
         'background': {
           50: 'var(--background-50)',
@@ -35,7 +35,7 @@ export default {
           800: 'var(--background-800)',
           900: 'var(--background-900)',
           950: 'var(--background-950)',
-          main: 'var(--background-main)',
+          1000: 'var(--background-1000)',
         },
         'primary': {
           50: 'var(--primary-50)',
@@ -49,7 +49,7 @@ export default {
           800: 'var(--primary-800)',
           900: 'var(--primary-900)',
           950: 'var(--primary-950)',
-          main: 'var(--primary-main)',
+          1000: 'var(--primary-1000)',
         },
         'secondary': {
           50: 'var(--secondary-50)',
@@ -63,7 +63,7 @@ export default {
           800: 'var(--secondary-800)',
           900: 'var(--secondary-900)',
           950: 'var(--secondary-950)',
-          main: 'var(--secondary-main)',
+          1000: 'var(--secondary-1000)',
         },
         'accent': {
           50: 'var(--accent-50)',
@@ -77,7 +77,7 @@ export default {
           800: 'var(--accent-800)',
           900: 'var(--accent-900)',
           950: 'var(--accent-950)',
-          main: 'var(--accent-main)',
+          1000: 'var(--accent-1000)',
         },
        },
        

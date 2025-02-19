@@ -5,34 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a6b12bb-b771-4c4c-8677-827c4b595596" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/admin/@analytics/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/admin/@organisations/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/admin/@products/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/admin/@verification/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/admin/layout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/admin/AdminHeader.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/ui/BouncingArrow.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/products/[item]/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/products/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignUp.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignUp.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/home/Hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/home/Hero.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/yarn.lock" afterDir="false" />
-    </list>
-    <list id="af11ce6c-dc19-406a-ab88-4037f72c3fee" name="Changes by aranj" comment="" />
-    <list id="3f194ab4-0333-49ec-a81f-7127dad5943b" name="Changes by Ismae" comment="">
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/admin/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/admin/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/auth/signup/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/auth/signup/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/AuthPageWrapper.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/AuthPageWrapper.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignIn.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Header.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/globals.scss" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/globals.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/handler/[...stack]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/handler/[...stack]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/tailwind.config.ts" afterDir="false" />
     </list>
+    <list id="af11ce6c-dc19-406a-ab88-4037f72c3fee" name="Changes by aranj" comment="" />
+    <list id="3f194ab4-0333-49ec-a81f-7127dad5943b" name="Changes by Ismae" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,17 +32,6 @@
     &quot;accountId&quot;: &quot;d8f18755-032f-47c1-a0aa-32f264d684f9&quot;
   }
 }</component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Header.tsx">
-      <ranges>
-        <range start1="3" end1="3" start2="3" end2="6" changelist="7a6b12bb-b771-4c4c-8677-827c4b595596" />
-        <range start1="5" end1="5" start2="8" end2="15" changelist="7a6b12bb-b771-4c4c-8677-827c4b595596" />
-        <range start1="7" end1="8" start2="17" end2="18" changelist="7a6b12bb-b771-4c4c-8677-827c4b595596" />
-        <range start1="15" end1="15" start2="25" end2="31" changelist="7a6b12bb-b771-4c4c-8677-827c4b595596" />
-        <range start1="31" end1="32" start2="47" end2="50" changelist="3f194ab4-0333-49ec-a81f-7127dad5943b" />
-      </ranges>
-    </file>
-  </component>
   <component name="PackageJsonUpdateNotifier">
     <dismissed value="$PROJECT_DIR$/Microservices/Catalog/package.json" />
   </component>
@@ -143,7 +111,10 @@
       <workItem from="1739532319129" duration="2324000" />
       <workItem from="1739552023941" duration="9672000" />
       <workItem from="1739718778030" duration="65000" />
-      <workItem from="1739892862935" duration="10760000" />
+      <workItem from="1739892862935" duration="10924000" />
+      <workItem from="1739977656468" duration="1803000" />
+      <workItem from="1739980233508" duration="32000" />
+      <workItem from="1739980301480" duration="1045000" />
     </task>
     <servers />
   </component>
