@@ -5,7 +5,7 @@ import BouncingArrow from "@/app/components/ui/BouncingArrow";
 
 export default function Hero() {
     return (
-        <div className="bg-background-main h-screen w-screen">
+        <div className="bg-background-1000 h-screen w-screen">
             <div className="grid md:grid-cols-2 grid-cols-1 h-full relative">
                 <div className="m-40 z-50">
                     <h1 className="text-5xl text-text-100 font-bold">
@@ -30,9 +30,9 @@ export default function Hero() {
                     className="absolute z-20 top-0 left-0 w-full h-full"
                     xmlns="http://www.w3.org/2000/svg"
                 >
-                    <polygon fill="#7426ed" points="0,87 1000,87 1000,100 0,100"/>
-                    <polygon fill="#5d1ebe" points="0,89 1000,89 1000,100 0,100"/>
-                    <polygon fill="#20024e" points="0,91 1000,91 1000,100 0,100"/>
+                    <polygon className="fill-primary-800" points="0,87 1000,87 1000,100 0,100"/>
+                    <polygon className="fill-primary-600" points="0,89 1000,89 1000,100 0,100"/>
+                    <polygon className="fill-primary-400" points="0,91 1000,91 1000,100 0,100"/>
                 </svg>
 
                 <div className="relative overflow-hidden">
@@ -43,7 +43,7 @@ export default function Hero() {
                         xmlns="http://www.w3.org/2000/svg"
                     >
 
-                        <polygon fill="#20024e" points="29,0 100,0 100,140 4,91"/>
+                        <polygon className="fill-primary-400" points="29,0 100,0 100,140 4,91"/>
 
 
                     </svg>
@@ -54,7 +54,7 @@ export default function Hero() {
                         xmlns="http://www.w3.org/2000/svg"
                     >
 
-                        <polygon fill="#5d1ebe" points="27,0 100,0 100,90 2,90"/>
+                        <polygon className="fill-primary-600" points="27,0 100,0 100,90 2,90"/>
 
                     </svg>
                     <svg
@@ -63,15 +63,15 @@ export default function Hero() {
                         className="absolute top-0 left-0 w-full h-full"
                         xmlns="http://www.w3.org/2000/svg"
                     >
-                        <polygon fill="#7426ed" points="25,0 100,0 100,90 0,90"/>
-                        <polygon fill="#5d1ebe" points="27,0 100,0 100,90 2,90"/>
-                        <polygon fill="#20024e" points="29,0 100,0 100,90 4,90"/>
+                        <polygon className="fill-primary-800" points="25,0 100,0 100,90 0,90"/>
+                        <polygon className="fill-primary-600" points="27,0 100,0 100,90 2,90"/>
+                        <polygon className="fill-primary-400" points="29,0 100,0 100,90 4,90"/>
 
                     </svg>
                 </div>
             </div>
 
-            <div className="w-full bg-gradient-to-b from-[#20024e] to-[#040317] h-96"></div>
+            <div className="w-full bg-gradient-to-b from-primary-400 to-background-1000 h-96"></div>
         </div>
     );
 }

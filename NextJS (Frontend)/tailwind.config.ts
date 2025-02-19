@@ -79,10 +79,7 @@ export default {
           950: 'var(--accent-950)',
           1000: 'var(--accent-1000)',
         },
-       },
-       
-
-
+       },            
     },
   },
   plugins: [],

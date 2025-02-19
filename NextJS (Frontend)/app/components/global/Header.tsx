@@ -14,7 +14,7 @@ export default function Header() {
     }
 
     return (
-        <header className="text-center bg-background-1000 border-b-2 border-background-900 ">
+        <header className="text-center bg-primary-400 border-b-2 border-background-900 ">
             <div className="grid grid-cols-2 items-center">
 
                 <div className="flex justify-start p-6">
