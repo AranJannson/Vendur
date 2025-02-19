@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a6b12bb-b771-4c4c-8677-827c4b595596" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/home/HeroProduct.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Footer.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/globals.scss" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/globals.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/tailwind.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/home/NavBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/home/NavBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/ui/Pill.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/ui/Pill.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/page.tsx" afterDir="false" />
     </list>
     <list id="af11ce6c-dc19-406a-ab88-4037f72c3fee" name="Changes by aranj" comment="" />
     <list id="3f194ab4-0333-49ec-a81f-7127dad5943b" name="Changes by Ismae" comment="" />
@@ -114,7 +117,7 @@
       <workItem from="1739892862935" duration="10924000" />
       <workItem from="1739977656468" duration="1803000" />
       <workItem from="1739980233508" duration="32000" />
-      <workItem from="1739980301480" duration="1045000" />
+      <workItem from="1739980301480" duration="4650000" />
     </task>
     <servers />
   </component>
