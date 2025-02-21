@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a6b12bb-b771-4c4c-8677-827c4b595596" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/home/HeroProduct.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Footer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/global/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/AuthPageWrapper.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/AuthPageWrapper.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignIn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignIn.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignUp.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/auth/SignUp.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/home/NavBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/home/NavBar.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/components/ui/Pill.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/components/ui/Pill.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NextJS (Frontend)/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/NextJS (Frontend)/app/page.tsx" afterDir="false" />
@@ -117,7 +117,9 @@
       <workItem from="1739892862935" duration="10924000" />
       <workItem from="1739977656468" duration="1803000" />
       <workItem from="1739980233508" duration="32000" />
-      <workItem from="1739980301480" duration="4650000" />
+      <workItem from="1739980301480" duration="4858000" />
+      <workItem from="1740132660784" duration="1000" />
+      <workItem from="1740134476257" duration="3928000" />
     </task>
     <servers />
   </component>
