@@ -12,7 +12,7 @@ export default function HeroProduct({ url, text }: { url: string; text: string }
                     className="object-cover rounded-lg shadow-xl"
                 />
 
-                <div className="absolute inset-0 bg-black/90 flex justify-center items-center rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer duration-500 m-2">
+                <div className="absolute inset-0 bg-sky-300/90 flex justify-center items-center rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer duration-500 m-2">
                     <span className="text-white text-2xl font-bold">
                         <Link href={`/search?query=${text}`}>
                             {text}
