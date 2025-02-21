@@ -53,6 +53,11 @@ export default function Header() {
                                 colorModeToggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
                             /> {/* TODO: Fix sign-in/sign-out going to wrong URL */}
                         </li>
+                        <li>
+                            <Link href="/payment" className="transition-colors hover:text-primary-600">
+                                Basket
+                            </Link>
+                        </li>
                     </ul>
                 </div>
 
