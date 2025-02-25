@@ -39,8 +39,8 @@ export default function Header() {
                             </Link>
                         </li>
                         <li>
-                            <Link href="#" className="transition-colors hover:text-primary-600">
-                                Page 2
+                            <Link href="/products" className="transition-colors hover:text-primary-600">
+                                Products
                             </Link>
                         </li>
                         <li>
