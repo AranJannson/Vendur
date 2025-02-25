@@ -1,18 +1,52 @@
 import { connect } from './dbConnect';
-import { items } from '../drizzle/schema';
+import { items, reviews, orders } from '../drizzle/schema';
+import { gt,sql } from 'drizzle-orm';
 
-export default async function mostPopularProducts() {
+export async function popularProducts(): Promise<any> {
     try {
         const db = await connect();
-        console.log("Database connected successfully.");
-        for (let i=0; i<5; i++){
-            const product = await db!.select().from(items).limit(1);
-            
 
-        }
-        return db;
-    } catch (error) {
-        console.error("Error connecting to the database:", error);
-        throw new Error("Failed to connect to the database.");
+        const popularProducts = await db!.select({
+            item_id: orders.item_id,
+            count: sql<number>`CAST(COUNT(${orders.item_id}) AS INT)`
+        })
+        .from(orders)
+        .groupBy(orders.item_id);
+        // Gets all products and counts how many orders there have been of product
+        
+        // return console.log(JSON.stringify(popularProducts));
+        return popularProducts
+        
+        
+    } catch (error){
+        console.error(error);
+        return; 
     }
-}
+} 
+
+export  async function mostPopularProduct(): Promise<any> {
+    try {
+
+
+        const allProducts = await popularProducts();
+        console.log(JSON.stringify(allProducts))
+        const mostPopularProduct = allProducts[0];
+        console.log(`Most Popular Product: ${mostPopularProduct}`)
+        return console.log(JSON.stringify(mostPopularProduct));
+
+        // Gets product with the highest order count by calling all popular
+        // products
+        
+        
+    } catch (error){
+        console.error(error);
+        return; 
+    }
+} 
+
+
+
+
+
+
+

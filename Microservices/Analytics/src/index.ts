@@ -1,35 +1,35 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import { popularProducts, mostPopularProduct } from "./utils/mostPopularProducts";
 
 dotenv.config();
 
-const Catalog = express();
+const Analytics = express();
 
-Catalog.use(express.json());
+Analytics.use(express.json());
 
-Catalog.use(cors());
+Analytics.use(cors());
 
 const portNumber = 8001;
 
-Catalog.listen(portNumber, () => {
-    console.log(`Catalog is running on port ${portNumber}`);
-    console.log(`Noah use brain`)
-
-    
+Analytics.listen(portNumber, () => {
+    console.log(`Analytics is running on port ${portNumber}`);
 });
 
-Catalog.get("/catalog", async (req: Request, res: Response) => {
+Analytics.get("/mostPopularProducts", async (req: Request, res: Response) => {
+
+    const pp = await popularProducts();
+
+    const mpp = await mostPopularProduct();
 
 
-});
+    console.log(JSON.stringify(pp))
+    console.log(JSON.stringify(mpp))
 
-Catalog.post("/catalog", (req: Request, res: Response) => {
-    res.send("Catalog is running");
-    
-});
+}); 
 
-Catalog.get("/catalog-test", (req: Request, res: Response) => {
-    res.send("Catalog is running");
-    
-});
+Analytics.get("/mostPopularCategories", async (req: Request, res: Response) => {
+
+}); 
+
