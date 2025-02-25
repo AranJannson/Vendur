@@ -25,13 +25,13 @@ export default async function FourByFour() {
                         className="aspect-square object-contain"
                     />
 
-                    <Link href={`/products/${item.name}`} className="absolute inset-0 bg-sky-300/90 flex justify-center items-center rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer duration-500 m-2">
+                    <div className="absolute inset-0 bg-sky-300/90 flex justify-center items-center rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer duration-500 m-2">
                         <span className="text-white text-2xl font-bold">
                               {item.name}
                             <br />
                               £{item.price.toFixed(2)}
                         </span>
-                    </Link>
+                    </div>
                 </Link>
             ))}
         </div>
