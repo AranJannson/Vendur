@@ -1,6 +1,6 @@
 import { connect } from './dbConnect';
 import { items, reviews, orders } from '../drizzle/schema';
-import { gt,sql,eq } from 'drizzle-orm';
+import { gt,sql,eq, desc } from 'drizzle-orm';
 
 export async function popularCategories(): Promise<any> {
     try {
@@ -8,12 +8,14 @@ export async function popularCategories(): Promise<any> {
 
         const popularCategories = await db!.select({
             category: items.category,
-            count: sql<number>`cast(count(${orders.item_id}) as int)`
+            count: sql<number>`cast(count(${items.category}) as int)`
         }).from(orders)
         .leftJoin(items, eq(orders.item_id, items.id))
+        .groupBy(items.category)
+        .orderBy(desc(sql<number>`CAST(COUNT(${items.category}) AS INT)`));
         // Gets all categories of products and counts how many orders there have been of category
         
-        return console.log(JSON.stringify(popularCategories));
+        return popularCategories;
         
         
     } catch (error){
@@ -27,8 +29,8 @@ export  async function mostPopularCategory(): Promise<any> {
 
 
         const allCategories = await popularCategories();
-        const mostPopularCategory = JSON.stringify(allCategories)[0]
-        return console.log(JSON.stringify(mostPopularCategory));
+        const mostPopularCategory = allCategories[0];
+        return mostPopularCategory;
 
         // Gets product with the highest order count by calling all popular
         // products

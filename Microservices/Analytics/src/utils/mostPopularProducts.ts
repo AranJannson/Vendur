@@ -1,6 +1,6 @@
 import { connect } from './dbConnect';
 import { items, reviews, orders } from '../drizzle/schema';
-import { gt,sql } from 'drizzle-orm';
+import { gt,sql, desc } from 'drizzle-orm';
 
 export async function popularProducts(): Promise<any> {
     try {
@@ -11,7 +11,8 @@ export async function popularProducts(): Promise<any> {
             count: sql<number>`CAST(COUNT(${orders.item_id}) AS INT)`
         })
         .from(orders)
-        .groupBy(orders.item_id);
+        .groupBy(orders.item_id)
+        .orderBy(desc(sql<number>`CAST(COUNT(${orders.item_id}) AS INT)`));
         // Gets all products and counts how many orders there have been of product
         
         // return console.log(JSON.stringify(popularProducts));
@@ -31,8 +32,7 @@ export  async function mostPopularProduct(): Promise<any> {
         const allProducts = await popularProducts();
         console.log(JSON.stringify(allProducts))
         const mostPopularProduct = allProducts[0];
-        console.log(`Most Popular Product: ${mostPopularProduct}`)
-        return console.log(JSON.stringify(mostPopularProduct));
+        return mostPopularProduct;
 
         // Gets product with the highest order count by calling all popular
         // products
