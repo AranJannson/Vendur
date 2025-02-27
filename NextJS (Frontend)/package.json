@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@stackframe/stack": "^2.7.14",
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.48.1",
     "@types/react-scroll": "^1.8.10",
     "advancedwebcw": "file:",
     "motion": "^12.3.0",
