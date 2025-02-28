@@ -1,5 +1,5 @@
 
-import { pgTable, serial, text, varchar, date, integer } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, varchar, date, integer, timestamp, boolean } from "drizzle-orm/pg-core";
 
 export const items = pgTable('items', {
   id: serial('id').primaryKey(),
@@ -19,4 +19,13 @@ export const orders = pgTable('orders', {
   quantity: integer('quantity')
 
 });
-        
+
+export const sellers = pgTable('sellers', {
+  seller_id: serial('seller_id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').unique().notNull(),
+  rating: integer('rating').default(0),
+  created_at: timestamp('created_at').defaultNow(),
+  is_verified: boolean('is_verified').default(false),
+  is_banned: boolean('is_banned').default(false),
+})
