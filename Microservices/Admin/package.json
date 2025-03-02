@@ -23,6 +23,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "drizzle-kit": "^0.30.4",
+    "supabase": "^2.15.8",
     "tsx": "^4.19.2"
   }
 }
