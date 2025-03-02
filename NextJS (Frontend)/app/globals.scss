@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
 @layer base {
   :root {
     --text-50: #eff2f6;
@@ -196,4 +198,3 @@ body {
 .admin-block {
   @apply bg-red-400
 }
-
