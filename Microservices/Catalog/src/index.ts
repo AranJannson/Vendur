@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import { testConnection } from "./utils/dbConnect";
 import dotenv from "dotenv";
 import cors from "cors";
-import { fetchCatalog } from "./utils/fetchCatalog";
 
 dotenv.config();
 
@@ -23,9 +22,9 @@ Catalog.listen(portNumber, () => {
 
 Catalog.get("/catalog", async (req: Request, res: Response) => {
 
-    const catalog = await fetchCatalog();
+    // const catalog = await fetchCatalog();
 
-    res.send(JSON.stringify(catalog, null, 2));
+    // res.send(JSON.stringify(catalog, null, 2));
 
 });
 
