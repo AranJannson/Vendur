@@ -9,7 +9,7 @@ export default function Header() {
     const { theme, setTheme } = useTheme();
 
     return (
-        <header className="text-center bg-primary-200 border-b-2 border-background-900 ">
+        <header className="text-center bg-primary-200 border-b-2 light:border-background-900 dark:border-background-400 ">
             <div className="grid md:grid-cols-3 grid-cols-1 items-center">
                 <div className="flex -mt-4 md:justify-start justify-center p-6">
                     <VendurLogo/>
