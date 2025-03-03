@@ -254,6 +254,7 @@ call-bound@^1.0.2:
   version "1.0.0"
   resolved "file:"
   dependencies:
+    "@supabase/supabase-js" "^2.49.1"
     catalog "file:"
     cors "^2.8.5"
     dotenv "^16.4.7"
