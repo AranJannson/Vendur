@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
-import NavButton from "@/app/components/ui/NavButton";
+import AddToCheckoutButton from '@/app/components/payment/AddToCheckoutButton';
 
 export default async function ItemPage({ params }: { params: { item: string } }) {
     const supabase = await createClient();
@@ -97,10 +97,10 @@ export default async function ItemPage({ params }: { params: { item: string } })
                                         Notify Me
                                     </button>
                                 ) : (
-                                    <button type="submit"
-                                            className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4">
-                                    Add To Basket
-                                    </button>
+                                    <AddToCheckoutButton 
+                                        item={item} 
+                                        quantity={stock?.quantity} // fix to selected quantity                            
+                                    />
                                 )}
                             </div>
                         </form>
