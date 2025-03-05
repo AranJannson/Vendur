@@ -1,5 +1,7 @@
 "use client";
+
 import { useUser } from "@stackframe/stack";
+import GetBasket from "./api/GetBasket";
 
 export default function Payment() {
 
@@ -10,6 +12,7 @@ export default function Payment() {
         { user? (
             <div>
                 Welcome to checkout, you are signed in
+                <GetBasket />
             </div>
         ) : (
             <div>
