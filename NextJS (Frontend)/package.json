@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.1.2",
     "@stackframe/stack": "^2.7.14",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.48.1",
     "@types/react-scroll": "^1.8.10",
     "advancedwebcw": "file:",
+    "embla-carousel-autoplay": "^8.5.2",
+    "embla-carousel-react": "^8.5.2",
     "motion": "^12.3.0",
     "next": "15.1.6",
     "next-themes": "^0.4.4",

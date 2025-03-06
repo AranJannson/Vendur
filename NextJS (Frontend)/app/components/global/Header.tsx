@@ -9,8 +9,9 @@ export default function Header() {
     const { theme, setTheme } = useTheme();
 
     return (
-        <header className="text-center bg-primary-200 border-b-2 light:border-background-900 dark:border-background-400 ">
+        <header className="text-center bg-background-100 border-b-2 light:border-background-900 dark:border-background-400 ">
             <div className="grid md:grid-cols-3 grid-cols-1 items-center">
+                
                 <div className="flex -mt-4 md:justify-start justify-center p-6">
                     <VendurLogo/>
                 </div>
@@ -23,18 +24,13 @@ export default function Header() {
                     <ul className="flex flex-row gap-5 p-6 items-center">
 
                         <li>
-                            <Link href="/" className="transition-colors hover:text-primary-600">
-                                Home
-                            </Link>
-                        </li>
-                        <li>
                             <Link href="/products" className="transition-colors hover:text-primary-600">
                                 Products
                             </Link>
                         </li>
                         <li>
                             <Link href="#" className="transition-colors hover:text-primary-600">
-                                Page 3
+                                Categories
                             </Link>
                         </li>
                         <li>

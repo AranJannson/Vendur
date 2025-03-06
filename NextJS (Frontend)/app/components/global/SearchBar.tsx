@@ -11,7 +11,7 @@ export default function SearchBar() {
     }
 
     return (
-        <form className="flex flex-row items-center bg-primary-300 rounded-lg w-full max-w-lg px-4 py-2"
+        <form className="flex flex-row items-center bg-primary-300 rounded-xl w-full max-w-lg px-4 py-2"
               name="SearchBar" onSubmit={onSubmit}>
             <IoSearch className="text-2xl ml-4"/>
             <input className="md:px-10 px-5 py-2 bg-transparent placeholder-black focus:outline-none"

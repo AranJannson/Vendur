@@ -69,7 +69,7 @@ export default async function ItemPage({ params }: { params: { item: string } })
 
                         <form className="flex flex-col">
 
-                            {item?.category === 'clothing' ? (
+                            {item?.category === 'Clothing & Shoes' ? (
                                 <div className="flex flex-col">
                                     <label className="font-bold ml-1">Size</label>
                                     <select className="p-2 bg-primary-200 rounded-full w-20">
@@ -116,12 +116,12 @@ export default async function ItemPage({ params }: { params: { item: string } })
             <div className="bg-secondary-100 m-4 rounded-lg p-5 flex flex-col gap-4">
                 <h2 className="text-2xl font-bold">Reviews</h2>
 
-                <div className="grid grid-cols-2 bg-background-200 rounded-lg p-4">
+                <div className="grid grid-cols-2 bg-primary-200 rounded-lg p-4">
                     <h3 className="text-sm font-semibold">Average Rating: item.rating</h3>
                     <h3 className="text-sm font-semibold">Total Reviews: item.reviewsCount</h3>
                 </div>
 
-                <div className="bg-background-200 rounded-lg p-5">
+                <div className="bg-primary-200 rounded-lg p-5">
                     <h2 className="font-bold text-xl mb-3">Add a Review</h2>
 
                     <form>
