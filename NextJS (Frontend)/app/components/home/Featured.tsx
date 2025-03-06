@@ -10,7 +10,7 @@ export default function Featured() {
 
             <div className="relative w-full mx-20 h-[300px] overflow-hidden">
                     <img
-                        src={"https://dummyimage.com/2000x900/fff/000.png"}
+                        src={"https://media.discordapp.net/attachments/739940713541926986/1347347257737084980/image.png?ex=67cb7e6a&is=67ca2cea&hm=c27cf589b8c539d69f2cb1ef20dcb8611d131cac52b148eb757d0060aed12911&=&format=webp&quality=lossless&width=1872&height=842"}
                         alt="Featured"
                         className="object-cover rounded-lg shadow-xl absolute inset-0 w-full h-full"
                     />

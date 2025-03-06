@@ -4,6 +4,11 @@ import FourByFour from "@/app/components/ui/productDisplays/4x4";
 import OneByFour from "@/app/components/ui/productDisplays/1x4";
 import CarouselClient from "./components/animation/CarouselClient";
 
+export const metadata = {
+    title: "Home | Vendur",
+    description: "",
+};
+
 
 export default function Home() {
 
@@ -53,9 +58,8 @@ export default function Home() {
 
                 </div>
 
-                <div>
+                <div className="bg-primary-200 m-4 rounded-lg p-2">
 
-                    {/* Carousel Here plz preety plz papi */}
                     <CarouselClient category="Home, Garden & DIY"/>
 
                 </div>

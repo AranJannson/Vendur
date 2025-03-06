@@ -1,6 +1,11 @@
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 
+export const metadata = {
+    title: "Products | Vendur",
+    description: "",
+};
+
 export default async function Products() {
     const supabase = await createClient();
     const { data: items } = await supabase.from("items").select("*");
@@ -27,7 +32,7 @@ export default async function Products() {
 
                         </div>
                         <div className="flex flex-col justify-center mt-2 items-center">
-                                <h3 className="text-2xl font-semibold">{item.name}</h3>
+                                <h3 className="text-2xl text-text-950 font-semibold">{item.name}</h3>
 
                                 {item.discount === null || item.discount === 0 ? (
                                     <p className="text-xl font-semibold">£{item.price.toFixed(2)}</p>
@@ -42,15 +47,19 @@ export default async function Products() {
                                             </p>
                                         </div>
 
-                                        <span>
-                                            <p className="font-semibold p-1 w-[150px] bg-red-400 rounded-xl p-1">Limited Time Deal</p>
-                                        </span>
+                                        
                                     </div>
                                     
                                 )}
-                                <span>
+                                {item.discount === null || item.discount === 0 ? (
+                                    null
+                                ) : (<div className="flex justify-center text-center items-center">
+                                    <p className="font-semibold p-1 w-[150px] bg-red-400 rounded-xl p-1">Limited Time Deal</p>
+                                </div>)}
+                                
+                                <div>
                                     <p className="w-fit p-1 bg-secondary-500 gap-15 rounded-xl mt-2">⭐⭐⭐⭐⭐</p>
-                                </span>
+                                </div>
                         </div>
 
                         {/* <div className="flex justify-end">

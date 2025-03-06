@@ -26,8 +26,8 @@ export default function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-gray-500">
-                                    Page 2
+                                <Link href="/products" className="hover:text-gray-500">
+                                    Products
                                 </Link>
                             </li>
                             <li>

@@ -11,10 +11,11 @@ export default function VendurLogo({ className }: { className?: string }) {
                 </g>
                 <g transform="translate(0, 200) scale(0.01215, 0.01215)">
                     <path id="path1" d="M 6491 -13362 c -1 9 -603 12 -2973 12 -2852 1 -2976 1 -3040 19 -68 18 -118 44 -118 60 0 5 10 16 22 24 24 17 61 49 140 123 205 190 352 327 431 402 51 48 168 158 260 244 92 87 280 265 419 396 375 354 449 423 475 438 13 8 47 29 76 48 112 72 316 150 488 185 89 19 144 20 1134 21 572 0 1043 4 1047 8 3 4 976 2556 2161 5672 2155 5665 2155 5665 2211 5688 56 22 56 22 1088 22 1032 0 1032 0 1066 -23 32 -21 107 -215 2186 -5681 1184 -3113 2157 -5665 2162 -5673 7 -11 196 -13 1049 -14 989 0 1045 -1 1134 -20 167 -34 377 -113 475 -178 25 -17 59 -37 75 -45 17 -9 79 -62 139 -117 59 -56 215 -203 347 -327 132 -124 317 -298 410 -387 93 -89 182 -173 197 -186 14 -13 119 -112 233 -219 114 -107 226 -212 249 -233 95 -86 159 -142 177 -155 18 -12 17 -14 -11 -38 -72 -58 171 -54 -3125 -54 -2409 0 -3024 -3 -3028 -12 -4 -10 -6 -10 -6 -1 -1 7 -16 28 -35 45 -25 26 -39 54 -59 123 -15 50 -108 314 -207 587 -255 706 -2307 6429 -2632 7343 -248 698 -563 1683 -750 2345 -34 121 -65 220 -68 220 -3 0 -34 -98 -68 -217 -200 -702 -480 -1583 -707 -2225 -73 -208 -2106 -5886 -2364 -6603 -71 -198 -213 -592 -315 -875 -103 -283 -194 -540 -203 -570 -28 -95 -43 -118 -89 -136 -24 -9 -45 -24 -47 -33 -3 -9 -5 -10 -6 -3 z "
-                    className = "Vendur-Logo-V-Shape fill-[var(--text-800)] stroke-[var(--text-800)] stroke-[20rem] group-hover:fill-[var(--text-700)] group-hover:stroke-[var(--text-700)]"/>
+                    className = "Vendur-Logo-V-Shape fill-[var(--primary-800)] stroke-[var(--primary-800)] stroke-[20rem] group-hover:fill-[var(--primary-700)] group-hover:stroke-[var(--primary-700)]"/>
                 </g>
             </svg>
-            <span className= "-ml-1 font-varela text-[4rem] font-bold text-[var(--text-800)] leading-none relative -bottom-0 select-none group-hover:text-[var(--text-700)]">endur</span>
+            <span className= "-ml-1 font-varela text-[4rem] font-bold text-[var(--primary-800)] leading-none relative -bottom-0 select-none group-hover:text-[var(--primary-700)]">endur</span>
+            <span className= "-ml-1 font-varela text-[2rem] font-bold text-[var(--primary-400)] leading-none relative -bottom-0 select-none group-hover:text-[var(--primary-300)] pb-1">.shop</span>
         </Link>
     </>
   );

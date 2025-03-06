@@ -1,26 +1,25 @@
 "use client"
 import Link from "next/link";
 import { UserButton } from "@stackframe/stack";
-import { useTheme } from "next-themes";
 import VendurLogo from "../ui/VendurLogo";
 import SearchBar from "@/app/components/global/SearchBar";
+import { RiShoppingBasket2Line } from "react-icons/ri";
 
 export default function Header() {
-    const { theme, setTheme } = useTheme();
 
     return (
-        <header className="text-center bg-background-100 border-b-2 light:border-background-900 dark:border-background-400 ">
-            <div className="grid md:grid-cols-3 grid-cols-1 items-center">
+        <header className="text-center bg-background-100 border-b-2 border-background-400 ">
+            <div className="flex md:flex-row flex-col justify-between items-center w-full">
                 
-                <div className="flex -mt-4 md:justify-start justify-center p-6">
+                <div className="flex -mt-4 md:justify-start justify-center p-3 pb-1 pt-3">
                     <VendurLogo/>
                 </div>
 
-                <div className="flex md:justify-center w-full">
-                 <SearchBar />
+                <div className="flex justify-center w-full px-6">
+                    <SearchBar/>
                 </div>
 
-                <div className="flex md:justify-end justify-center font-bold ">
+                <div className="flex md:justify-end justify-center font-bold">
                     <ul className="flex flex-row gap-5 p-6 items-center">
 
                         <li>
@@ -33,10 +32,13 @@ export default function Header() {
                                 Categories
                             </Link>
                         </li>
+
+                        <li className="text-2xl rounded-full bg-primary-400 text-black p-2 hover:bg-primary-500 transition-colors hover:cursor-pointer">
+                            <RiShoppingBasket2Line />
+                        </li>
+
                         <li>
-                            <UserButton
-                                colorModeToggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                            /> {/* TODO: Fix sign-in/sign-out going to wrong URL */}
+                            <UserButton/>
                         </li>
                     </ul>
                 </div>
