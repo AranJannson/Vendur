@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { connect } from "./utils/dbConnect";
-import { items, organisations } from "./drizzle/schema";
 
 dotenv.config();
 
@@ -17,25 +16,25 @@ OrgMgmt.listen(portNumber, () => {
     console.log(`OrgMgmt is running on port ${portNumber}`);
 });
 
-OrgMgmt.get("/OrgMgmt", async (req: Request, res: Response) => {
+OrgMgmt.get("/OrgGet", async (req: Request, res: Response) => {
     const db = await connect();
 
-    const itemsList = await db!.select().from(items);
+    const itemsList = await db.from('items').select('*');
 
     console.log(JSON.stringify(itemsList, null, 2));
 
     res.send(JSON.stringify(itemsList, null, 2));
 });
 
-OrgMgmt.post("/OrgMgmt", async (req: Request, res: Response): Promise<any> => {
-    const db = await connect();
+OrgMgmt.post("/OrgPost", async (req: Request, res: Response): Promise<any> => {
 
-    const { name } = req.body;
-    if (!name) {
-        return res.status(400).send("Name is required");
-    }
+    const supabase = await connect();
 
-    res.send(JSON.stringify(name, null, 2));
+    await supabase.from('items').insert({ 
+        name: 'Pyoro', 
+        image: "https://mario.wiki.gallery/images/5/5d/WWGIT_CS_Pyoro.png", 
+        price: 4000, 
+        description: "A cute little bird that eats bugs."
+    });
 
-    const result = await db!.insert(organisations).values({ name });
 });
