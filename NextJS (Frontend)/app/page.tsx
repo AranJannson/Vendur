@@ -2,6 +2,7 @@ import NavBar from "@/app/components/home/NavBar";
 import Featured from "@/app/components/home/Featured";
 import FourByFour from "@/app/components/ui/productDisplays/4x4";
 import OneByFour from "@/app/components/ui/productDisplays/1x4";
+import OneByFourCat from "@/app/components/ui/productDisplays/1x4_category";
 import CarouselClient from "./components/animation/CarouselClient";
 
 export const metadata = {
@@ -32,8 +33,8 @@ export default function Home() {
 
                 <NavBar/>
 
-                <div className="w-full bg-gradient-to-b from-primary-200 to-background-100 h-10"/>
-                <div className="bg-background-100 rounded-b-3xl">
+                <div className="w-full primary-200 h-10"/>
+                <div className="bg-background-100">
                     <div className="mx-4">
                         <Featured/>
 
@@ -45,6 +46,9 @@ export default function Home() {
 
                 </div>
 
+                <div>
+                    <OneByFourCat/>
+                </div>
                 
                 <div className="grid grid-cols-2">
 

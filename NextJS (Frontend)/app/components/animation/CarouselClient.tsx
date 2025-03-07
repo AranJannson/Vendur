@@ -18,6 +18,8 @@ export default function CarouselClient({className, category} : {className?: stri
 
     const [items, setItems] = useState<{ id: string; image: string; name: string }[]>([]);
 
+    const [activeIndex, setActiveIndex] = useState(0);
+
     useEffect(() => {
 
         async function fetchItems() {
