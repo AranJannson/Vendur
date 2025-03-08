@@ -49,34 +49,12 @@ export default function Home() {
                 <div>
                     <OneByFourCat/>
                 </div>
-                
-                <div className="grid grid-cols-2">
-
-                    <div>
-                        <FourByFour title="Electronics & Computing"/>
-                    </div>
-                    <div>
-                        <FourByFour title="Clothing & Shoes"/>
-                    </div>
-
-
-                </div>
 
                 <div className="bg-primary-200 m-4 rounded-lg p-2">
 
-                    <CarouselClient category="Home, Garden & DIY"/>
+                    {/*TODO: List of items last viewed or seasonal*/}
 
-                </div>
-
-                <div className="grid grid-cols-2">
-
-                <div>
-                    <FourByFour title="Health & Beauty"/>
-                </div>
-                <div>
-                    <FourByFour title="Home, Garden & DIY"/>
-                </div>
-
+                    {/*<CarouselClient category="Home, Garden & DIY"/>*/}
 
                 </div>
             </div>
