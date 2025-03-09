@@ -1,6 +1,7 @@
 "use client";
 
 import DeleteBasketButton from "@/app/components/payment/DeleteBasketButton";
+import DeleteItemButton from "@/app/components/payment/DeleteItemButton";
 import { useEffect, useState } from "react";
 
 interface Item {
@@ -58,6 +59,7 @@ export default function GetBasket() {
                                 <p>Price: £{item.price}</p>
                                 {item.size && <p>Size: {item.size}</p>}
                                 <p>Quantity: {item.quantity}</p>
+                                <DeleteItemButton itemId={item.id} />
                             </li>
                         ))}
                     </ul>

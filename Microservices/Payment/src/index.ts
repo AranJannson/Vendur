@@ -73,6 +73,29 @@ Payment.delete("/deletecookie", async (req: Request, res: Response) => {
     res.end()
 });
 
+// @ts-ignore
+Payment.delete("/deletevalue", async (req: Request, res: Response) => {
+    
+    const { id } = req.body;
+
+    if (!id) {
+        return res.json([]);;
+    }
+
+    let basket = req.cookies["basket"] ? JSON.parse(req.cookies["basket"]) : [];
+
+    if (!Array.isArray(basket)) {
+        return res.json([]);
+    }
+
+    const updatedBasket = basket.filter((item: { id: string }) => item.id !== id);
+
+    res.cookie("basket", JSON.stringify(updatedBasket), { maxAge: 2 * 60 * 1000, httpOnly: true, sameSite: "lax" });
+
+    res.json({ message: "Item removed", basket: updatedBasket });
+
+});
+
 Payment.listen(portNumber, () => {
     console.log(`Payment is running on port ${portNumber}`);
 
