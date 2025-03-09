@@ -1,8 +1,12 @@
 "use client";
 
-export default function AddToCheckoutButton( { item, quantity }: { item: any, quantity: string }) {
+export default function AddToCheckoutButton( { item, formId }: { item: any, formId: string }) {
     
     const handleClick = async () => {
+
+        const form = document.getElementById(formId) as HTMLFormElement;
+        const quantityInput = form?.querySelector("input[name='quantity']") as HTMLInputElement;
+        const quantity = quantityInput ? Number(quantityInput.value) : 1;
 
         const response = await fetch("http://localhost:8002/setcookie", {
             method: "POST",

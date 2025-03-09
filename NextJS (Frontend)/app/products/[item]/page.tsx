@@ -67,7 +67,7 @@ export default async function ItemPage({ params }: { params: { item: string } })
                             </div>
                         )}
 
-                        <form className="flex flex-col">
+                        <form className="flex flex-col" id="quantityForm">
 
                             {item?.category === 'clothing' ? (
                                 <div className="flex flex-col">
@@ -87,8 +87,9 @@ export default async function ItemPage({ params }: { params: { item: string } })
                                 type="number"
                                 defaultValue="1"
                                 max={availableQuantity < 10 ? availableQuantity : 10}
-                                min="0"
+                                min="1"
                                 className="p-2 bg-primary-200 rounded-full w-20"
+                                name="quantity"
                             />
                             <div>
                                 {availableQuantity === 0 ? (
@@ -99,8 +100,8 @@ export default async function ItemPage({ params }: { params: { item: string } })
                                 ) : (
                                     <AddToCheckoutButton 
                                         item={item} 
-                                        quantity={stock?.quantity} // fix to selected quantity                            
-                                    />
+                                        formId="quantityForm"
+                                        />
                                 )}
                             </div>
                         </form>
