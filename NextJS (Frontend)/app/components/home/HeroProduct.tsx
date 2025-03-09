@@ -2,17 +2,19 @@ import Link from "next/link";
 
 export default function HeroProduct({ url, text }: { url: string; text: string }) {
   return (
-    <span className="flex flex-col gap-2 justify-center items-center">
-      <div className="relative w-80 h-80 flex flex-row bg-primary-100 w-fit rounded-xl p-4 w-[500px] break-words">
-        <img
-          src={url}
-          alt={text}
-          className="w-fit aspect-square h-full object-contain rounded-lg"
-        />
+    <span className="flex flex-col gap-2 justify-center items-center w-screen md:w-full">
+      <div className="relative w-80 md:h-80 h-96 flex md:flex-row flex-col bg-primary-100 md:w-fit md:m-0 rounded-xl p-4 md:w-[500px] break-words">
+      <div className="w-full md:w-1/2 flex justify-center items-center">
+          <img
+            src={url}
+            alt={text}
+            className="w-full h-auto max-h-60 object-contain rounded-lg"
+          />
+        </div>
 
         <div className="flex flex-col text-center justify-center items-center content-center">
 
-          <div>
+          <div className="md:m-0 my-4">
             <p className="font-bold text-3xl">{text}</p>
           </div>
 

@@ -4,6 +4,8 @@ import FourByFour from "@/app/components/ui/productDisplays/4x4";
 import OneByFour from "@/app/components/ui/productDisplays/1x4";
 import OneByFourCat from "@/app/components/ui/productDisplays/1x4_category";
 import CarouselClient from "./components/animation/CarouselClient";
+import OneByFourHistory from "./components/ui/productDisplays/1x4_history";
+import VendurSpotlight from "./components/home/VendurSpotlight";
 
 export const metadata = {
     title: "Home | Vendur",
@@ -25,6 +27,7 @@ export default function Home() {
                     
 
                 </div>
+
                 <div className = "user-select: none">
                 <CarouselClient category="Electronics & Computing"/>
                 </div>
@@ -34,6 +37,7 @@ export default function Home() {
                 <NavBar/>
 
                 <div className="w-full primary-200 h-10"/>
+
                 <div className="bg-background-100">
                     <div className="mx-4">
                         <Featured/>
@@ -47,16 +51,19 @@ export default function Home() {
                 </div>
 
                 <div>
+                    <VendurSpotlight/>
+                </div>
+
+                <div>
                     <OneByFourCat/>
                 </div>
 
-                <div className="bg-primary-200 m-4 rounded-lg p-2">
-
-                    {/*TODO: List of items last viewed or seasonal*/}
-
-                    {/*<CarouselClient category="Home, Garden & DIY"/>*/}
-
+                <div>
+                    <OneByFourHistory/>
                 </div>
+
+                
+
             </div>
         </div>
     );

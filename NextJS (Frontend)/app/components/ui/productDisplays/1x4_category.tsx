@@ -30,7 +30,7 @@ export default async function OneByFour() {
                 <h2 className="text-3xl font-semibold text-center p-4">Shop our most popular categories</h2>
             </div>
             
-            <div className="grid grid-cols-4 gap-8 p-4">
+            <div className="grid md:grid-cols-4 grid-cols-1 gap-8 p-4">
                 {categories.map((category, catIndex) => (
                     <Link href={`/products`} key={catIndex} className="flex flex-col items-center">
                         <h3 className="text-xl font-bold mb-4 text-[25px]">{category.name}</h3>

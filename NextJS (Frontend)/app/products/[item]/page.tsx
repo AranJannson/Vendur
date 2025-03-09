@@ -1,5 +1,16 @@
 import { createClient } from '@/utils/supabase/server';
 import NavButton from "@/app/components/ui/NavButton";
+import Link from 'next/link';
+
+//@ts-ignore
+export async function generateMetadata({ params }) {
+    const decodedItemName = decodeURIComponent(params.item);
+    return {
+      title: `${decodedItemName} | Vendur`,
+      description: "",
+    };
+}
+
 
 export default async function ItemPage({ params }: { params: { item: string } }) {
     const supabase = await createClient();
@@ -27,9 +38,11 @@ export default async function ItemPage({ params }: { params: { item: string } })
     }
 
     const availableQuantity = stock?.quantity || 0;
+    const discount = ((item.price * (1 - item.discount / 100)).toFixed(2));
+    const percentage_discount = `${item.discount}%`
 
     return (
-        <div>
+        <div className = "md:w-[70%] mx-auto">
             <div className="grid md:grid-cols-2 grid-cols-1">
                 <div>
                     <div
@@ -44,8 +57,9 @@ export default async function ItemPage({ params }: { params: { item: string } })
 
                             <h1 className="text-3xl font-bold">{item.name}</h1>
                             <i className="text-gray-400">Item ID: {item.id}</i>
-
+                            
                         </div>
+                        
 
                         {availableQuantity === 0 ? (
                             <p className="text-red-600">Out of Stock</p>
@@ -56,16 +70,30 @@ export default async function ItemPage({ params }: { params: { item: string } })
                         {item.discount === null || item.discount === 0 ? (
                             <p className="text-2xl font-semibold">£{item.price.toFixed(2)}</p>
                         ) : (
-                            <div>
-                                <p className="text-2xl">
-                                    <s className="text-gray-500">£{item.price.toFixed(2)}</s>
-                                    <span className="ml-2 text-red-500 font-bold">
-                                        £{(item.price * (1 - item.discount / 100)).toFixed(2)}
+                            
+                            <div className="flex flex-row gap-4">
+                                <div>
+                                <p className="text-2xl flex gap-2">
+                                    <span className="text-red-600 font-bold">
+                                        £{(discount)}
                                     </span>
+                                    
                                 </p>
+                                <div className="flex flex-row gap-3 justify-center items-center">
+                                    <s className="text-sm text-gray-500">£{item.price.toFixed(2)}</s>
+                                    <div className="bg-primary-200 p-1 rounded-lg inline-block w-fit">
+                                        <p className="text-gray-500 text-sm">{percentage_discount} off</p>
+                                    </div>
+                                </div>
+                                </div>
+                                
+                                
+                                
+                            </div> 
 
-                            </div>
+                       
                         )}
+                        
 
                         <form className="flex flex-col">
 
@@ -108,8 +136,9 @@ export default async function ItemPage({ params }: { params: { item: string } })
                 </div>
 
             </div>
-            <div className="bg-secondary-100 m-4 rounded-lg p-5">
+            <div className="bg-background-50 shadow-2xl m-4 rounded-lg p-5">
                 <h2 className="text-2xl font-bold mb-3">Description</h2>
+                <p>Sold by: <Link href = "#" className = "text-text font-bold underline text-text mt-2">Vendur</Link></p>
                 <p>{item.description}</p>
             </div>
 

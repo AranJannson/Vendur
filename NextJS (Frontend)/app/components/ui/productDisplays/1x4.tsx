@@ -18,7 +18,7 @@ export default async function OneByFour() {
     return (
         <div className="bg-primary-200 m-4 rounded-lg max-w-screen">
             <h2 className="text-3xl font-semibold text-center p-4">Latest Offers</h2>
-            <div className="grid grid-cols-4 grid-rows-1">
+            <div className="grid md:grid-cols-4 grid-cols-1 grid-rows-1">
                 {discountedItems.slice(0, 4).map((item, index) => (
                     <div
                         key={index}

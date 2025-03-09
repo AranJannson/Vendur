@@ -184,7 +184,8 @@ const CarouselItem = React.forwardRef<
       role="group"
       aria-roledescription="slide"
       className={cn(
-        "min-w-0 shrink-0 grow-0 basis-full",
+        "shrink-0 grow-0",
+        "w-full sm:w-1/3",
         orientation === "horizontal" ? "pl-4" : "pt-4",
         className
       )}
@@ -192,6 +193,7 @@ const CarouselItem = React.forwardRef<
     />
   )
 })
+
 CarouselItem.displayName = "CarouselItem"
 
 const CarouselPrevious = React.forwardRef<
