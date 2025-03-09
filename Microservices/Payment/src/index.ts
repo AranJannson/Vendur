@@ -68,6 +68,10 @@ Payment.get("/getcookie", async (req: Request, res: Response) => {
 
 });
 
+Payment.delete("/deletecookie", async (req: Request, res: Response) => {
+    res.clearCookie("basket");
+    res.end()
+});
 
 Payment.listen(portNumber, () => {
     console.log(`Payment is running on port ${portNumber}`);

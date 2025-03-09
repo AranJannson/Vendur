@@ -1,5 +1,6 @@
 "use client";
 
+import DeleteBasketButton from "@/app/components/payment/DeleteBasketButton";
 import { useEffect, useState } from "react";
 
 interface Item {
@@ -48,17 +49,20 @@ export default function GetBasket() {
         <div>
             <h2>Basket:</h2>
             {basket && Array.isArray(basket) && basket.length > 0 ? (
-                <ul>
-                    {basket.map((item, index) => (
-                        <li key={index} className="mb-4">
-                            <h2 className="text-xl font-bold">{item.name}</h2>
-                            <p>Id: {item.id}</p>
-                            <p>Price: £{item.price}</p>
-                            {item.size && <p>Size: {item.size}</p>}
-                            <p>Quantity: {item.quantity}</p>
-                        </li>
-                    ))}
-                </ul>
+                <div>
+                    <ul>
+                        {basket.map((item, index) => (
+                            <li key={index} className="mb-4">
+                                <h2 className="text-xl font-bold">{item.name}</h2>
+                                <p>Id: {item.id}</p>
+                                <p>Price: £{item.price}</p>
+                                {item.size && <p>Size: {item.size}</p>}
+                                <p>Quantity: {item.quantity}</p>
+                            </li>
+                        ))}
+                    </ul>
+                    <DeleteBasketButton />
+                </div>
             ) : (
                 <p>No items in basket.</p>
             )}
