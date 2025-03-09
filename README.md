@@ -21,8 +21,8 @@ Vendur is a simple, lightweight, and easy-to-use e-commerce platform. It is buil
 ## Installation and Usage
 
 #### 1. Clone the repository:
-- SSH: *git@github.com:AranJannson/AdvancedWeb.git*
-- HTTPS: *https://github.com/AranJannson/AdvancedWeb.git*
+- SSH: *git@github.com:AranJannson/Vendur.git*
+- HTTPS: *https://github.com/AranJannson/Vendur.git*
 
 #### 2. Install the dependencies and Run (Frontend):
 ```bash
