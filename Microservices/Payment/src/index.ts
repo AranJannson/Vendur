@@ -33,36 +33,41 @@ Payment.post("/setcookie", async (req: Request, res: Response) => {
         return;
     }
 
-    const parsedValue = JSON.parse(value);
+    let basket = [];
 
-    console.log("Parsed itemId:", parsedValue.itemId);
-    console.log("Parsed price:", parsedValue.price);
-    console.log("Parsed size:", parsedValue.size);
-    console.log("Parsed quantity:", parsedValue.quantity);
-
-    res.cookie(name, JSON.stringify(value), {httpOnly: true});
-
-    res.send('Cookie set')
-
-});
-
-Payment.get("/getcookie", (req: Request, res: Response) => {
-
-    const cookies = req.cookies;
-
-    console.log(cookies);
-
-    Object.keys(cookies).forEach((key => {
-        try {
-            console.log("doing ", key)
-            cookies[key] = JSON.parse(cookies[key]);
-        } catch (error) {
-            console.error("error");
+    if (req.cookies["basket"]) {
+        basket = JSON.parse(req.cookies["basket"]);
+        if (!Array.isArray(basket)) {
+            basket = [];
         }
-    }));
+    }
 
-    res.json(cookies);
+    basket.push(JSON.parse(value));
+
+    res.cookie(name, JSON.stringify(basket), {maxAge: 2 * 60 * 1000, httpOnly: true, sameSite: "lax"});
+
+    res.json({ message: "Cookie set", basket });
+
 });
+
+// @ts-ignore
+Payment.get("/getcookie", async (req: Request, res: Response) => {
+
+    const cookies = req.cookies["basket"];
+
+    console.log("cookies: ", cookies);
+
+    if (!cookies) {
+        return res.json([]);
+    }
+
+    const parsedValue = JSON.parse(cookies); 
+    console.log("parsed cookies: ", parsedValue)
+
+    res.json(parsedValue);
+
+});
+
 
 Payment.listen(portNumber, () => {
     console.log(`Payment is running on port ${portNumber}`);

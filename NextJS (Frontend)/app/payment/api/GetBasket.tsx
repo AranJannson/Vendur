@@ -30,6 +30,7 @@ export default function GetBasket() {
                 }
 
                 const data: Item[] = await response.json();
+
                 setBasket(data);
             } catch (error) {
                 console.error("Error fetching basket:", error);
@@ -51,10 +52,10 @@ export default function GetBasket() {
                     {basket.map((item, index) => (
                         <li key={index} className="mb-4">
                             <h2 className="text-xl font-bold">{item.name}</h2>
-                            <p>{item.id}</p>
-                            <p className="text-green-600">Price: ${item.price}</p>
-                            {item.size && <p>Size: ${item.size}</p>}
-                            <p>Quantity: ${item.quantity}</p>
+                            <p>Id: {item.id}</p>
+                            <p>Price: £{item.price}</p>
+                            {item.size && <p>Size: {item.size}</p>}
+                            <p>Quantity: {item.quantity}</p>
                         </li>
                     ))}
                 </ul>

@@ -4,18 +4,17 @@ export default function AddToCheckoutButton( { item, quantity }: { item: any, qu
     
     const handleClick = async () => {
 
-        // docker doesn't like spaces
-        const sanitizedItemName = (item.name).replace(/\s+/g, "_");
-        
         const response = await fetch("http://localhost:8002/setcookie", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({
-                name: sanitizedItemName,
+                name: "basket",
                 value: JSON.stringify({
-                    itemId: item.id, 
+                    id: item.id, 
+                    name:item.name,
                     price: item.discount === null || item.discount === 0 ? ( item.price ) : ((item.price * (1 - item.discount / 100))),
                     quantity: quantity,
                     size: item.category === "clothing" ? item.size : null
