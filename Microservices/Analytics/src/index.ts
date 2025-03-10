@@ -5,6 +5,8 @@ import { popularProducts, mostPopularProduct } from "./utils/mostPopularProducts
 import { mostPopularCategory, popularCategories } from "./utils/mostPopularCategory";
 import { getTotalSales} from "./utils/sales";
 import { getOrderAverage} from "./utils/orderAverage";
+import { lowStock } from "./utils/lowStock";
+import { mostPopularDate } from "./utils/timeAnalytics";
 
 dotenv.config();
 
@@ -51,9 +53,25 @@ Analytics.get("/sales", async (req: Request, res: Response) => {
 
 Analytics.get("/orderAverage", async (req: Request, res: Response) => {
 
-    const sales = await getOrderAverage()
+    const orderAvg = await getOrderAverage()
 
-    console.log("This is the Order Average:", sales);
+    console.log("This is the Order Average:", orderAvg);
+
+}); 
+
+Analytics.get("/lowStock", async (req: Request, res: Response) => {
+
+    const lowStockItems = await lowStock()
+
+    console.log("These are the items with stock running out:", lowStockItems);
+
+}); 
+
+Analytics.get("/orderDates", async (req: Request, res: Response) => {
+
+    const popularDay = await mostPopularDate()
+
+    console.log("This was the most popular day:", popularDay);
 
 }); 
 

@@ -1,5 +1,5 @@
 
-import { pgTable, serial, text, varchar, integer, date, decimal } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, varchar, integer, date, decimal, timestamp } from "drizzle-orm/pg-core";
 
 export const items = pgTable('items', {
   id: serial('id').primaryKey(),
@@ -25,7 +25,15 @@ export const reviews = pgTable('reviews', {
 
 export const orders = pgTable('orders', {
   id: serial('id').primaryKey(),
-  item_id: varchar('item_id').references(items.id as any),
+  created_at: timestamp("created_at", { withTimezone: true}).defaultNow(),
+  item_id: varchar('item_id').references(() => items.id),
+  quantity: integer('quantity'),
+
+});
+
+export const stock = pgTable('stock', {
+  id: serial('id').primaryKey(),
+  item_id: varchar('item_id').references(() => items.id),
   quantity: integer('quantity'),
 
 });
