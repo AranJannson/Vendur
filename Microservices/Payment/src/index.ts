@@ -75,28 +75,40 @@ Payment.get("/getcookie", async (req: Request, res: Response) => {
 // @ts-ignore
 Payment.get("/getcookieage", async (req: Request, res: Response) => {
 
-    const expiryTime = req.cookies[expiryCookieName]
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
 
-    console.log("cookies: ", expiryTime);
+    
+    const sendTimerUpdate = () => {
+        const expiryTime = req.cookies[expiryCookieName]
+        
+        if (!expiryTime) {
+            return res.json([]);
+        }
 
-    if (!expiryTime) {
-        return res.json([]);
-    }
+        const ageSeconds = (duration / 1000) - ((Date.now() - expiryTime) / 1000);
+        const minutes = Math.floor((ageSeconds / 60) % 60);
+        const seconds = Math.floor(ageSeconds % 60);
+        const hours = Math.floor(ageSeconds / 3600);
+        const ageString = String( hours + "hr " + minutes + "m " + seconds + "s");
+        
+        res.write(`data: ${JSON.stringify({ age: ageString }) }\n\n`)
+    };
 
-    const ageSeconds = (duration / 1000) - ((Date.now() - expiryTime) / 1000);
-    const minutes = Math.floor((ageSeconds / 60) % 60);
-    const seconds = ageSeconds % 60;
-    const hours = Math.floor(ageSeconds / 3600)
-    const ageString = String( hours + "hr " + minutes + "m " + seconds.toFixed(2) + "s")
+    const interval = setInterval(sendTimerUpdate, 1000)
 
-    res.json(ageString);
+    req.on("close", () => {
+        console.log("Client disconnected from SSE");
+        clearInterval(interval);
+    });
 
 });
 
 Payment.delete("/deletecookie", async (req: Request, res: Response) => {
     res.clearCookie(basketCookieName);
     res.clearCookie(expiryCookieName);
-    res.end()
+    res.json({event: "expired"});
 });
 
 // @ts-ignore
@@ -115,14 +127,15 @@ Payment.delete("/deletevalue", async (req: Request, res: Response) => {
     }
 
     const updatedBasket = basket.filter((item: { id: string }) => item.id !== id);
-
+    
+    res.cookie(basketCookieName, JSON.stringify(updatedBasket), { maxAge: duration, httpOnly: true, sameSite: "lax" });
+    
     if (updatedBasket.length == 0){
         res.clearCookie(expiryCookieName);
-    };
-
-    res.cookie(basketCookieName, JSON.stringify(updatedBasket), { maxAge: duration, httpOnly: true, sameSite: "lax" });
-
-    res.json({ message: "Item removed", basket: updatedBasket });
+        res.json({event: "expired"});
+    } else (
+        res.json({ message: "Item removed", basket: updatedBasket })
+    );
 
 });
 
