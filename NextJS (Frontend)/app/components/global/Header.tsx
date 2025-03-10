@@ -34,16 +34,13 @@ export default function Header() {
                         </li>
 
                         <li className="text-2xl rounded-full bg-primary-400 text-black p-2 hover:bg-primary-500 transition-colors hover:cursor-pointer">
-                            <RiShoppingBasket2Line />
+                            <Link href="/payment">
+                                <RiShoppingBasket2Line />
+                            </Link>
                         </li>
 
                         <li>
                             <UserButton/>
-                        </li>
-                        <li>
-                            <Link href="/payment" className="transition-colors hover:text-primary-600">
-                                Basket
-                            </Link>
                         </li>
                     </ul>
                 </div>

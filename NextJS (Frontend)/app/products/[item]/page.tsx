@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import NavButton from "@/app/components/ui/NavButton";
 import Link from 'next/link';
+import AddToCheckoutButton from '@/app/components/payment/AddToCheckoutButton';
 
 //@ts-ignore
 export async function generateMetadata({ params }) {
