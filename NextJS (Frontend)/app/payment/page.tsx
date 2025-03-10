@@ -2,6 +2,7 @@
 
 import { useUser } from "@stackframe/stack";
 import GetBasket from "./api/GetBasket";
+import GetBasketCountdownTimer from "../components/payment/GetBasketCountdownTimer";
 
 export default function Payment() {
 
@@ -13,6 +14,7 @@ export default function Payment() {
             <div>
                 Welcome to checkout, you are signed in
                 <GetBasket />
+                <GetBasketCountdownTimer />
             </div>
         ) : (
             <div>
