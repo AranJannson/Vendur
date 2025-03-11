@@ -1,4 +1,3 @@
-import { items } from '../drizzle/schema'
 import { JSONValue } from 'postgres';
 
 
