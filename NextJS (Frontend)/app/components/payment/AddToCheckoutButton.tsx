@@ -7,6 +7,8 @@ export default function AddToCheckoutButton( { item, formId }: { item: any, form
         const form = document.getElementById(formId) as HTMLFormElement;
         const quantityInput = form?.querySelector("input[name='quantity']") as HTMLInputElement;
         const quantity = quantityInput ? Number(quantityInput.value) : 1;
+        const sizeInput = form?.querySelector("select[name='size']") as HTMLInputElement;
+        const size = sizeInput ? String(sizeInput.value) : null;
 
         const response = await fetch("http://localhost:8002/setcookie", {
             method: "POST",
@@ -21,7 +23,7 @@ export default function AddToCheckoutButton( { item, formId }: { item: any, form
                     name:item.name,
                     price: item.discount === null || item.discount === 0 ? ( item.price ) : ((item.price * (1 - item.discount / 100))),
                     quantity: quantity,
-                    size: item.category === "clothing" ? item.size : null
+                    size: size,
                 })
             }),
         });
