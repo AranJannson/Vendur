@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-import { testConnection } from "./utils/dbConnect";
 import dotenv from "dotenv";
 import cors from "cors";
 import searchCatalogue from "./utils/search";
@@ -35,7 +34,15 @@ Catalog.get("/search", async (req: Request, res: Response): Promise<any> => {
 
     const query = req.headers.query as string;
 
-    const search = await searchCatalogue(query)
+    const filters = req.headers.filters as string;
+
+    let search;
+
+    if (filters) {
+        search = await searchCatalogue(query, filters);
+    } else {
+        search = await searchCatalogue(query);
+    }
 
     console.log(search)
 
