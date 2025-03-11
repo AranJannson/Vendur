@@ -30,7 +30,9 @@ Catalog.get("/search", async (req: Request, res: Response): Promise<any> => {
 
     const query = req.headers.query as string;
 
-    const search = await searchCatalogue(query)
+    const filters = req.headers.filters as string;
+
+    const search = await searchCatalogue(query, filters);
 
     console.log(search)
     res.send(JSON.stringify(search, null, 2));
