@@ -43,7 +43,19 @@ Payment.post("/setcookie", async (req: Request, res: Response) => {
         }
     }
 
-    basket.push(JSON.parse(value));
+    const parsedItem = JSON.parse(value);
+
+    console.log(parsedItem.size);
+
+    const existingItemIndex = basket.findIndex((item: { id: string; size?: string | null }) => 
+        item.id === parsedItem.id && item.size === parsedItem.size
+    );
+
+    if (existingItemIndex === -1) {
+        basket.push(parsedItem);
+    } else {
+        basket[existingItemIndex].quantity += parsedItem.quantity;
+    }
 
     res.cookie(basketCookieName, JSON.stringify(basket), {maxAge: duration, httpOnly: true, sameSite: "lax"});
     
