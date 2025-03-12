@@ -59,7 +59,7 @@ export default function GetBasket() {
                                 <p>Price: £{item.price}</p>
                                 {item.size && <p>Size: {item.size}</p>}
                                 <p>Quantity: {item.quantity}</p>
-                                <DeleteItemButton itemId={item.id} />
+                                <DeleteItemButton item={item} />
                             </li>
                         ))}
                     </ul>

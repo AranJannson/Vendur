@@ -114,7 +114,7 @@ Payment.delete("/deletecookie", async (req: Request, res: Response) => {
 // @ts-ignore
 Payment.delete("/deletevalue", async (req: Request, res: Response) => {
     
-    const { id } = req.body;
+    const { id, size } = req.body;
 
     if (!id) {
         return res.json([]);;
@@ -126,7 +126,7 @@ Payment.delete("/deletevalue", async (req: Request, res: Response) => {
         return res.json([]);
     }
 
-    const updatedBasket = basket.filter((item: { id: string }) => item.id !== id);
+    const updatedBasket = basket.filter((item: { id: string, size?: string | null }) => !(item.id === id && item.size === size));
     
     res.cookie(basketCookieName, JSON.stringify(updatedBasket), { maxAge: duration, httpOnly: true, sameSite: "lax" });
     

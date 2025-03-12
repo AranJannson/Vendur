@@ -1,6 +1,6 @@
 "use client";
 
-export default function DeleteItemButton({ itemId }: { itemId: string }) {
+export default function DeleteItemButton({ item }: { item: any }) {
     
     const handleClick = async () => {
 
@@ -10,7 +10,7 @@ export default function DeleteItemButton({ itemId }: { itemId: string }) {
                 "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({ id: itemId }),
+            body: JSON.stringify({ id: item.id, size: item.size }),
         });
 
         if (response.ok) {
