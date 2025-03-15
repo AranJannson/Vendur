@@ -4,6 +4,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
 
     const search = searchParams.get("query");
+    const filters = searchParams.get("filters");
 
 
     if (!search) {
@@ -11,7 +12,12 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/search", {
+        let url = `http://localhost:8000/search?query=${encodeURIComponent(search)}`;
+        console.log(`filters: ${filters}`)
+        if (filters !== null && filters !== undefined && filters !== "" && filters.length > 0 && filters !== "null") {
+            url += `&filters=${encodeURIComponent(filters)}`;
+        }
+        const response = await fetch(url, {
             method: "GET",
             headers: {
                 "query": search,

@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-import { testConnection } from "./utils/dbConnect";
 import dotenv from "dotenv";
 import cors from "cors";
 import searchCatalogue from "./utils/search";
@@ -26,17 +25,40 @@ Catalog.get("/catalog", async (req: Request, res: Response) => {
 
 });
 
+// Catalog.get("/search", async (req: Request, res: Response): Promise<any> => {
+//
+//     const query = req.headers.query as string;
+//     req.q
+//
+//     const filters = req.headers.filters as string;
+//     const filtersArr = filters?.split(",");
+//     let search;
+//
+//     if (filters) {
+//         search = await searchCatalogue(query, filtersArr);
+//     } else {
+//         search = await searchCatalogue(query);
+//     }
+//
+//     console.log(search)
+//     res.send(JSON.stringify(search, null, 2));
+// });
 Catalog.get("/search", async (req: Request, res: Response): Promise<any> => {
+    const query = req.query.query as string;
 
-    const query = req.headers.query as string;
+    console.log(`query: ${query}`)
+    const filters = req.query.filters as string;
+    console.log(`filters: ${filters}`)
+    // Filters are in the form: category_fruit,sort_price etc
+    const filtersArr = filters?.split(",");
+    let search;
 
-    const filters = req.headers.filters as string;
+   search = await searchCatalogue(query, filtersArr);
 
-    const search = await searchCatalogue(query, filters);
-
-    console.log(search)
+    // console.log(search);
     res.send(JSON.stringify(search, null, 2));
 });
+
 
 Catalog.post("/catalog", (req: Request, res: Response) => {
     res.send("Catalog is running");
