@@ -46,42 +46,29 @@ export default async function searchCatalogue(query: string, filters: string[] =
     }
 
     // Sort by Price (Ascending)
-    if (filters.includes("sort")) {
-        if (filters[filters.indexOf("sort") + 1] === "price") {
-            const { data } = await supabase.from('items').select().ilike('name', `%${query}%`).order("price", { ascending: true });
-            return data;
-        }
+    // http://localhost:3000/search?query=apple&filters=sort_price_ASC
+    const sortPriceAscFilter = filters.find(filter => filter.startsWith("sort_price_ASC"));
+    if (sortPriceAscFilter) {
+        const { data } = await supabase.from('items').select().ilike('name', `%${query}%`).order("price", { ascending: true });
+        return data;
     }
     // Sort by Price (Descending)
-    if (filters.includes("sort")) {
-        if (filters[filters.indexOf("sort") + 1] === "price") {
-            const { data } = await supabase.from('items').select().ilike('name', `%${query}%`).order("price", { ascending: false });
-            return data;
-        }
+    // http://localhost:3000/search?query=apple&filters=sort_price_DESC
+    const sortPriceDescFilter = filters.find(filter => filter.startsWith("sort_price_DESC"));
+    if (sortPriceDescFilter) {
+        const { data } = await supabase.from('items').select().ilike('name', `%${query}%`).order("price", { ascending: false });
+        return data;
     }
     // Sort by Name (Ascending)
-    if (filters.includes("sort")) {
-        if (filters[filters.indexOf("sort") + 1] === "name") {
-            const { data } = await supabase.from('items').select().ilike('name', `%${query}%`).order("name", { ascending: true });
-            return data;
-        }
+    const sortNameAscFilter = filters.find(filter => filter.startsWith("sort_name_ASC"));
+    if (sortNameAscFilter) {
+        const { data } = await supabase.from('items').select().ilike('name', `%${query}%`).order("name", { ascending: true });
+        return data;
     }
     // Sort by Name (Descending)
-    if (filters.includes("sort")) {
-        if (filters[filters.indexOf("sort") + 1] === "name") {
-            const { data } = await supabase.from('items').select().ilike('name', `%${query}%`).order("name", { ascending: false });
-            return data;
-        }
+    const sortNameDescFilter = filters.find(filter => filter.startsWith("sort_name_DESC"));
+    if (sortNameDescFilter) {
+        const { data } = await supabase.from('items').select().ilike('name', `%${query}%`).order("name", { ascending: false });
+        return data;
     }
 }
-
-export async function searchByCategory(query: string, category: string){
-
-    const supabase = connect();
-
-    const { data } = await supabase.from("items").select().eq("category", category).ilike("name", `%${query}%`)
-
-    return data;
-
-}
-
