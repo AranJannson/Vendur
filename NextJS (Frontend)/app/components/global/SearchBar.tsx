@@ -19,7 +19,11 @@ export default function SearchBar() {
         event.preventDefault();
         const search = new FormData(event.currentTarget).get("search") as string;
         const filters = selectedFilter === "category" ? `category_${selectedCategory}` : selectedFilter;
-
+        if (!filters) {
+            // Redirect with encoded query parameters
+            redirect(`/search?query=${encodeURIComponent(search)}`);
+            return;
+        }
         // Redirect with encoded query parameters
         redirect(`/search?query=${encodeURIComponent(search)}&filters=${encodeURIComponent(filters)}`);
         console.log(encodeURIComponent(filters))
@@ -32,7 +36,6 @@ export default function SearchBar() {
             <input className="px-5 py-2 bg-transparent placeholder-black h-full w-full focus:outline-none"
                    placeholder="Search..." name="search" type="search"/>
 
-            {/* Select Filters */}
             <select className="px-5 py-2 bg-transparent placeholder-black h-full w-full focus:outline-none"
                     name="filters"
                     value={selectedFilter}

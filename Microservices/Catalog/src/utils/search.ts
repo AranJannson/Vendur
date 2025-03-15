@@ -3,25 +3,13 @@ import { connect } from "./dbConnect";
 export default async function searchCatalogue(query: string, filters: string[] = []) {
     const supabase = connect();
 
-    if (filters.length === 0) {
+    if (filters.length === 0 || null || undefined || "") {
         const { data } = await supabase.from('items').select().ilike('name', `%${query}%`)
         return data;
     }
 
     // URL template = /search?query=apple&filters=category_fruit,sort_price
     // http://localhost:3000/search?query=l&filters=category_Electronics%20%26%20Computing
-
-    // Search by Category
-    // const categoryFilter = filters.find(filter => filter.startsWith("category_"))
-    // if (filters.includes("category")) {
-    //
-    //     const { data } = await supabase
-    //         .from('items')
-    //         .select()
-    //         .ilike('name', `%${query}%`)
-    //         .eq("category", filters[filters.indexOf("category") + 1]);
-    //     return data;
-    // }
 
     const categoryFilter = filters.find(filter => filter.startsWith("category_"));
     if (categoryFilter) {
@@ -30,6 +18,14 @@ export default async function searchCatalogue(query: string, filters: string[] =
         const categoryValue = decodeURIComponent(categoryFilter.replace("category_", ""));
 
         console.log(`Category Value: ${categoryValue}\nQuery: ${query}`)
+
+        if (categoryValue === null) {
+            const { data } = await supabase
+                .from('items')
+                .select()
+                .ilike('name', `%${query}%`);
+            return data;
+        }
         const { data } = await supabase
             .from('items')
             .select()
@@ -37,10 +33,15 @@ export default async function searchCatalogue(query: string, filters: string[] =
             .eq("category", categoryValue);
         return data;
     }
-
+    // http://localhost:3000/search?query=apple&filters=price_min_100,price_max_200
     // Search by Price Range
-    if (filters.includes("price")) {
-        const { data } = await supabase.from('items').select().ilike('name', `%${query}%`).gte("price", filters[filters.indexOf("price") + 1]).lte("price", filters[filters.indexOf("price") + 2]);
+    const priceMinFilter = filters.find(filter => filter.startsWith("price_min_"));
+    const priceMaxFilter = filters.find(filter => filter.startsWith("price_max_"));
+
+    if (priceMinFilter && priceMaxFilter) {
+        const minPrice = parseInt(priceMinFilter.split("_")[2]);
+        const maxPrice = parseInt(priceMaxFilter.split("_")[2]);
+        const {data} = await supabase.from('items').select().ilike('name', `%${query}%`).gte("price", minPrice).lte("price", maxPrice);
         return data;
     }
 

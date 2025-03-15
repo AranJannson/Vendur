@@ -16,6 +16,14 @@ export default function SearchPage() {
 
         const fetchData = async () => {
             try {
+                if (!filters || filters === "null") {
+                    const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+                    if (!response.ok) throw new Error("Failed to fetch data");
+
+                    const result = await response.json();
+                    setData(result);
+                    return;
+                }
                 const response = await fetch(`/api/search?query=${encodeURIComponent(query)}&filters=${encodeURIComponent(filters)}`, );
                 if (!response.ok) throw new Error("Failed to fetch data");
 
