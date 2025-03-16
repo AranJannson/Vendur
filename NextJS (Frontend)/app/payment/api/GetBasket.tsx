@@ -10,6 +10,7 @@ interface Item {
     price: number;
     quantity: number;
     size: (string & { length: 1 }) | null;
+    image: string;
 }
 
 export default function GetBasket() {
@@ -55,7 +56,10 @@ export default function GetBasket() {
                         {basket.map((item, index) => (
                             <li key={index} className="mb-4">
                                 <h2 className="text-xl font-bold">{item.name}</h2>
-                                <p>Id: {item.id}</p>
+                                <div
+                                    className="bg-secondary-100 max-w-[10rem] max-h-[10rem] p-4 m-4 rounded-lg flex justify-center">
+                                    <img src={item.image} alt={item.name} width="300" height="300" className="object-contain"/>
+                                </div>                                <p>Id: {item.id}</p>
                                 <p>Price: £{item.price}</p>
                                 {item.size && <p>Size: {item.size}</p>}
                                 <p>Quantity: {item.quantity}</p>
@@ -63,7 +67,7 @@ export default function GetBasket() {
                             </li>
                         ))}
                     </ul>
-                    <DeleteBasketButton />
+                    { basket.length != 1 && <DeleteBasketButton /> }
                 </div>
             ) : (
                 <p>No items in basket.</p>
