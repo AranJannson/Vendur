@@ -45,8 +45,6 @@ Payment.post("/setcookie", async (req: Request, res: Response) => {
 
     const parsedItem = JSON.parse(value);
 
-    console.log(parsedItem.size);
-
     const existingItemIndex = basket.findIndex((item: { id: string; size?: string | null }) => 
         item.id === parsedItem.id && item.size === parsedItem.size
     );
@@ -120,7 +118,6 @@ Payment.get("/getcookieage", async (req: Request, res: Response) => {
 Payment.delete("/deletecookie", async (req: Request, res: Response) => {
     res.clearCookie(basketCookieName);
     res.clearCookie(expiryCookieName);
-    res.json({event: "expired"});
 });
 
 // @ts-ignore

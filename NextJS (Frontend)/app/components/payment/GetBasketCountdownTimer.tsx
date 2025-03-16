@@ -11,13 +11,17 @@ export default function GetBasketCountdownTimer() {
 
         eventSource.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            setAge(data.age)
+            if (data.age === "0hr 0m 0s") {
+                window.location.reload()
+            } else {
+                setAge(data.age)
+            }
         };
 
-        eventSource.addEventListener("expired", () => {
-            setAge("")
+        eventSource.onerror = () => {
+            setAge("");
             eventSource.close();
-        });
+        };
 
         return () => {
             eventSource.close();
