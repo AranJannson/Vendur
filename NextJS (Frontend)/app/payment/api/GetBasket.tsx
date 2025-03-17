@@ -60,14 +60,33 @@ export default function GetBasket() {
                                     className="bg-secondary-100 max-w-[10rem] max-h-[10rem] p-4 m-4 rounded-lg flex justify-center">
                                     <img src={item.image} alt={item.name} width="300" height="300" className="object-contain"/>
                                 </div>                                <p>Id: {item.id}</p>
-                                <p>Price: £{item.price}</p>
-                                {item.size && <p>Size: {item.size}</p>}
-                                <p>Quantity: {item.quantity}</p>
+                                <p>Price: £{item.price.toFixed(2)}</p>
+                                {item.size !== null ? (
+                                <div>
+                                    <label className="font-bold ml-1">Size</label>
+                                    <select className="p-2 bg-primary-200 rounded-full w-20" name="size" defaultValue={item.size}>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                    </select>
+                                </div>
+
+                            ) : null}
+                                <label className="font-bold ml-1">Quantity</label>
+                                <input
+                                    type="number"
+                                    defaultValue={item.quantity}
+                                    max="10"
+                                    min="1"
+                                    className="p-2 bg-primary-200 rounded-full w-20"
+                                    name="quantity"
+                            />
                                 <DeleteItemButton item={item} />
                             </li>
                         ))}
                     </ul>
-                    { basket.length != 1 && <DeleteBasketButton /> }
+                    <DeleteBasketButton /> 
                 </div>
             ) : (
                 <p>No items in basket.</p>
