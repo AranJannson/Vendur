@@ -7,6 +7,7 @@ import Link from "next/link";
 export default function SearchPage() {
     const searchParams = useSearchParams();
     const query = searchParams.get("query");
+    const filters = searchParams.get("filters");
 
     const [data, setData] = useState(null);
 
@@ -15,7 +16,15 @@ export default function SearchPage() {
 
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+                if (!filters || filters === "null") {
+                    const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+                    if (!response.ok) throw new Error("Failed to fetch data");
+
+                    const result = await response.json();
+                    setData(result);
+                    return;
+                }
+                const response = await fetch(`/api/search?query=${encodeURIComponent(query)}&filters=${encodeURIComponent(filters)}`, );
                 if (!response.ok) throw new Error("Failed to fetch data");
 
                 const result = await response.json();
