@@ -30,7 +30,7 @@ Catalog.get("/stock", async (req: Request, res: Response): Promise<any> => {
 
     const { item_id } = req.body;
 
-    return checkStock(item_id);
+    res.send(checkStock(item_id));
 
 })
 
