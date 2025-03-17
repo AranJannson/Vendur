@@ -118,6 +118,7 @@ Payment.get("/getcookieage", async (req: Request, res: Response) => {
 Payment.delete("/deletecookie", async (req: Request, res: Response) => {
     res.clearCookie(basketCookieName);
     res.clearCookie(expiryCookieName);
+    res.json({event: "expired"});
 });
 
 // @ts-ignore

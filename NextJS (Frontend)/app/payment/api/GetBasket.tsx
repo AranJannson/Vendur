@@ -86,7 +86,7 @@ export default function GetBasket() {
                             </li>
                         ))}
                     </ul>
-                    <DeleteBasketButton /> 
+                    { basket.length != 1 && <DeleteBasketButton /> } 
                 </div>
             ) : (
                 <p>No items in basket.</p>
