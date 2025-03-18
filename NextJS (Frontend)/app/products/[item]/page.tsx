@@ -5,7 +5,7 @@ import AddToCheckoutButton from '@/app/components/payment/AddToCheckoutButton';
 
 //@ts-ignore
 export async function generateMetadata({ params }) {
-    const decodedItemName = decodeURIComponent(params.item);
+    const decodedItemName = decodeURIComponent( params.item);
     return {
       title: `${decodedItemName} | Vendur`,
       description: "",
@@ -96,12 +96,12 @@ export default async function ItemPage({ params }: { params: { item: string } })
                         )}
                         
 
-                        <form className="flex flex-col">
+                        <form className="flex flex-col" id="itemForm">
 
                             {item?.category === 'Clothing & Shoes' ? (
                                 <div className="flex flex-col">
                                     <label className="font-bold ml-1">Size</label>
-                                    <select className="p-2 bg-primary-200 rounded-full w-20">
+                                    <select className="p-2 bg-primary-200 rounded-full w-20" name="size">
                                         <option value="S">S</option>
                                         <option value="M">M</option>
                                         <option value="L">L</option>
@@ -129,7 +129,7 @@ export default async function ItemPage({ params }: { params: { item: string } })
                                 ) : (
                                     <AddToCheckoutButton 
                                         item={item} 
-                                        formId="quantityForm"
+                                        formId="itemForm"
                                         />
                                 )}
                             </div>

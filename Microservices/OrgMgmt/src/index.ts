@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { connect } from "./utils/dbConnect";
+import {getRandomItemImages} from "./utils/displayImage";
 
 dotenv.config();
 
@@ -16,25 +16,38 @@ OrgMgmt.listen(portNumber, () => {
     console.log(`OrgMgmt is running on port ${portNumber}`);
 });
 
-OrgMgmt.get("/OrgGet", async (req: Request, res: Response) => {
-    const db = await connect();
+// OrgMgmt.get("/OrgGet", async (req: Request, res: Response) => {
+//     const db = await connect();
+//
+//     const itemsList = await db.from('items').select('*');
+//
+//     console.log(JSON.stringify(itemsList, null, 2));
+//
+//     res.send(JSON.stringify(itemsList, null, 2));
+// });
+//
+// OrgMgmt.post("/OrgPost", async (req: Request, res: Response): Promise<any> => {
+//
+//     const supabase = await connect();
+//
+//     await supabase.from('items').insert({
+//         name: 'Pyoro',
+//         image: "https://mario.wiki.gallery/images/5/5d/WWGIT_CS_Pyoro.png",
+//         price: 4000,
+//         description: "A cute little bird that eats bugs."
+//     });
+//
+// });
 
-    const itemsList = await db.from('items').select('*');
+OrgMgmt.get("/display-random-item-images", async (req: Request, res: Response): Promise<any> => {
 
-    console.log(JSON.stringify(itemsList, null, 2));
+    const { imageCount } = req.body;
 
-    res.send(JSON.stringify(itemsList, null, 2));
-});
+    const data = await getRandomItemImages(imageCount);
 
-OrgMgmt.post("/OrgPost", async (req: Request, res: Response): Promise<any> => {
+    if (!data) {
+        return res.status(500).send({ error: "Failed to fetch images" });
+    }
 
-    const supabase = await connect();
-
-    await supabase.from('items').insert({ 
-        name: 'Pyoro', 
-        image: "https://mario.wiki.gallery/images/5/5d/WWGIT_CS_Pyoro.png", 
-        price: 4000, 
-        description: "A cute little bird that eats bugs."
-    });
-
+    res.status(200).send(data);
 });

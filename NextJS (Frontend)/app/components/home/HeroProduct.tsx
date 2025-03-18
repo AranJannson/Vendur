@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function HeroProduct({ url, text }: { url: string; text: string }) {
   return (
     <span className="flex flex-col gap-2 justify-center items-center w-screen md:w-full">
-      <div className="relative w-80 md:h-80 h-96 flex md:flex-row flex-col bg-primary-100 md:w-fit md:m-0 rounded-xl p-4 md:w-[500px] break-words">
+      <div className="relative w-full md:h-80 h-96 flex md:flex-row flex-col bg-primary-100  md:m-0 rounded-xl p-4 md:w-[500px] break-words">
       <div className="w-full md:w-1/2 flex justify-center items-center">
           <img
             src={url}
