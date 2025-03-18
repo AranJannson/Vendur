@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { testConnection } from "./utils/dbConnect";
 import dotenv from "dotenv";
 import cors from "cors";
-import { fetchCatalog } from "./utils/fetchCatalog";
+import searchCatalogue from "./utils/search";
 
 dotenv.config();
 
@@ -16,17 +16,24 @@ const portNumber = 8000;
 
 Catalog.listen(portNumber, () => {
     console.log(`Catalog is running on port ${portNumber}`);
-
-    testConnection();
-    
 });
 
 Catalog.get("/catalog", async (req: Request, res: Response) => {
 
-    const catalog = await fetchCatalog();
+    // const catalog = await fetchCatalog();
 
-    res.send(JSON.stringify(catalog, null, 2));
+    // res.send(JSON.stringify(catalog, null, 2));
 
+});
+
+Catalog.get("/search", async (req: Request, res: Response): Promise<any> => {
+
+    const query = req.headers.query as string;
+
+    const search = await searchCatalogue(query)
+
+    console.log(search)
+    res.send(JSON.stringify(search, null, 2));
 });
 
 Catalog.post("/catalog", (req: Request, res: Response) => {

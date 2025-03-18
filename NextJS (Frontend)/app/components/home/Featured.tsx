@@ -1,4 +1,5 @@
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import Image from "next/image";
 
 export default function Featured() {
 
@@ -9,9 +10,11 @@ export default function Featured() {
             </div>
 
             <div className="relative w-full mx-20 h-[300px] overflow-hidden">
-                    <img
-                        src={"https://dummyimage.com/2000x900/fff/000.png"}
+                    <Image
+                        src="/advert.png"
                         alt="Featured"
+                        width={2000}
+                        height={900}
                         className="object-cover rounded-lg shadow-xl absolute inset-0 w-full h-full"
                     />
             </div>
