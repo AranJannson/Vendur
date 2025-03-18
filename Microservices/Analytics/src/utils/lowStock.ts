@@ -1,27 +1,19 @@
-import { connect } from './dbConnect';
-import { items, stock } from '../drizzle/schema';
-import { gt,sql,eq, desc, lt } from 'drizzle-orm';
+import {createClient} from "@supabase/supabase-js";
 
+const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process.env.PUBLIC_SUPABASE_ANON_KEY as string);
 
-export async function lowStock(): Promise<any>{
-    try {
-        const db = await connect();
+export async function lowStock(){
 
-        const lowProducts = await db!.select({
-            itemId: stock.item_id,
-            itemName: items.name,
-            stock: stock.quantity
-        })
-        .from(stock)
-        .innerJoin(items, eq(stock.item_id, items.id))
-        .where(lt(stock.quantity, 10));
+    try{
+        const { data, error } = await supabase.from("stock").select("*").lt("quantity", 10);
+        return data;
 
-        return lowProducts
-
-    } catch (error){
+    }catch (error){
         console.error(error);
-        return;
+        return 0;
     }
+
+
 }
 
 

@@ -1,10 +1,11 @@
-import { items } from '../drizzle/schema'
-import { connect } from './dbConnect'
-import { JSONValue } from 'postgres';
+import {createClient} from "@supabase/supabase-js";
 
-export const fetchProducts = async (): Promise<JSONValue> => {
+const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process.env.PUBLIC_SUPABASE_ANON_KEY as string);
 
-    const db = await connect();
+export async function fetchAllProducts(){
 
-    return await db!.select().from(items);
+    const { data } = await supabase?.from("items").select("*");
+
+    return data;
+
 }
