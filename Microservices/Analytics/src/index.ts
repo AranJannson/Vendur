@@ -7,7 +7,7 @@ import { getTotalSales} from "./utils/sales";
 import { getOrderAverage} from "./utils/orderAverage";
 import { lowStock } from "./utils/lowStock";
 import { mostPopularDate } from "./utils/timeAnalytics";
-import { popularProductsList } from "./utils/productAnalytics" 
+import { popularProduct, testAllProducts } from "./utils/productAnalytics" 
 
 dotenv.config();
 
@@ -78,9 +78,17 @@ Analytics.get("/orderDates", async (req: Request, res: Response) => {
 
 Analytics.get("/newerPopularProducts", async (req: Request, res: Response) => {
 
-    const popularProductsListVar = await popularProductsList()
+    const popularProductsListVar = await popularProduct()
 
     console.log("The newer output for products is:", popularProductsListVar);
+
+}); 
+
+Analytics.get("/testAllProducts", async (req: Request, res: Response) => {
+
+    const productList = await testAllProducts()
+
+    console.log("The new product list is:", productList);
 
 }); 
 
