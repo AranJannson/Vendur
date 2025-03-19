@@ -33,8 +33,20 @@ const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process
 export async function popularProduct(){
 
     try{
-        const { data, error } = await supabase.from("orders").select("item_id", {count:'exact'}).order("item_id");
-        
+        // const { data, error } = await supabase.from("orders").select("item_id", {count:'exact'}).order("item_id");
+        const { data, error } = await supabase.from("orders").select("*");
+        return data;
+
+    }catch (error){
+        console.error(error);
+        return 0;
+    }
+}
+
+export async function everydatabase(){
+
+    try{
+        const { data, error } = await supabase.from("orders").select("*");
         return data;
 
     }catch (error){
@@ -44,6 +56,8 @@ export async function popularProduct(){
 
 
 }
+
+
 
 
 export async function testAllProducts(){

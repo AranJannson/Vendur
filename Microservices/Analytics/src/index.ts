@@ -7,7 +7,7 @@ import { getTotalSales} from "./utils/sales";
 import { getOrderAverage} from "./utils/orderAverage";
 import { lowStock } from "./utils/lowStock";
 import { mostPopularDate } from "./utils/timeAnalytics";
-import { popularProduct, testAllProducts } from "./utils/productAnalytics" 
+import { popularProduct, testAllProducts, everydatabase } from "./utils/productAnalytics" 
 
 dotenv.config();
 
@@ -92,3 +92,10 @@ Analytics.get("/testAllProducts", async (req: Request, res: Response) => {
 
 }); 
 
+Analytics.get("/everyDatabase", async (req: Request, res: Response) => {
+
+    const productList = await everydatabase()
+
+    console.log("The new product list is:", productList);
+
+}); 
