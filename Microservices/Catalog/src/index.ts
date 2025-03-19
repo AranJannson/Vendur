@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import searchCatalogue from "./utils/search";
 import checkStock from "./utils/fetchIItemInfo";
-import { fetchAllReviews, fetchReview } from "./utils/fetchReview";
+import { fetchAllReviews, reviews, makeReview } from "./utils/reviews";
 
 dotenv.config();
 
@@ -35,24 +35,6 @@ Catalog.get("/stock", async (req: Request, res: Response): Promise<any> => {
 
 })
 
-// Catalog.get("/search", async (req: Request, res: Response): Promise<any> => {
-//
-//     const query = req.headers.query as string;
-//     req.q
-//
-//     const filters = req.headers.filters as string;
-//     const filtersArr = filters?.split(",");
-//     let search;
-//
-//     if (filters) {
-//         search = await searchCatalogue(query, filtersArr);
-//     } else {
-//         search = await searchCatalogue(query);
-//     }
-//
-//     console.log(search)
-//     res.send(JSON.stringify(search, null, 2));
-// });
 Catalog.get("/search", async (req: Request, res: Response): Promise<any> => {
     const query = req.query.query as string;
 
@@ -65,7 +47,6 @@ Catalog.get("/search", async (req: Request, res: Response): Promise<any> => {
 
    search = await searchCatalogue(query, filtersArr);
 
-    // console.log(search);
     res.send(JSON.stringify(search, null, 2));
 });
 
@@ -82,15 +63,22 @@ Catalog.get("/reviews/:item_id", async (req: Request, res: Response): Promise<an
 Catalog.get("/review/:review_id", async (req: Request, res: Response): Promise<any> => {
     const review_id = req.params.review_id as string;
 
-    const review = await fetchReview(review_id);
+    const review = await reviews(review_id);
 
     res.send(JSON.stringify(review, null, 2));
 
 });
 
+Catalog.post("/review", async (req: Request, res: Response): Promise<any> => {
+    const { item_id, rating, reviewText } = req.body;
+    const newReview = await makeReview(item_id, rating, reviewText);
+
+    res.send(JSON.stringify(newReview, null, 2));
+});
+
 Catalog.post("/catalog", (req: Request, res: Response) => {
     res.send("Catalog is running");
-    
+
 });
 
 Catalog.get("/catalog-test", (req: Request, res: Response) => {
