@@ -7,8 +7,9 @@ import { getTotalSales} from "./utils/sales";
 import { getOrderAverage} from "./utils/orderAverage";
 import { lowStock } from "./utils/lowStock";
 import { mostPopularDate } from "./utils/timeAnalytics";
-import { popularProduct, testAllProducts, everydatabase } from "./utils/productAnalytics" 
+import { popularProduct, testAllProducts, everydatabase, catalogItemsCall } from "./utils/productAnalytics" 
 import { fetchAllProducts } from "./utils/fetchAllProducts";
+import { inventoryValue } from "./utils/stockAnalysis";
 
 dotenv.config();
 
@@ -106,5 +107,21 @@ Analytics.get("/fetchAllProducts", async (req: Request, res: Response) => {
     const productList = await fetchAllProducts()
 
     console.log("The modified version with catalog is:", productList);
+
+}); 
+
+Analytics.get("/catalogItemsCall", async (req: Request, res: Response) => {
+
+    const productList = await catalogItemsCall()
+
+    console.log("The modified version with catalog is:", productList);
+
+}); 
+
+Analytics.get("/inventoryValue", async (req: Request, res: Response) => {
+
+    const productList = await inventoryValue()
+
+    console.log("The inventory value is:", productList);
 
 }); 
