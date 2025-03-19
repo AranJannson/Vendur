@@ -17,6 +17,6 @@ const analyticsSupabase = createClient(
 // Function to fetch all products from the catalogue database.
 export async function fetchAllProducts() {
     // Query the 'items' table from the catalogue database.
-    const { data } = await catalougeSupabase.from("items").select("*");
+    const { data } = await catalougeSupabase.from("stock").select("*");
     return data;
 }
