@@ -1,15 +1,12 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { popularProducts, mostPopularProduct } from "./utils/mostPopularProducts";
-import { mostPopularCategory, popularCategories } from "./utils/mostPopularCategory";
-import { getTotalSales} from "./utils/sales";
 import { getOrderAverage} from "./utils/orderAverage";
 import { lowStock } from "./utils/lowStock";
 import { mostPopularDate } from "./utils/timeAnalytics";
-import { popularProduct, testAllProducts, everydatabase, catalogItemsCall } from "./utils/productAnalytics" 
+import { mostPopularCategory } from "./utils/productAnalytics" 
 import { fetchAllProducts } from "./utils/fetchAllProducts";
-import { inventoryValue } from "./utils/stockAnalysis";
+import { inventoryValue, lowerStock, outOfStock, mostValuableStockItem } from "./utils/stockAnalysis";
 
 dotenv.config();
 
@@ -25,82 +22,37 @@ Analytics.listen(portNumber, () => {
     console.log(`Analytics is running on port ${portNumber}`);
 });
 
-Analytics.get("/mostPopularProducts", async (req: Request, res: Response) => {
+// Analytics.get("/orderAverage", async (req: Request, res: Response) => {
 
-    const pp = await popularProducts();
+//     const orderAvg = await getOrderAverage()
 
-    const mpp = await mostPopularProduct();
+//     console.log("This is the Order Average:", orderAvg);
 
+// }); 
 
-    console.log("This is the pp variable:", JSON.stringify(pp));
-    console.log("This is the mpp variable:", JSON.stringify(mpp));
+// Analytics.get("/lowStock", async (req: Request, res: Response) => {
 
-}); 
+//     const lowStockItems = await lowStock()
 
-Analytics.get("/mostPopularCategories", async (req: Request, res: Response) => {
+//     console.log("These are the items with stock running out:", lowStockItems);
 
-    const pc = await popularCategories()
-    const mpc = await mostPopularCategory()
+// }); 
 
-    console.log("This is the pc variable:", JSON.stringify(pc));
-    console.log("This is the mpc variable:", JSON.stringify(mpc))
-}); 
+// Analytics.get("/orderDates", async (req: Request, res: Response) => {
 
-Analytics.get("/sales", async (req: Request, res: Response) => {
+//     const popularDay = await mostPopularDate()
 
-    const sales = await getTotalSales()
+//     console.log("This was the most popular day:", popularDay);
 
-    console.log("This is the sales variable:", sales);
+// }); 
 
-}); 
+// Analytics.get("/newerPopularProducts", async (req: Request, res: Response) => {
 
-Analytics.get("/orderAverage", async (req: Request, res: Response) => {
+//     const popularProductsListVar = await popularProduct()
 
-    const orderAvg = await getOrderAverage()
+//     console.log("The newer output for products is:", popularProductsListVar);
 
-    console.log("This is the Order Average:", orderAvg);
-
-}); 
-
-Analytics.get("/lowStock", async (req: Request, res: Response) => {
-
-    const lowStockItems = await lowStock()
-
-    console.log("These are the items with stock running out:", lowStockItems);
-
-}); 
-
-Analytics.get("/orderDates", async (req: Request, res: Response) => {
-
-    const popularDay = await mostPopularDate()
-
-    console.log("This was the most popular day:", popularDay);
-
-}); 
-
-Analytics.get("/newerPopularProducts", async (req: Request, res: Response) => {
-
-    const popularProductsListVar = await popularProduct()
-
-    console.log("The newer output for products is:", popularProductsListVar);
-
-}); 
-
-Analytics.get("/testAllProducts", async (req: Request, res: Response) => {
-
-    const productList = await testAllProducts()
-
-    console.log("The new product list is:", productList);
-
-}); 
-
-Analytics.get("/everyDatabase", async (req: Request, res: Response) => {
-
-    const productList = await everydatabase()
-
-    console.log("The new product list is:", productList);
-
-}); 
+// }); 
 
 Analytics.get("/fetchAllProducts", async (req: Request, res: Response) => {
 
@@ -110,18 +62,45 @@ Analytics.get("/fetchAllProducts", async (req: Request, res: Response) => {
 
 }); 
 
-Analytics.get("/catalogItemsCall", async (req: Request, res: Response) => {
+Analytics.get("/popularCategory", async (req: Request, res: Response) => {
 
-    const productList = await catalogItemsCall()
+    const productList = await mostPopularCategory()
 
-    console.log("The modified version with catalog is:", productList);
+    console.log("The most popular category is:", productList);
 
 }); 
 
+// Stock Analytic Tests
+
 Analytics.get("/inventoryValue", async (req: Request, res: Response) => {
 
-    const productList = await inventoryValue()
+    const totalInvValue = await inventoryValue()
 
-    console.log("The inventory value is:", productList);
+    console.log("The inventory value is:", totalInvValue);
+
+}); 
+
+
+Analytics.get("/lowerStock", async (req: Request, res: Response) => {
+
+    const lowStockList = await lowerStock()
+
+    console.log("These are the items that are low on stock:", lowStockList);
+
+}); 
+
+Analytics.get("/outOfStock", async (req: Request, res: Response) => {
+
+    const outOfStockList = await outOfStock()
+
+    console.log("These are the items out of stock:", outOfStockList);
+
+}); 
+
+Analytics.get("/highValueStockItem", async (req: Request, res: Response) => {
+
+    const highStockItem = await mostValuableStockItem()
+
+    console.log("This item has the highest value:", highStockItem);
 
 }); 
