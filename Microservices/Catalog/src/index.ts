@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import searchCatalogue from "./utils/search";
+import checkStock from "./utils/fetchIItemInfo";
 
 dotenv.config();
 
@@ -24,6 +25,14 @@ Catalog.get("/catalog", async (req: Request, res: Response) => {
     // res.send(JSON.stringify(catalog, null, 2));
 
 });
+
+Catalog.get("/stock", async (req: Request, res: Response): Promise<any> => {
+
+    const { item_id } = req.body;
+
+    res.send(checkStock(item_id));
+
+})
 
 // Catalog.get("/search", async (req: Request, res: Response): Promise<any> => {
 //
