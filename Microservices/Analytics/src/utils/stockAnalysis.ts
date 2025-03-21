@@ -1,4 +1,4 @@
-import {createClient} from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 
 const catalogSupabase = createClient(
     process.env.CATALOUGE_SUPABASE_URL as string,
