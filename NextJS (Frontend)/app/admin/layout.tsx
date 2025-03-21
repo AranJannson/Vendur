@@ -17,20 +17,30 @@ export default function Layout({
   return (
     <>
         <AdminHeader/>
-      <div className="admin-dashboard">
-        <div className="admin-analytics admin-block">
-          {analytics}
-        </div>
-        <div className="admin-products admin-block">
-          {products}
-        </div>
-        <div className="admin-verification admin-block">
-          {verification}
-        </div>
-        <div className="admin-organisations admin-block">
-          {organisations}
+      <div className="">
+        <div className="grid grid-cols-2 gap-6 p-4">
+
+          <div className="w-full">
+            {products}
+          </div>
+
+          <div className="w-full">
+            {verification}
+          </div>
+
         </div>
       </div>
+
+      <div className="w-full">
+        {analytics}
+      </div>
+
+      <div className="w-full">
+        {organisations}
+      </div>
+
+
+
     </>
   )
 }
