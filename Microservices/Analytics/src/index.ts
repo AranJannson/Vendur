@@ -6,6 +6,7 @@ import { mostPopularDate } from "./utils/timeAnalytics";
 import { mostPopularCategory } from "./utils/productAnalytics" 
 import { fetchAllProducts } from "./utils/fetchAllProducts";
 import { inventoryValue, lowerStock, outOfStock, mostValuableStockItem } from "./utils/stockAnalysis";
+import { mostReviewedProduct, highestReviewedProduct} from "./utils/reviewAnalytics";
 
 dotenv.config();
 
@@ -87,4 +88,20 @@ Analytics.get("/highValueStockItem", async (req: Request, res: Response) => {
 
     console.log("This item has the highest value:", highStockItem);
     res.send(JSON.stringify(highStockItem, null, 2))
-}); 
+});
+
+Analytics.get("/mostReviewedProduct", async (req: Request, res: Response) => {
+
+    const mostReviewedItem = await mostReviewedProduct()
+
+    console.log("This is the product with the most reviews", mostReviewedItem);
+    res.send(JSON.stringify(mostReviewedItem, null, 2))
+});
+
+Analytics.get("/highRatedProduct", async (req: Request, res: Response) => {
+
+    const mostReviewedItem = await highestReviewedProduct()
+
+    console.log("This is the product with the highest rating", mostReviewedItem);
+    res.send(JSON.stringify(mostReviewedItem, null, 2))
+});
