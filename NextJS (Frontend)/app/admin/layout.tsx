@@ -1,4 +1,4 @@
-import { ReactNode } from 'React';
+import { ReactNode } from 'react';
 import {AdminHeader} from "@/app/components/admin/AdminHeader";
 
 export default function Layout({
@@ -8,7 +8,7 @@ export default function Layout({
     verification,
     organisations
 }: {
-  children: ReactNode
+  children?: ReactNode
   analytics: ReactNode
   products: ReactNode
     verification: ReactNode
@@ -39,7 +39,9 @@ export default function Layout({
         {organisations}
       </div>
 
-
+        <div>
+            {children}
+        </div>
 
     </>
   )
