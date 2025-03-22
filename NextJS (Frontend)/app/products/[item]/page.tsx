@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import NavButton from "@/app/components/ui/NavButton";
 import Link from 'next/link';
 import AddToCheckoutButton from '@/app/components/payment/AddToCheckoutButton';
+import ReviewSection from "@/app/components/product/ReviewSection";
 
 //@ts-ignore
 export async function generateMetadata({ params }) {
@@ -23,6 +24,13 @@ export default async function ItemPage({ params }: { params: { item: string } })
         .select('*')
         .ilike('name', decodedItemName)
         .maybeSingle();
+
+
+    const { data: reviews, error: reviewsError } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('item_id', item?.id)
+
 
     if (error || !item) {
         return <div>Error loading item: {error ? error.message : 'Item not found'}</div>;
@@ -96,12 +104,12 @@ export default async function ItemPage({ params }: { params: { item: string } })
                         )}
                         
 
-                        <form className="flex flex-col">
+                        <form className="flex flex-col" id="itemForm">
 
                             {item?.category === 'Clothing & Shoes' ? (
                                 <div className="flex flex-col">
                                     <label className="font-bold ml-1">Size</label>
-                                    <select className="p-2 bg-primary-200 rounded-full w-20">
+                                    <select className="p-2 bg-primary-200 rounded-full w-20" name="size">
                                         <option value="S">S</option>
                                         <option value="M">M</option>
                                         <option value="L">L</option>
@@ -129,7 +137,7 @@ export default async function ItemPage({ params }: { params: { item: string } })
                                 ) : (
                                     <AddToCheckoutButton 
                                         item={item} 
-                                        formId="quantityForm"
+                                        formId="itemForm"
                                         />
                                 )}
                             </div>
@@ -143,55 +151,8 @@ export default async function ItemPage({ params }: { params: { item: string } })
                 <p>Sold by: <Link href = "#" className = "text-text font-bold underline text-text mt-2">Vendur</Link></p>
                 <p>{item.description}</p>
             </div>
-
-            <div className="bg-secondary-100 m-4 rounded-lg p-5 flex flex-col gap-4">
-                <h2 className="text-2xl font-bold">Reviews</h2>
-
-                <div className="grid grid-cols-2 bg-primary-200 rounded-lg p-4">
-                    <h3 className="text-sm font-semibold">Average Rating: item.rating</h3>
-                    <h3 className="text-sm font-semibold">Total Reviews: item.reviewsCount</h3>
-                </div>
-
-                <div className="bg-primary-200 rounded-lg p-5">
-                    <h2 className="font-bold text-xl mb-3">Add a Review</h2>
-
-                    <form>
-                        <div className="flex flex-col">
-                            <label htmlFor="review" className="font-bold">Review</label>
-                            <textarea
-                                name="review"
-                                id="review"
-                                className="p-2 bg-primary-100 rounded-lg"
-                            />
-                        </div>
-
-                        <div className="flex flex-col mt-4">
-                            <label className="font-bold">Rating</label>
-                            <div className="flex gap-2">
-                                {[1, 2, 3, 4, 5].map((value) => (
-                                    <label key={value} className="flex items-center gap-1">
-                                        <input
-                                            type="radio"
-                                            name="rating"
-                                            value={value}
-                                            className="accent-primary-500"
-                                        />
-                                        {value}
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
-                        <button type="submit"
-                                className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4">
-                            Submit
-                        </button>
-                    </form>
-
-                </div>
-
-                <h2 className="text-2xl font-bold">Recent Reviews</h2>
-                <p>{item.reviews ? item.reviews : 'No reviews yet'}</p></div>
-
+            {/* Review section */}
+            <ReviewSection reviews={reviews} item_id={item.id} />
         </div>
     );
 }

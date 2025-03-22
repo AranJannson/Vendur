@@ -70,8 +70,8 @@ Catalog.get("/review/:review_id", async (req: Request, res: Response): Promise<a
 });
 
 Catalog.post("/review", async (req: Request, res: Response): Promise<any> => {
-    const { item_id, rating, reviewText } = req.body;
-    const newReview = await makeReview(item_id, rating, reviewText);
+    const { item_id, rating, reviewText, user_id } = req.body;
+    const newReview = await makeReview(item_id, rating, reviewText, user_id);
 
     res.send(JSON.stringify(newReview, null, 2));
 });
