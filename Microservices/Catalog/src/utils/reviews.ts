@@ -16,9 +16,9 @@ export const reviews = async (review_id : any): Promise<any> => {
 }
 
 // Make review
-export const makeReview = async (item_id: any, rating: any, reviewText: any): Promise<any> => {
+export const makeReview = async (item_id: any, rating: any, reviewText: any, user_id: any): Promise<any> => {
     const supabase = connect();
 
-    const { data } = await supabase.from('reviews').insert([{ item_id: item_id, rating: rating, reviewText: reviewText }]);
+    const { data } = await supabase.from('reviews').insert([{ item_id: item_id, rating: rating, reviewText: reviewText, user_id: user_id}]);
     return data;
 }
