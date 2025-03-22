@@ -75,3 +75,7 @@ export async function productsByReviewValue(){
     })
 
 }
+
+export async function highestReviewedProduct(){
+
+}
