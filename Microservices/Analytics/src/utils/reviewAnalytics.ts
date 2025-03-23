@@ -52,7 +52,87 @@ export async function mostReviewedProduct(){
 export async function productsByReviewValue(){
     const {data, error} = await catalogSupabase
         .from("reviews")
-        .select("id, item:items!id (id, name, rating)");
+        .select("id, rating, item:items!id (id, name)")
+
+    if (error){
+        console.log("Error fetching reviews:", error);
+        return 0;
+    }
+
+    const ReviewCount: Record<number, { name: string; totalRating: number; count: number  }> = {};
+
+    data.forEach((item) => {
+        const id = Array.isArray(item.item)
+            ? (item.item as { id: number }[])[0]?.id
+            : (item.item as { id: number }).id;
+        const name = Array.isArray(item.item)
+            ? (item.item as { name: string }[])[1]?.name
+            : (item.item as { name: string }).name;
+        const rating = item.rating;
+
+        const product = Array.isArray(item.item) ? item.item[0] : item.item;
+        if (!item || !item.id) return;
+
+        if (!ReviewCount[id]) {
+            ReviewCount[id] = { name, totalRating: 0, count: 0 };
+        }
+        ReviewCount[id].totalRating += rating;
+        ReviewCount[id].count += 1;
+    })
+    return Object.entries(ReviewCount)
+        .map(([id, { name, totalRating, count }]) => ({
+            id: Number(id),
+            name,
+            averageRating: totalRating / count,
+            reviewCount: count
+        }))
+        .sort((a, b) => b.averageRating - a.averageRating);
+}
+
+
+export async function highestReviewedProduct(){
+    const {data, error} = await catalogSupabase
+        .from("reviews")
+        .select("id, rating, item:items!id (id, name)")
+
+    if (error){
+        console.log("Error fetching reviews:", error);
+        return 0;
+    }
+    const ReviewCount: Record<number, { name: string; totalRating: number; count: number  }> = {};
+    data.forEach((item) => {
+        const id = Array.isArray(item.item)
+            ? (item.item as { id: number }[])[0]?.id
+            : (item.item as { id: number }).id;
+        const name = Array.isArray(item.item)
+            ? (item.item as { name: string }[])[1]?.name
+            : (item.item as { name: string }).name;
+        const rating = item.rating;
+        const product = Array.isArray(item.item) ? item.item[0] : item.item;
+        if (!item || !item.id) return;
+        if (!ReviewCount[id]) {
+            ReviewCount[id] = { name, totalRating: 0, count: 0 };
+        }
+        ReviewCount[id].totalRating += rating;
+        ReviewCount[id].count += 1;
+    })
+
+    const reviewList = Object.entries(ReviewCount)
+        .map(([id, { name, totalRating, count }]) => ({
+            id: Number(id),
+            name,
+            averageRating: totalRating / count,
+            reviewCount: count
+        }))
+        .sort((a, b) => b.averageRating - a.averageRating)
+
+    return reviewList[0];
+}
+
+export async function dailyReviewsList(){
+    const {data, error} = await catalogSupabase
+        .from("reviews")
+        .select("id, rating, created_at, item:items!id (id)")
 
     if (error){
         console.log("Error fetching reviews:", error);
@@ -61,21 +141,16 @@ export async function productsByReviewValue(){
 
     const ReviewCount: Record<number, number> = {};
 
+     let dateList = "This is a list of dates"
+
     data.forEach((item) => {
         const id = Array.isArray(item.item)
             ? (item.item as { id: number }[])[0]?.id
             : (item.item as { id: number }).id;
-        const name = Array.isArray(item.item)
-            ? (item.item as { name: string }[])[0]?.name
-            : (item.item as { name: string }).name;
-        const rating = Array.isArray(item.item)
-            ? (item.item as { rating: number }[])[0]?.rating
-            : (item.item as { rating: number }).rating;
+        const created_at = item.created_at;
+        dateList+=created_at;
+
 
     })
-
-}
-
-export async function highestReviewedProduct(){
-
+    return dateList;
 }
