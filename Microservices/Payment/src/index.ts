@@ -23,13 +23,13 @@ Payment.use(cookieParser());
 
 const portNumber = 8002;
 
-Payment.post("/setcookie", async (req: Request, res: Response) => {
+Payment.post("/setcookie", (req: Request, res: Response) => {
 
     const { name, value } = req.body;
     
     console.log(name)
     console.log(value)
-
+    
     if (!name || !value) {
         return;
     }
@@ -43,19 +43,19 @@ Payment.post("/setcookie", async (req: Request, res: Response) => {
         }
     }
 
-    const parsedItem = JSON.parse(value);
+    console.log(typeof(value));
 
     const existingItemIndex = basket.findIndex((item: { id: string; size?: string | null }) => 
-        item.id === parsedItem.id && item.size === parsedItem.size
+        item.id === value.id && item.size === value.size
     );
 
     if (existingItemIndex === -1) {
-        basket.push(parsedItem);
+        basket.push(value);
     } else {
-        basket[existingItemIndex].quantity += parsedItem.quantity;
+        basket[existingItemIndex].quantity += value.quantity;
     }
-
-    res.cookie(basketCookieName, JSON.stringify(basket), {maxAge: duration, httpOnly: true, sameSite: "lax"});
+    
+    res.cookie(basketCookieName, JSON.stringify(basket), {maxAge: duration, httpOnly: true, sameSite: "lax", domain: "localhost"});
     
     const expiryTime = Date.now()
     res.cookie(expiryCookieName, expiryTime, { maxAge: duration });
@@ -138,7 +138,7 @@ Payment.delete("/deletevalue", async (req: Request, res: Response) => {
 
     const updatedBasket = basket.filter((item: { id: string, size?: string | null }) => !(item.id === id && item.size === size));
     
-    res.cookie(basketCookieName, JSON.stringify(updatedBasket), { maxAge: duration, httpOnly: true, sameSite: "lax" });
+    res.cookie(basketCookieName, JSON.stringify(updatedBasket), { maxAge: duration, httpOnly: true, sameSite: "lax", domain: "localhost"});
     
     if (updatedBasket.length == 0){
         res.clearCookie(expiryCookieName);

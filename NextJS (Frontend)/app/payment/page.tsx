@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@stackframe/stack";
-import GetBasket from "./api/GetBasket";
+import GetBasket from "../components/payment/GetBasket";
 import GetBasketCountdownTimer from "../components/payment/GetBasketCountdownTimer";
 
 export default function Payment() {

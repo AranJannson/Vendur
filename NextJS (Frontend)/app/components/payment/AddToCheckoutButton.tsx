@@ -18,14 +18,14 @@ export default function AddToCheckoutButton( { item, formId }: { item: any, form
             credentials: "include",
             body: JSON.stringify({
                 name: "basket",
-                value: JSON.stringify({
+                value: {
                     id: item.id, 
                     name:item.name,
                     price: item.discount === null || item.discount === 0 ? ( item.price ) : ((item.price * (1 - item.discount / 100))),
                     image: item.image,
                     quantity: quantity,
                     size: size,
-                })
+                }
             }),
         });
 
