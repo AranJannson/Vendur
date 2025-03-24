@@ -129,7 +129,7 @@ export async function highestReviewedProduct(){
     return reviewList[0];
 }
 
-export async function dailyReviewsList(){
+export async function dateWithMostReviews(){
     const {data, error} = await catalogSupabase
         .from("reviews")
         .select("id, rating, created_at, item:items!id (id)")
@@ -139,7 +139,7 @@ export async function dailyReviewsList(){
         return 0;
     }
 
-    const ReviewCount: Record<number, number> = {};
+    const dateCount: Record<string, number> = {};
 
      let dateList = "This is a list of dates"
 
@@ -148,9 +148,57 @@ export async function dailyReviewsList(){
             ? (item.item as { id: number }[])[0]?.id
             : (item.item as { id: number }).id;
         const created_at = item.created_at;
-        dateList+=created_at;
+        let timestampString = String(created_at)
+        const createdAtType = typeof created_at
+        let date = timestampString.slice(0,10)
+        dateList+=date;
+        if (date) {
+            dateCount[date] = (dateCount[date] || 0) + 1;
+        }
 
 
     })
-    return dateList;
+    let mostFrequentDate :string | null = null;
+    let maxCount = 0;
+
+    for (const date in dateCount){
+        if (dateCount[date]>maxCount){
+            mostFrequentDate = date;
+            maxCount = dateCount[date];
+        }
+    }
+
+    return mostFrequentDate ? {date: mostFrequentDate, count: maxCount} : null;
+}
+
+export async function listOfReviewsPerDay(){
+    const {data, error} = await catalogSupabase
+        .from("reviews")
+        .select("id, rating, created_at, item:items!id (id)")
+
+    if (error){
+        console.log("Error fetching reviews:", error);
+        return 0;
+    }
+
+    const dateCount: Record<string, number> = {};
+
+    let dateList = "This is a list of dates"
+
+    data.forEach((item) => {
+        const id = Array.isArray(item.item)
+            ? (item.item as { id: number }[])[0]?.id
+            : (item.item as { id: number }).id;
+        const created_at = item.created_at;
+        let timestampString = String(created_at)
+        const createdAtType = typeof created_at
+        let date = timestampString.slice(0,10)
+        dateList+=date;
+        if (date) {
+            dateCount[date] = (dateCount[date] || 0) + 1;
+        }
+
+
+})
+    return dateCount;
 }

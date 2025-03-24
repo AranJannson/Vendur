@@ -6,7 +6,9 @@ import { mostPopularDate } from "./utils/timeAnalytics";
 import { mostPopularCategory } from "./utils/productAnalytics" 
 import { fetchAllProducts } from "./utils/fetchAllProducts";
 import { inventoryValue, lowerStock, outOfStock, mostValuableStockItem } from "./utils/stockAnalysis";
-import { mostReviewedProduct, highestReviewedProduct, productsByReviewValue, dailyReviewsList} from "./utils/reviewAnalytics";
+import { mostReviewedProduct, highestReviewedProduct, productsByReviewValue, dateWithMostReviews, listOfReviewsPerDay} from "./utils/reviewAnalytics";
+import {listOfOrgInvValue} from "./utils/organisationsAnalytics"
+
 
 dotenv.config();
 
@@ -114,9 +116,26 @@ Analytics.get("/highRatedProduct", async (req: Request, res: Response) => {
     res.send(JSON.stringify(mostReviewedItem, null, 2))
 });
 
-Analytics.get("/dailyReviewedList", async (req: Request, res: Response) => {
+Analytics.get("/dateWithMostReviews", async (req: Request, res: Response) => {
 
-    const mostReviewedItem = await dailyReviewsList()
+    const mostReviewedItem = await dateWithMostReviews()
+
+    console.log(mostReviewedItem);
+    res.send(JSON.stringify(mostReviewedItem, null, 2))
+});
+
+Analytics.get("/listOfReviewsPerDay", async (req: Request, res: Response) => {
+
+    const mostReviewedItem = await listOfReviewsPerDay()
+
+    console.log(mostReviewedItem);
+    res.send(JSON.stringify(mostReviewedItem, null, 2))
+});
+
+
+Analytics.get("/orgInvList", async (req: Request, res: Response) => {
+
+    const mostReviewedItem = await listOfOrgInvValue()
 
     console.log(mostReviewedItem);
     res.send(JSON.stringify(mostReviewedItem, null, 2))
