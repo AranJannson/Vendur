@@ -202,3 +202,27 @@ export async function listOfReviewsPerDay(){
 })
     return dateCount;
 }
+
+export async function ratingDistribution(){
+    const {data, error} = await catalogSupabase
+        .from("reviews")
+        .select("id, rating, item:items!id (id)")
+
+    if (error){
+        console.log("Error fetching reviews:", error);
+        return 0;
+    }
+
+    const ratingDistributionTable: Record<string, number> = {};
+
+    let dateList = "This is a list of dates"
+
+    data.forEach((item) => {
+        const rating = item.rating;
+        if (rating){
+            ratingDistributionTable[rating] = (ratingDistributionTable[rating] || 0 ) + 1;
+        }
+
+})
+    return ratingDistributionTable;
+}

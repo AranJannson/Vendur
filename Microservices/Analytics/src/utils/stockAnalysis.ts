@@ -117,3 +117,32 @@ export async function mostValuableStockItem(){
 
     return mostValuableItem;
 }
+
+export async function listOfItemStockValue(){
+    const { data, error } = await catalogSupabase
+        .from("stock")
+        .select("quantity, item:items!id (id, name, price)");
+    if (error){
+        console.error("Error fetching items:", error);
+        return 0;
+    }
+    const itemStockValueTable:  Record<string, number>=  {};
+    data.forEach((item) => {
+        console.log(item.item);
+        const quantity = item.quantity;
+        // Checks if item.item is an array or object and acts accordingly 
+        const price = Array.isArray(item.item)
+        ? (item.item as { price: number }[])[0]?.price 
+        : (item.item as { price: number }).price;
+        const name = Array.isArray(item.item)
+        ? (item.item as { name: string }[])[0]?.name 
+        : (item.item as { name: string }).name;
+        let itemTotal = quantity * price
+        if (name){
+            itemStockValueTable[name] = (itemStockValueTable[name] || 0 ) + itemTotal
+        }
+
+    })
+
+    return itemStockValueTable;
+}
