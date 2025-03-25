@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
+import StarRating from "@/app/components/product/StarRating";
 
 export const metadata = {
     title: "Products | Vendur",
@@ -8,14 +9,36 @@ export const metadata = {
 
 export default async function Products() {
     const supabase = await createClient();
-    const { data: items } = await supabase.from("items").select("*");
+    const { data: items, error} = await supabase.from("items").select("*");
+
+    if (error || !items) {
+        console.error("Error fetching items:", error.message);
+        return <div>Error loading items.</div>;
+    }
+    const productsWithRatings = await Promise.all(
+        items.map(async (item) => {
+            const { data: ratings, error: ratingsError } = await supabase.from("reviews").select("rating").eq("item_id", item.id).limit(1);
+
+            if (ratingsError && ratingsError.code !== "PGRST116") {//No rating
+                console.error("Error fetching rating", ratingsError.message);
+                return { ...item, rating: 0 };
+            }
+
+            if (!ratings || ratings.length === 0) {
+                return { ...item, rating: 0 };
+            }
+
+            const rating = ratings[0]?.rating ?? 0;
+            return { ...item, rating };
+        })
+    );
 
     return (
         <div className="bg-background-100 w-full p-4">
             <h1 className="text-4xl font-bold text-center mb-6">All Products</h1>
 
             <div className="grid md:grid-cols-4 grid-cols-1 gap-6">
-                {items?.map((item) => (
+            {productsWithRatings.map((item) => (
                     <Link
                         key={item.id}
                         href={`/products/${item.name}`}
@@ -56,10 +79,7 @@ export default async function Products() {
                                 ) : (<div className="flex justify-center text-center items-center">
                                     <p className="font-semibold p-1 w-[150px] bg-red-400 rounded-xl p-1">Limited Time Deal</p>
                                 </div>)}
-                                
-                                <div>
-                                    <p className="w-fit p-1 bg-secondary-500 gap-15 rounded-xl mt-2">⭐⭐⭐⭐⭐</p>
-                                </div>
+                                <div className="w-fit p-1 bg-secondary-500 gap-15 rounded-xl mt-2"><StarRating rating={item.rating}/></div>
                         </div>
 
                         {/* <div className="flex justify-end">
