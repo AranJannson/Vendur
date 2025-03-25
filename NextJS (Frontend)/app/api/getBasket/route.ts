@@ -6,8 +6,8 @@ export async function GET(req: NextRequest) {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
+                Cookie: req.headers.get("cookie") || "",
             },
-            credentials: "include",
         });
 
         if (!response.ok) {

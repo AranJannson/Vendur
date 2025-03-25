@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-import { testConnection } from "./utils/dbConnect";
 import dotenv from "dotenv";
 import cors from "cors";
 // @ts-ignore
@@ -24,7 +23,7 @@ Payment.use(cookieParser());
 const portNumber = 8002;
 
 Payment.post("/setcookie", (req: Request, res: Response) => {
-
+    console.log("Cookie Setting...")
     const { name, value } = req.body;
     
     console.log(name)
@@ -67,6 +66,7 @@ Payment.post("/setcookie", (req: Request, res: Response) => {
 // @ts-ignore
 Payment.get("/getcookie", async (req: Request, res: Response) => {
 
+    console.log("Enetered Get Cookie")
     const cookies = req.cookies[basketCookieName];
 
     console.log("cookies: ", cookies);
@@ -152,6 +152,4 @@ Payment.delete("/deletevalue", async (req: Request, res: Response) => {
 Payment.listen(portNumber, () => {
     console.log(`Payment is running on port ${portNumber}`);
 
-    testConnection();
-    
 });

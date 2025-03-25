@@ -25,7 +25,6 @@ export default function GetBasket() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    credentials: "include",
                 });
 
                 if (!response.ok) {

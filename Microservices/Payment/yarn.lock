@@ -647,6 +647,7 @@ path-to-regexp@0.1.12:
   version "1.0.0"
   resolved "file:"
   dependencies:
+    cookie-parser "^1.4.7"
     cors "^2.8.5"
     dotenv "^16.4.7"
     drizzle-orm "^0.39.3"
