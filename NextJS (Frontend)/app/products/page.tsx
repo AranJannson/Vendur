@@ -1,4 +1,3 @@
-import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 
 export const metadata = {
@@ -7,15 +6,19 @@ export const metadata = {
 };
 
 export default async function Products() {
-    const supabase = await createClient();
-    const { data: items } = await supabase.from("items").select("*");
+
+    const response = await fetch('http://localhost:8000/getItems', {
+        method: 'GET',
+    });
+
+    const items = await response.json();
 
     return (
         <div className="bg-background-100 w-full p-4">
             <h1 className="text-4xl font-bold text-center mb-6">All Products</h1>
 
             <div className="grid md:grid-cols-4 grid-cols-1 gap-6">
-                {items?.map((item) => (
+                {items?.map((item: any) => (
                     <Link
                         key={item.id}
                         href={`/products/${item.name}`}
@@ -47,16 +50,15 @@ export default async function Products() {
                                             </p>
                                         </div>
 
-                                        
+
                                     </div>
-                                    
+
                                 )}
-                                {item.discount === null || item.discount === 0 ? (
-                                    null
-                                ) : (<div className="flex justify-center text-center items-center">
+                                {item.discount === null || item.discount === 0 ? null : (
+                                <div className="flex justify-center text-center items-center">
                                     <p className="font-semibold p-1 w-[150px] bg-red-400 rounded-xl p-1">Limited Time Deal</p>
                                 </div>)}
-                                
+
                                 <div>
                                     <p className="w-fit p-1 bg-secondary-500 gap-15 rounded-xl mt-2">⭐⭐⭐⭐⭐</p>
                                 </div>
