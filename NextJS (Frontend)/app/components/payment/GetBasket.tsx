@@ -20,7 +20,7 @@ export default function GetBasket() {
     useEffect(() => {
         async function fetchBasket() {
             try {
-                const response = await fetch("http://localhost:8002/getcookie", {
+                const response = await fetch("http://localhost:3000/api/getBasket", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
