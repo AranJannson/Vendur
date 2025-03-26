@@ -55,81 +55,167 @@ export async function listOfOrgInvValue() {
     return orgInventoryMap;
 }
 
-export async function averageOrganisationProductRating(){
-
+export async function averageOrganisationProductRating() {
     const itemOrgQuery = await catalogSupabase
-    .from("items")
-    .select("id, org:organisations!org_id (id)");
-
+      .from("items")
+      .select("id, org:organisations!org_id (id)");
+  
     if (itemOrgQuery.error) {
-        console.error("Error fetching organisations:", itemOrgQuery.error);
-        return 0;
+      console.error("Error fetching organisations:", itemOrgQuery.error);
+      return 0;
     }
-
+  
     const reviewQuery = await catalogSupabase
-    .from("reviews")
-    .select("id, item_id, rating")
-
+      .from("reviews")
+      .select("id, item_id, rating");
+  
     if (reviewQuery.error) {
-        console.error("Error fetching stock:", reviewQuery.error);
+      console.error("Error fetching stock:", reviewQuery.error);
+      return 0;
+    }
+  
+    const reviewData = reviewQuery.data;
+    const itemOrgData = itemOrgQuery.data;
+  
+    //Maps item id to organisation id
+    const itemOrgTable: Record<number, number> = {};
+    itemOrgData.forEach((item) => {
+      const itemId = item.id;
+      const orgId = Array.isArray(item.org)
+        ? (item.org as { id: number }[])[0]?.id
+        : (item.org as { id: number }).id;
+      if (itemId) {
+        itemOrgTable[itemId] = orgId;
+      }
+    });
+  
+    //Links organisation ids to review data via item id
+    const combinedResults = reviewData.map((review) => {
+      const reviewItemId = review.item_id;
+      const rating = review.rating;
+      const orgId = itemOrgTable[reviewItemId];
+      return { itemId: reviewItemId, orgId, rating };
+    });
+  
+    //Adds total ratings and number of reviews (count) per organisation
+    const orgAggregates: Record<number, { total: number; count: number }> = {};
+    for (const result of combinedResults) {
+      const { orgId, rating } = result;
+      if (orgId !== undefined) {
+        if (!orgAggregates[orgId]) {
+          orgAggregates[orgId] = { total: 0, count: 0 };
+        }
+        orgAggregates[orgId].total += rating;
+        orgAggregates[orgId].count++;
+      }
+    }
+  
+    // Calculates average rating per organisation
+    const orgAverages: Record<number, number> = {};
+    for (const orgId in orgAggregates) {
+      const { total, count } = orgAggregates[orgId];
+      orgAverages[Number(orgId)] = total / count;
+    }
+  
+    return orgAverages;
+  }
+
+export async function orgNumberOfSales(){
+    const orderQuery = await catalogSupabase
+        .from("orders")
+        .select("id, item:items!id(org_id)")
+
+    if (orderQuery.error) {
+        console.error("Error fetching order:", orderQuery.error);
         return 0;
     }
 
-    const reviewData = reviewQuery.data
-    const itemOrgData = itemOrgQuery.data;
-    const reviewResults = reviewData.map(review=>({
-        [review.item_id]: review.rating
-    }))
+    const orderData = orderQuery.data;
 
-    const itemOrgTable: Record<number, number> = {};
+    const orgSalesCount: Record<string, number> = {};
 
-
-    itemOrgData.forEach((item)=>{
-        const itemId = item.id;
-        const orgId = Array.isArray(item.org)
-        ? (item.org as { id: number }[])[0]?.id 
-        : (item.org as { id: number }).id;
-        if (itemId){
-            itemOrgTable[itemId] = orgId;        
+    orderData.forEach((item) => {
+        const org_id = Array.isArray(item.item)
+            ? (item.item as { org_id: number }[])[0]?.org_id
+            : (item.item as { org_id: number }).org_id;
+        if (org_id){
+            orgSalesCount[org_id] = (orgSalesCount[org_id] || 0) + 1;
         }
-        
     })
 
-    // for (const entry of reviewResults){
-    //     const reviewItemId = Object.keys(entry)[0];
-    //     const rating = Object.values(entry);
-    //     itemOrgTable.map(callback[, ])
-    // }
-
-    const combinedResults = reviewResults.map(entry => {
-        // Each entry is an object with a single key-value pair.
-        const reviewItemIdStr = Object.keys(entry)[0]; // item id as string
-        const rating = Object.values(entry)[0]; // rating number
-        const reviewItemId = Number(reviewItemIdStr);
-        
-        // Lookup org id for this item id in itemOrgTable
-        const orgId = itemOrgTable[reviewItemId];
-    
-        return { itemId: reviewItemId, orgId, rating };
-      });
-
-      const orgAggregates: Record<number, { total: number; count: number }> = {};
-
-      for (const result of combinedResults) {
-        const { orgId, rating } = result;
-        if (orgId !== undefined) {
-          if (!orgAggregates[orgId]) {
-            orgAggregates[orgId] = { total: 0, count: 0 };
-          }
-          orgAggregates[orgId].total += rating;
-          orgAggregates[orgId].count++;
-        }
-      }
-
-
-      return orgAggregates;
-
-
-
+    return Object.entries(orgSalesCount)
+        .sort((a, b) => b[1] - a[1]);
 }
+
+export async function orgTotalRevenueList(){
+    const orderQuery = await catalogSupabase
+        .from("orders")
+        .select("price, item:items!id(org_id)")
+
+    if (orderQuery.error) {
+        console.error("Error fetching order:", orderQuery.error);
+        return 0;
+    }
+
+    const orderData = orderQuery.data;
+
+    const orgOrderValueList: Record<number, number> = {};
+    orderData.forEach((item) => {
+        const price = item.price;
+        const org_id = Array.isArray(item.item)
+            ? (item.item as { org_id: number }[])[0]?.org_id
+            : (item.item as { org_id: number }).org_id;
+        if (org_id){
+           orgOrderValueList[org_id] = (orgOrderValueList[org_id] || 0) + price;
+        }
+    })
+
+    return Object.entries(orgOrderValueList)
+        .sort((a, b) => b[1] - a[1]);
+}
+
+export async function orgAverageOrderValue(){
+    const orderQuery = await catalogSupabase
+        .from("orders")
+        .select("price, item:items!id(org_id)")
+
+    if (orderQuery.error) {
+        console.error("Error fetching order:", orderQuery.error);
+        return 0;
+    }
+
+    const orderData = orderQuery.data;
+
+    const orgPriceOrderCountTable: Record<number, { total: number; count: number }> = {};
+
+    orderData.forEach((item) => {
+        const price = item.price;
+        const org_id = Array.isArray(item.item)
+            ? (item.item as { org_id: number }[])[0]?.org_id
+            : (item.item as { org_id: number }).org_id;
+        if (org_id !== undefined) {
+            if (!orgPriceOrderCountTable[org_id]) {
+                orgPriceOrderCountTable[org_id] = { total: 0, count: 0 };
+            }
+            orgPriceOrderCountTable[org_id].total += price;
+            orgPriceOrderCountTable[org_id].count++;
+        }
+    })
+
+    let avgOrderValue = 0;
+    const orgOrderAvgList: Record<number, number> = {};
+    const orderAverage  =[];
+
+    for (const orgId in orgPriceOrderCountTable){
+        const { total, count } = orgPriceOrderCountTable[orgId];
+        avgOrderValue = total / count;
+        orderAverage.push(avgOrderValue);
+        orgOrderAvgList[orgId] = (orgOrderAvgList[orgId] || 0) + avgOrderValue;
+    }
+
+
+    return Object.entries(orgOrderAvgList)
+        .sort((a, b) => b[1] - a[1]);
+}
+  
 
