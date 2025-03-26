@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import StarRating from "@/app/components/product/StarRating";
+import { useSearchParams } from "next/navigation"; 
 
 interface Product {
     id: number;
@@ -20,7 +21,7 @@ interface ProductsListProps {
 
 export default function ProductsList({ items }: ProductsListProps) {
     const [selectedCategory, setSelectedCategory] = useState("All");
-    const [sortOption, setSortOption] = useState("default");
+    const [sortOption, setSortOption] = useState("relevance");
     
     const categories = ["All", ...new Set(items.map((item) => item.category))];
 
@@ -48,16 +49,49 @@ export default function ProductsList({ items }: ProductsListProps) {
         }
     });
 
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryFromURL = urlParams.get('category');
+        const sortFromURL = urlParams.get('sort');
+    
+        if (categoryFromURL) {
+            setSelectedCategory(decodeURIComponent(categoryFromURL));
+        }
+    
+        if (sortFromURL) {
+            setSortOption(decodeURIComponent(sortFromURL));
+        }
+    }, []);
+    //Update URL
+    const handleCategoryChange = (selectedCategory: string) => {
+        setSelectedCategory(selectedCategory);
+    
+        const url = new URL(window.location.href);
+        url.searchParams.set("category", encodeURIComponent(selectedCategory));
+        url.searchParams.set("sort", encodeURIComponent(sortOption));
+        window.history.pushState(null, "", url.toString());
+    };
+    
+    const handleSortChange = (selectedSortOption: string) => {
+        setSortOption(selectedSortOption);
+    
+        const url = new URL(window.location.href);
+        url.searchParams.set("category", encodeURIComponent(selectedCategory));
+        url.searchParams.set("sort", encodeURIComponent(selectedSortOption));
+        window.history.pushState(null, "", url.toString());
+    };
+    
     return (
         <div>
-            <h1 className="text-4xl font-bold text-center md:w-auto">All Products</h1>
-            
+            <h1 className="text-4xl font-bold text-center md:w-auto">Vendur Products</h1>
             <div className="flex items-center justify-end mb-4 flex items-center gap-2">
                 <label className="text-lg font-semibold">Filter Category:</label>
                 <select
                     className="border p-2 rounded-md bg-secondary-50"
                     value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    onChange={(e) => handleCategoryChange(e.target.value)}
                 >
                     {categories.map((category) => (
                         <option key={category} value={category}>
@@ -72,9 +106,9 @@ export default function ProductsList({ items }: ProductsListProps) {
                 <select
                     className="border p-2 rounded-md bg-secondary-50"
                     value={sortOption}
-                    onChange={(e) => setSortOption(e.target.value)}
+                    onChange={(e) => handleSortChange(e.target.value)}
                 >
-                    <option value="default">Relevance</option>
+                    <option value="relevance">Relevance</option>
                     <option value="discountedOnly">Discounted Items</option>
                     <option value="priceLowToHigh">Price: Low - High</option>
                     <option value="priceHighToLow">Price: High - Low</option>
