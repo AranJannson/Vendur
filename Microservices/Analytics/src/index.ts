@@ -5,7 +5,8 @@ import {
     itemSalesList,
     mostPopularCategoryByItemsListed,
     mostPopularCategoryBySales,
-    mostPopularCategoryBySalesList
+    mostPopularCategoryBySalesList,
+    avgItemPricePerCategory
 } from "./utils/productAnalytics"
 import { fetchAllProducts } from "./utils/fetchAllProducts";
 import { inventoryValue, lowerStock, outOfStock, mostValuableStockItem, listOfItemStockValue } from "./utils/stockAnalysis";
@@ -280,4 +281,12 @@ Analytics.get("/avgQuantityOrderList", async (req: Request, res: Response) => {
 
     console.log(avgQuantityList);
     res.send(JSON.stringify(avgQuantityList, null, 2))
+});
+
+Analytics.get("/avgItemPriceCategory", async (req: Request, res: Response) => {
+
+    const avgItemPrice = await avgItemPricePerCategory()
+
+    console.log(avgItemPrice);
+    res.send(JSON.stringify(avgItemPrice, null, 2))
 });

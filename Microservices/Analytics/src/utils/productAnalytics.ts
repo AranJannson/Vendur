@@ -132,3 +132,16 @@ export async function itemSalesList() {
         .sort((a, b) => b[1] - a[1]);
 }
 
+export async function avgItemPricePerCategory(){
+    const {data, error} = await catalogSupabase
+        .from("items, price")
+        .select("category")
+
+    if (error){
+        console.log("Error fetching items:", error);
+        return 0;
+    }
+
+    return data;
+}
+
