@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import searchCatalogue from "./utils/search";
 import checkStock from "./utils/fetchIItemInfo";
-import { fetchAllReviews, reviews, makeReview } from "./utils/reviews";
+import {fetchAllReviews, reviews, makeReview, checkIfItemHasReview} from "./utils/reviews";
 import {fetchCatalouge, fetchItemsBasedOnCategory, fetchOrgProducts, fetchStock} from "./utils/fetchCatalog";
 
 dotenv.config();
@@ -79,6 +79,20 @@ Catalog.post("/getItemsBasedOnCategory", async (req: Request, res: Response) => 
         res.status(500).send({error: `Items in category ${category} could not be found`})
     }
 
+
+});
+
+Catalog.post("/checkIfItemHasReview", async (req: Request, res: Response) => {
+
+    const { item_id } = req.body;
+
+    try{
+        const data = await checkIfItemHasReview(item_id);
+
+        res.status(200).send(data);
+    }catch (error){
+        res.status(500).send({error: `Could not find reviews for item ${item_id}`});
+    }
 
 });
 
