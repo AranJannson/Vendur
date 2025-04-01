@@ -3,22 +3,25 @@ import NavButton from "@/app/components/ui/NavButton";
 import Link from 'next/link';
 import AddToCheckoutButton from '@/app/components/payment/AddToCheckoutButton';
 import ReviewSection from "@/app/components/product/ReviewSection";
+import StarRating from "@/app/components/product/StarRating";
 
 //@ts-ignore
-export async function generateMetadata({ params }) {
-    const decodedItemName = decodeURIComponent(params.item);
+export async function generateMetadata({ params }: { params: { item: string } }) {
+    const item = await params.item;
+    const decodedItemName = decodeURIComponent(item);
+
     return {
-      title: `${decodedItemName} | Vendur`,
-      description: "",
+        title: `${decodedItemName} | Vendur`,
+        description: "",
     };
 }
 
 
 export default async function ItemPage({ params }: { params: { item: string } }) {
+    
+    const itemName = params.item;
+    const decodedItemName = decodeURIComponent(itemName);
     const supabase = await createClient();
-
-    const decodedItemName = decodeURIComponent(params.item);
-
     const { data: item, error } = await supabase
         .from('items')
         .select('*')
@@ -30,6 +33,16 @@ export default async function ItemPage({ params }: { params: { item: string } })
         .from('reviews')
         .select('*')
         .eq('item_id', item?.id)
+
+    const { data: rating, error: ratingError } = await supabase
+    .from('reviews')
+    .select('rating')
+    .eq('item_id', item?.id)
+    .single();
+
+    if (ratingError) {
+        console.error("No Rating", ratingError);
+    }
 
 
     if (error || !item) {
@@ -68,7 +81,8 @@ export default async function ItemPage({ params }: { params: { item: string } })
                             <i className="text-gray-400">Item ID: {item.id}</i>
                             
                         </div>
-                        
+                        <StarRating rating={rating?.rating ?? 0} />
+
 
                         {availableQuantity === 0 ? (
                             <p className="text-red-600">Out of Stock</p>
