@@ -3,7 +3,7 @@ services:
   microservice:
     build: .
     ports:
-      - "8003:8003"
+      - "8000:8000"
     env_file:
       - .env
     restart: unless-stopped
