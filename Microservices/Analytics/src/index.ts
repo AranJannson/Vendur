@@ -4,7 +4,6 @@ import cors from "cors";
 import {
     itemSalesList,
     mostPopularCategoryByItemsListed,
-    mostPopularCategoryBySales,
     mostPopularCategoryBySalesList,
     avgItemPricePerCategory
 } from "./utils/productAnalytics"
@@ -169,14 +168,6 @@ Analytics.get("/avgOrgProd", async (req: Request, res: Response) => {
 
     console.log(ratingDistributionResult);
     res.send(JSON.stringify(ratingDistributionResult, null, 2))
-});
-
-Analytics.get("/popularCategorySales", async (req: Request, res: Response) => {
-
-    const popularCategorySales = await mostPopularCategoryBySales()
-
-    console.log(popularCategorySales);
-    res.send(JSON.stringify(popularCategorySales, null, 2))
 });
 
 Analytics.get("/popularCategorySalesList", async (req: Request, res: Response) => {

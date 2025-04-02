@@ -11,7 +11,7 @@ const analyticsSupabase = createClient(
     process.env.PUBLIC_SUPABASE_ANON_KEY as string
 );
 
-// Product with most reviews
+// Returns product with the most reviews
 export async function mostReviewedProduct(){
     const { data, error } = await catalogSupabase
         .from("reviews")
@@ -89,7 +89,7 @@ export async function productsByReviewValue(){
         .sort((a, b) => b.averageRating - a.averageRating);
 }
 
-
+// Returns the product with the highest rating
 export async function highestReviewedProduct(){
     const {data, error} = await catalogSupabase
         .from("reviews")
@@ -129,6 +129,7 @@ export async function highestReviewedProduct(){
     return reviewList[0];
 }
 
+// Returns the date with the most reviews placed
 export async function dateWithMostReviews(){
     const {data, error} = await catalogSupabase
         .from("reviews")
@@ -170,6 +171,7 @@ export async function dateWithMostReviews(){
     return mostFrequentDate ? {date: mostFrequentDate, count: maxCount} : null;
 }
 
+// Returns a list of days and how many reviews were done on the day
 export async function listOfReviewsPerDay(){
     const {data, error} = await catalogSupabase
         .from("reviews")
@@ -202,6 +204,7 @@ export async function listOfReviewsPerDay(){
     return dateCount;
 }
 
+// Returns a list of every possible rating and how many reviews have this rating
 export async function ratingDistribution(){
     const {data, error} = await catalogSupabase
         .from("reviews")

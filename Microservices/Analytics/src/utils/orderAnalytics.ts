@@ -12,6 +12,7 @@ const analyticsSupabase = createClient(
     process.env.PUBLIC_SUPABASE_ANON_KEY as string
 );
 
+// Returns value of total revenue
 export async function totalSalesEver() {
     const {data, error} = await catalogSupabase
         .from("orders")
@@ -56,6 +57,7 @@ export async function orderNumberDailyList() {
     return dateCount;
 }
 
+// Returns a list of revenue per day
 export async function totalRevenuePerDayList() {
     const {data, error} = await catalogSupabase
     .from("orders").select("created_at, price")
@@ -80,7 +82,7 @@ export async function totalRevenuePerDayList() {
 
 }
 
-
+// Returns a list of days and the average order value for these days
 export async function averageOrderValuePerDayList() {
     const {data, error} = await catalogSupabase
         .from("orders").select("created_at, price")
@@ -115,6 +117,7 @@ export async function averageOrderValuePerDayList() {
 
 }
 
+// Returns a list of items and the average quantity when said item is ordered
 export async function avgQuantityPerItemInOrder(){
     const {data, error} = await catalogSupabase
     .from("orders").select("item_id, quantity")

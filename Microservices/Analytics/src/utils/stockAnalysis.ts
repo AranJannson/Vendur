@@ -10,6 +10,7 @@ const analyticsSupabase = createClient(
     process.env.PUBLIC_SUPABASE_ANON_KEY as string
 );
 
+// Returns the total inventory value
 export async function inventoryValue(){
     const { data, error } = await catalogSupabase
         .from("stock")
@@ -35,6 +36,7 @@ export async function inventoryValue(){
     return total;
 }
 
+// Returns a list of any items that are low on stock
 export async function lowerStock(){
     const { data, error } = await catalogSupabase
         .from("stock")
@@ -59,6 +61,7 @@ export async function lowerStock(){
     return lowItemsList;
 }
 
+// Returns a list of items that are out of stock
 export async function outOfStock(){
     const { data, error } = await catalogSupabase
         .from("stock")
@@ -83,6 +86,7 @@ export async function outOfStock(){
     return outOfStockList;
 }
 
+// Returns the item that has the highest stock-price value (stock X price)
 export async function mostValuableStockItem(){
     const { data, error } = await catalogSupabase
         .from("stock")
@@ -118,6 +122,7 @@ export async function mostValuableStockItem(){
     return mostValuableItem;
 }
 
+// Returns a list of items and their respective price-stock value (Price X Stock)
 export async function listOfItemStockValue(){
     const { data, error } = await catalogSupabase
         .from("stock")

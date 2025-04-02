@@ -10,6 +10,7 @@ const analyticsSupabase = createClient(
     process.env.PUBLIC_SUPABASE_ANON_KEY as string
 );
 
+// Returns a list of user ids and how many orders they have made
 export async function userOrderList(){
   const {data, error} = await catalogSupabase
       .from("orders")
@@ -32,6 +33,7 @@ export async function userOrderList(){
   return userCount;
 }
 
+// Returns a list of user ids and the average order value for each
 export async function userAvgOrderList(){
     const {data, error} = await catalogSupabase
         .from("orders")

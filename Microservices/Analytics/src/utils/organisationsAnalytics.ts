@@ -11,7 +11,7 @@ const analyticsSupabase = createClient(
 );
 
 
-
+// Returns a list of organisations and their respective amount for inventory value
 export async function listOfOrgInvValue() {
     const orgQuery = await catalogSupabase
         .from("items")
@@ -55,6 +55,7 @@ export async function listOfOrgInvValue() {
     return orgInventoryMap;
 }
 
+// Returns a list of organisations and the average review for each organisation
 export async function averageOrganisationProductRating() {
     const itemOrgQuery = await catalogSupabase
       .from("items")
@@ -119,7 +120,7 @@ export async function averageOrganisationProductRating() {
   
     return orgAverages;
   }
-
+//Returns a list of organisations and the number of sales each respective organisation has had in descending order
 export async function orgNumberOfSales(){
     const orderQuery = await catalogSupabase
         .from("orders")
@@ -147,6 +148,7 @@ export async function orgNumberOfSales(){
         .sort((a, b) => b[1] - a[1]);
 }
 
+// Returns a list of each organisation and how much total revenue they have made
 export async function orgTotalRevenueList(){
     const orderQuery = await catalogSupabase
         .from("orders")
@@ -174,6 +176,7 @@ export async function orgTotalRevenueList(){
         .sort((a, b) => b[1] - a[1]);
 }
 
+// Returns a list of organisations and how the average order value for each
 export async function orgAverageOrderValue(){
     const orderQuery = await catalogSupabase
         .from("orders")
