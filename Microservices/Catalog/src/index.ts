@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import searchCatalogue from "./utils/search";
+import checkStock from "./utils/fetchIItemInfo";
+import { fetchAllReviews, reviews, makeReview } from "./utils/reviews";
 
 dotenv.config();
 
@@ -25,24 +27,14 @@ Catalog.get("/catalog", async (req: Request, res: Response) => {
 
 });
 
-// Catalog.get("/search", async (req: Request, res: Response): Promise<any> => {
-//
-//     const query = req.headers.query as string;
-//     req.q
-//
-//     const filters = req.headers.filters as string;
-//     const filtersArr = filters?.split(",");
-//     let search;
-//
-//     if (filters) {
-//         search = await searchCatalogue(query, filtersArr);
-//     } else {
-//         search = await searchCatalogue(query);
-//     }
-//
-//     console.log(search)
-//     res.send(JSON.stringify(search, null, 2));
-// });
+Catalog.get("/stock", async (req: Request, res: Response): Promise<any> => {
+
+    const { item_id } = req.body;
+
+    res.send(checkStock(item_id));
+
+})
+
 Catalog.get("/search", async (req: Request, res: Response): Promise<any> => {
     const query = req.query.query as string;
 
@@ -55,14 +47,38 @@ Catalog.get("/search", async (req: Request, res: Response): Promise<any> => {
 
    search = await searchCatalogue(query, filtersArr);
 
-    // console.log(search);
     res.send(JSON.stringify(search, null, 2));
 });
 
+// Reviews
+Catalog.get("/reviews/:item_id", async (req: Request, res: Response): Promise<any> => {
+    const item_id = req.params.item_id as string;
+
+    const reviews = await fetchAllReviews(item_id);
+
+    res.send(JSON.stringify(reviews, null, 2));
+
+});
+
+Catalog.get("/review/:review_id", async (req: Request, res: Response): Promise<any> => {
+    const review_id = req.params.review_id as string;
+
+    const review = await reviews(review_id);
+
+    res.send(JSON.stringify(review, null, 2));
+
+});
+
+Catalog.post("/review", async (req: Request, res: Response): Promise<any> => {
+    const { item_id, rating, reviewText, user_id } = req.body;
+    const newReview = await makeReview(item_id, rating, reviewText, user_id);
+
+    res.send(JSON.stringify(newReview, null, 2));
+});
 
 Catalog.post("/catalog", (req: Request, res: Response) => {
     res.send("Catalog is running");
-    
+
 });
 
 Catalog.get("/catalog-test", (req: Request, res: Response) => {

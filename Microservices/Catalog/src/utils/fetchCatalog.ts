@@ -1,7 +1,5 @@
-import { JSONValue } from 'postgres';
 
-
-export const fetchCatalog = async (): Promise<JSONValue> => {
+export const fetchCatalog = async (): Promise<any> => {
 
     return null;
 }
