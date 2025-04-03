@@ -49,3 +49,22 @@ export const deleteProduct = async (productId: any) => {
     }
     return data;
 }
+
+// Applying Discounts to Products
+// If want to remove discount, pass null as discount value
+export const applyDiscount = async (productId: any, discount: any) => {
+    if (discount < 0 || discount > 100) {
+        throw new Error("Discount must be between 0 and 100");
+    }
+
+    const { data, error } = await supabase
+        .from("items")
+        .update({ discount })
+        .eq("id", productId)
+        .single()
+
+    if (error) {
+        throw new Error(`Error applying discount: ${error.message}`);
+    }
+    return data;
+}

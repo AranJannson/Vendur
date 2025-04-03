@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import {createProduct, deleteProduct, getOrgProducts, updateProduct} from "./utils/productManagement";
+import {applyDiscount, createProduct, deleteProduct, getOrgProducts, updateProduct} from "./utils/productManagement";
 
 dotenv.config();
 
@@ -63,5 +63,17 @@ OrgMgmt.delete("/delete-product", async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Error deleting product:", error);
         res.status(500).send({ error: "Failed to delete product" });
+    }
+})
+
+// Apply a discount to a product
+OrgMgmt.put("/apply-discount", async (req: Request, res: Response) => {
+    try {
+        const { id, discount } = req.body;
+        const data = await applyDiscount(id, discount);
+        res.status(200).send(JSON.stringify(data));
+    } catch (error) {
+        console.error("Error applying discount:", error);
+        res.status(500).send({ error: "Failed to apply discount" });
     }
 })
