@@ -29,22 +29,17 @@ export default async function Products() {
     const productsWithRatings = await Promise.all(
         items.map(async (item: Item) => {
 
-            const response = await fetch('http://localhost:8000/checkIfItemHasReview', {
+            const reviewResponse = await fetch('http://localhost:8000/checkIfItemHasReview', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({ item_id: item.id }),
             });
 
-            const ratings = response;
+            const ratings = await reviewResponse.json();
+            const rating = ratings.length > 0 ? ratings[0].rating : 0;
 
-            if (!ratings) {//No rating
-                console.error("Error fetching rating");
-                return { ...item, rating: 0 };
-            }
-            
-            
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            const rating = ratings[0]?.rating ?? 0;
             return { ...item, rating };
         })
     );

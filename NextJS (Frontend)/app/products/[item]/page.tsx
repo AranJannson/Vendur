@@ -1,5 +1,3 @@
-import { createClient } from '@/utils/supabase/server';
-import NavButton from "@/app/components/ui/NavButton";
 import Link from 'next/link';
 import AddToCheckoutButton from '@/app/components/payment/AddToCheckoutButton';
 import ReviewSection from "@/app/components/product/ReviewSection";
@@ -18,50 +16,53 @@ export async function generateMetadata({ params }: { params: { item: string } })
 
 
 export default async function ItemPage({ params }: { params: { item: string } }) {
-    
     const itemName = params.item;
     const decodedItemName = decodeURIComponent(itemName);
-    const supabase = await createClient();
-    const { data: item, error } = await supabase
-        .from('items')
-        .select('*')
-        .ilike('name', decodedItemName)
-        .maybeSingle();
 
+    const itemResponse = await fetch(`http://localhost:8000/getItems`);
+    const items = await itemResponse.json();
+    
+    const item = items.find((i: any) => i.name === decodedItemName);
 
-    const { data: reviews, error: reviewsError } = await supabase
-        .from('reviews')
-        .select('*')
-        .eq('item_id', item?.id)
-
-    const { data: rating, error: ratingError } = await supabase
-    .from('reviews')
-    .select('rating')
-    .eq('item_id', item?.id)
-    .single();
-
-    if (ratingError) {
-        console.error("No Rating", ratingError);
+    if (!item) {
+        return <div>Error loading item: Item not found</div>;
     }
 
+    const reviewsResponse = await fetch(`http://localhost:8000/reviews/${item.id}`);
+    const reviews = await reviewsResponse.json();
 
-    if (error || !item) {
-        return <div>Error loading item: {error ? error.message : 'Item not found'}</div>;
+    if (reviewsResponse.status !== 200) {
+        console.error("Error fetching reviews:", reviews);
     }
 
-    const { data: stock, error: stockError } = await supabase
-        .from('stock')
-        .select('*')
-        .eq('item_id', item.id)
-        .maybeSingle();
+    const ratingResponse = await fetch('http://localhost:8000/checkIfItemHasReview', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ item_id: item.id }),
+    });
+    
+    const ratings = await ratingResponse.json();
+    const rating = Array.isArray(ratings) && ratings.length > 0 ? ratings[0].rating : 0;
 
-    if (stockError) {
-        console.error('Stock error:', stockError);
+    const stockResponse = await fetch(`http://localhost:8000/getStock`, {
+        method: 'POST',
+        body: JSON.stringify({ item_id: item.id }),
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    const stock = await stockResponse.json();
+    
+    if (stockResponse.status !== 200) {
+        console.error("Error fetching stock:", stock);
     }
 
     const availableQuantity = stock?.quantity || 0;
     const discount = ((item.price * (1 - item.discount / 100)).toFixed(2));
-    const percentage_discount = `${item.discount}%`
+    const percentage_discount = `${item.discount}%`;
 
     return (
         <div className = "md:w-[70%] mx-auto">
@@ -81,8 +82,7 @@ export default async function ItemPage({ params }: { params: { item: string } })
                             <i className="text-gray-400">Item ID: {item.id}</i>
                             
                         </div>
-                        <StarRating rating={rating?.rating ?? 0} />
-
+                        <StarRating rating={rating}/>
 
                         {availableQuantity === 0 ? (
                             <p className="text-red-600">Out of Stock</p>
@@ -117,7 +117,6 @@ export default async function ItemPage({ params }: { params: { item: string } })
                        
                         )}
                         
-
                         <form className="flex flex-col" id="itemForm">
 
                             {item?.category === 'Clothing & Shoes' ? (
