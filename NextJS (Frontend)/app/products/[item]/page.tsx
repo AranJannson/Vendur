@@ -53,14 +53,20 @@ export default async function ItemPage({ params }: { params: { item: string } })
             'Content-Type': 'application/json',
         }
     });
-
-    const stock = await stockResponse.json();
     
-    if (stockResponse.status !== 200) {
-        console.error("Error fetching stock:", stock);
+    let stock = 0;
+    if (stockResponse.status === 200) {
+        try {
+            const stockData = await stockResponse.json();
+            stock = stockData?.quantity ?? 0;
+        } catch (error) {
+            console.error("Error parsing stock data:", error);
+        }
+    } else {
+        console.error("Error fetching stock:", stockResponse.status);
     }
 
-    const availableQuantity = stock?.quantity || 0;
+    const availableQuantity = stock;
     const discount = ((item.price * (1 - item.discount / 100)).toFixed(2));
     const percentage_discount = `${item.discount}%`;
 

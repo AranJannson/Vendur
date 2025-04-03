@@ -1,13 +1,21 @@
-import { createClient } from '@/utils/supabase/server'
 import Link from "next/link";
 
-export default async function OneByFour() {
-    const supabase = await createClient();
-    const { data: items } = await supabase.from('items').select('*');
+interface Item {
+    id: number;
+    name: string;
+    image: string;
+    category: string;
+    discount: number;
+    rating: number;
+    price: number;
+}
 
-    if (!items) {
-        return <div>No items found</div>;
-    }
+export default async function OneByFour() {
+    const response = await fetch('http://localhost:8000/getItems', {
+        method: 'GET',
+    });
+
+    const items: Item[] = await response.json()
 
     const electronicsItems = items.filter((item) => item.category === 'Electronics & Computing').slice(0, 4);
     
