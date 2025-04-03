@@ -28,8 +28,8 @@ export default function Header() {
                             </Link>
                         </li>
                         <li>
-                            <Link href="#" className="transition-colors hover:text-primary-600">
-                                Categories
+                            <Link href="/organisations" className="transition-colors hover:text-primary-600">
+                                Vendurs
                             </Link>
                         </li>
 

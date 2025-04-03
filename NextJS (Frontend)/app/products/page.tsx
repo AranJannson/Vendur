@@ -1,5 +1,3 @@
-import { createClient } from "@/utils/supabase/server";
-import Link from "next/link";
 import StarRating from "@/app/components/product/StarRating";
 import ProductList from "@/app//products/productList";
 
@@ -8,29 +6,40 @@ export const metadata = {
     description: "",
 };
 
+
+interface Item {
+    id: number;
+    name: string;
+    image: string;
+    price: number;
+    description: string;
+    category: string;
+    discount: number;
+    org_id: number;
+}
+
 export default async function Products() {
-    const supabase = await createClient();
-    const { data: items, error} = await supabase.from("items").select("*");
-    
 
-    if (error || !items) {
-        console.error("Error fetching items:", error.message);
-        return <div>Error loading items.</div>;
-    }
+    const response = await fetch('http://localhost:8000/getItems', {
+        method: 'GET',
+    });
+
+    const items = await response.json();
+
     const productsWithRatings = await Promise.all(
-        items.map(async (item) => {
-            const { data: ratings, error: ratingsError } = await supabase.from("reviews").select("rating").eq("item_id", item.id).limit(1);
+        items.map(async (item: Item) => {
 
-            if (ratingsError && ratingsError.code !== "PGRST116") {//No rating
-                console.error("Error fetching rating", ratingsError.message);
-                return { ...item, rating: 0 };
-            }
+            const reviewResponse = await fetch('http://localhost:8000/checkIfItemHasReview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ item_id: item.id }),
+            });
 
-            if (!ratings || ratings.length === 0) {
-                return { ...item, rating: 0 };
-            }
+            const ratings = await reviewResponse.json();
+            const rating = ratings.length > 0 ? ratings[0].rating : 0;
 
-            const rating = ratings[0]?.rating ?? 0;
             return { ...item, rating };
         })
     );

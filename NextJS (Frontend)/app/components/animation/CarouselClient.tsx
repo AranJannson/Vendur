@@ -1,18 +1,12 @@
 "use client";
 import HeroProduct from "@/app/components/home/HeroProduct";
+import Autoplay from 'embla-carousel-autoplay'
 import { useEffect, useState } from 'react';
 import {
     Carousel,
     CarouselContent,
     CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
   } from "@/components/ui/carousel"
-
-import useEmblaCarousel from 'embla-carousel-react'
-import Autoplay from 'embla-carousel-autoplay'
-import { createClient } from '@/utils/supabase/client';
-
 
 export default function CarouselClient({className, category} : {className?: string, category: string}) {
 
@@ -24,9 +18,8 @@ export default function CarouselClient({className, category} : {className?: stri
 
         async function fetchItems() {
 
-            const supabase = createClient();
-            const { data: items } = await supabase.from('items').select('*').eq('category', category);
-            console.log(items);
+            const itemResponse = await fetch(`http://localhost:8000/getItems`);
+            const items = await itemResponse.json();
 
             //@ts-ignore
             setItems(items);
