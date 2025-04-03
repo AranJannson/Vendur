@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
 
-export default function AddProducts() {
+export default function EditProducts({ product }) {
     const [category, setCategory] = useState("");
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -20,17 +20,18 @@ export default function AddProducts() {
                 price,
                 category,
                 image,
-                org_id: 1
+                org_id: 1,
+                id: product.id
             }
         };
         // TODO: Change this to actually use the API route instead of the backend directly
-        const response = await fetch('http://localhost:8003/products', {
-            method: 'POST',
+        const response = await fetch('http://localhost:3000/api/update-product', {
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
         });
 
-        alert(response.ok ? 'Product added successfully' : 'Failed to add product');
+        alert(response.ok ? 'Product edited successfully' : 'Failed to edit product');
     };
 
     return (

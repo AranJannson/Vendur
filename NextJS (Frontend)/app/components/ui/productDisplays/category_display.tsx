@@ -1,15 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 
-interface Item {
-    id: number;
-    name: string;
-    image: string;
-    category: string;
-    discount: number;
-    rating: number;
-    price: number;
-}
 
 export default async function category_display() {
 
@@ -61,13 +52,13 @@ export default async function category_display() {
 
     return (
         <div className="bg-primary-200 m-4 rounded-lg max-w-screen">
-            <div className="bg-background-200 p-4 rounded-t-xl rounded-b-xl">
+            <div className="bg-primary-300 p-4 rounded-t-xl rounded-b-xl">
                 <h2 className="text-3xl font-semibold text-center p-4">
-                    Explore all of our categories:
+                    Explore All Of Our Categories
                 </h2>
             </div>
 
-            <div className="grid md:grid-cols-10 grid-cols-1 gap-8 p-4 bg-background-100">
+            <div className="grid md:grid-cols-10 grid-cols-1 gap-8 p-4 bg-background-100 rounded-b-xl">
                 {categories.map((category, catIndex) => (
                     <Link
                         href={{
@@ -90,7 +81,8 @@ export default async function category_display() {
                                         height: '400px', 
                                         objectFit: 'cover', 
                                         objectPosition: `${category.shiftPercentage} center`
-                                    }} 
+                                    }}
+                                    className="rounded-lg"
                                 />
                             </div>
                         </div>

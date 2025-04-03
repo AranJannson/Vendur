@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: { item: string } })
 export default async function ItemPage({ params }: { params: { item: string } }) {
     const itemName = params.item;
     const decodedItemName = decodeURIComponent(itemName);
-
+    // TODO: Change this to work with api routes
     const itemResponse = await fetch(`http://localhost:8000/getItems`);
     const items = await itemResponse.json();
     
@@ -27,7 +27,7 @@ export default async function ItemPage({ params }: { params: { item: string } })
     if (!item) {
         return <div>Error loading item: Item not found</div>;
     }
-
+    // TODO: Change this to work with api routes
     const reviewsResponse = await fetch(`http://localhost:8000/reviews/${item.id}`);
     const reviews = await reviewsResponse.json();
 
@@ -75,12 +75,12 @@ export default async function ItemPage({ params }: { params: { item: string } })
             <div className="grid md:grid-cols-2 grid-cols-1">
                 <div>
                     <div
-                        className="bg-secondary-100 aspect-square max-w-[30rem] max-h-[30rem] p-10 m-4 rounded-lg flex justify-center">
+                        className="bg-secondary-100 aspect-square max-w-[30rem] max-h-[30rem] p-10 m-4 rounded-lg flex justify-center shadow-xl">
                         <img src={item.image} alt={item.name} width="500" height="500" className="object-contain"/>
                     </div>
                 </div>
 
-                <div className="m-10 bg-secondary-100 p-5 rounded-lg flex flex-col justify-center">
+                <div className="m-10 bg-secondary-100 p-5 rounded-lg flex flex-col justify-center shadow-xl">
                     <div className="flex flex-col gap-2">
                         <div>
 
