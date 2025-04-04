@@ -13,6 +13,8 @@ import { mostReviewedProduct, highestReviewedProduct, productsByReviewValue, dat
 import {listOfOrgInvValue, averageOrganisationProductRating, orgNumberOfSales, orgTotalRevenueList, orgAverageOrderValue} from "./utils/organisationsAnalytics"
 import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder } from "./utils/orderAnalytics";
 import { userOrderList, userAvgOrderList } from "./utils/userAnalytics";
+import {listenToPresenceEvents} from "./utils/metadata";
+import * as meta  from "./utils/metadata";
 
 
 dotenv.config();
@@ -277,6 +279,14 @@ Analytics.get("/avgQuantityOrderList", async (req: Request, res: Response) => {
 Analytics.get("/avgItemPriceCategory", async (req: Request, res: Response) => {
 
     const avgItemPrice = await avgItemPricePerCategory()
+
+    console.log(avgItemPrice);
+    res.send(JSON.stringify(avgItemPrice, null, 2))
+});
+
+Analytics.get("/userMetaPresence", async (req: Request, res: Response) => {
+
+    const avgItemPrice = await listenToPresenceEvents()
 
     console.log(avgItemPrice);
     res.send(JSON.stringify(avgItemPrice, null, 2))
