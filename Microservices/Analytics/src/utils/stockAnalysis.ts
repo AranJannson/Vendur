@@ -46,6 +46,7 @@ export async function lowerStock(){
         return 0;
     }
     let lowItemsList = "";
+    const lowStock: string[] = [];
     data.forEach((item) => {
         console.log(item.item);
         const quantity = item.quantity;
@@ -55,10 +56,11 @@ export async function lowerStock(){
         : (item.item as { name: string }).name;
         if (quantity < 35){
             lowItemsList+=name;
+            lowStock.push(name);
         }
     })
 
-    return lowItemsList;
+    return lowStock;
 }
 
 // Returns a list of items that are out of stock
@@ -71,6 +73,7 @@ export async function outOfStock(){
         return 0;
     }
     let outOfStockList = "";
+    const outOfStock: string[] = [];
     data.forEach((item) => {
         console.log(item.item);
         const quantity = item.quantity;
@@ -80,10 +83,11 @@ export async function outOfStock(){
         : (item.item as { name: string }).name;
         if (quantity == 0){
             outOfStockList+=name;
+            outOfStock.push(name)
         }
     })
 
-    return outOfStockList;
+    return outOfStock;
 }
 
 // Returns the item that has the highest stock-price value (stock X price)

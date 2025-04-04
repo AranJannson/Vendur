@@ -187,12 +187,8 @@ export async function listOfReviewsPerDay(){
     let dateList = "This is a list of dates"
 
     data.forEach((item) => {
-        const id = Array.isArray(item.item)
-            ? (item.item as { id: number }[])[0]?.id
-            : (item.item as { id: number }).id;
         const created_at = item.created_at;
         let timestampString = String(created_at)
-        const createdAtType = typeof created_at
         let date = timestampString.slice(0,10)
         dateList+=date;
         if (date) {
