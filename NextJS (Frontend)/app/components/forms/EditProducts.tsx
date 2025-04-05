@@ -1,9 +1,8 @@
 "use client";
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export default function EditProducts({ product }) {
     const [category, setCategory] = useState("");
-
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
@@ -11,9 +10,15 @@ export default function EditProducts({ product }) {
         const category = formData.get('category');
         const description = formData.get('description');
         const price = formData.get('price');
-        const image = formData.get('image');
+        // TODO: Handle image upload
+        // const image = formData.get('image');
+
+        // Product Id needs to be a nunber
+        const productId = parseInt(product.id);
+        console.log(`Product ID: ${productId}`);
 
         const payload = {
+            id: productId,
             product : {
                 name,
                 description,
@@ -21,22 +26,24 @@ export default function EditProducts({ product }) {
                 category,
                 image,
                 org_id: 1,
-                id: product.id
             }
         };
         // TODO: Change this to actually use the API route instead of the backend directly
-        const response = await fetch('http://localhost:3000/api/update-product', {
+        const response = await fetch('http://localhost:3000/api/organisations/products/update-product', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
         });
 
-        alert(response.ok ? 'Product edited successfully' : 'Failed to edit product');
+        if (response.ok) {
+        //     Redirect to the product page
+
+        }
     };
 
     return (
         <form onSubmit={onSubmit} className="flex flex-col gap-4 p-4 bg-primary-100 rounded-lg shadow-md">
-            <h1 className="text-xl font-bold">Add Product</h1>
+            <h1 className="text-xl font-bold">Edit Product</h1>
 
             <div className="flex flex-col gap-2 bg-background-200 p-2 rounded-lg">
                 <span className="flex flex-col gap-2">
@@ -71,11 +78,11 @@ export default function EditProducts({ product }) {
             <div className="flex flex-col gap-2 bg-background-200 p-2 rounded-lg">
                 <span className="flex flex-col gap-2">
                     <label>Product Image</label>
-                    <input type="file" name="image" accept=".jpg, .jpeg, .png, .gif" className="p-2 rounded-lg"/>
+                    <input type="file" name="image" accept="image/*" className="p-2 rounded-lg"/>
                 </span>
             </div>
 
-            <button type="submit" className="bg-secondary-300 p-3 font-semibold rounded-xl transition-colors hover:bg-secondary-400">Add Product</button>
+            <button type="submit" className="bg-secondary-300 p-3 font-semibold rounded-xl transition-colors hover:bg-secondary-400">Edit Product</button>
         </form>
     );
 }
