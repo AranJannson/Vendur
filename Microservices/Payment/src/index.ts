@@ -66,7 +66,7 @@ Payment.post("/setcookie", (req: Request, res: Response) => {
 // @ts-ignore
 Payment.get("/getcookie", async (req: Request, res: Response) => {
 
-    console.log("Enetered Get Cookie")
+    console.log("Entered Get Cookie")
     const cookies = req.cookies[basketCookieName];
 
     console.log("cookies: ", cookies);
