@@ -26,6 +26,7 @@ export function listenToPresenceEvents(channelName: string = 'room_01') {
             console.log('leave', key, leftPresences);
         });
 
+
     room.subscribe((status) => {
         if (status === 'SUBSCRIBED') {
             console.log(`Subscribed to presence on "${channelName}"`);
