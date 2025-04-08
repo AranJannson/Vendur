@@ -2,11 +2,11 @@ import { connectCatalogue } from "./dbConnect";
 
 const supabase = connectCatalogue();
 
-export const getOrgProducts = async (org_id: any) => {
+export const getOrgInfo = async (org_id: any) => {
     const { data, error } = await supabase
-        .from("items")
+        .from("organisations")
         .select()
-        .eq("org_id", org_id)
+        .eq("id", org_id)
 
     if (error) {
         throw new Error(`Error fetching products: ${error.message}`);

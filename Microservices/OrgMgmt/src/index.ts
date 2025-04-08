@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import {applyDiscount, createProduct, deleteProduct, getOrgProducts, updateProduct} from "./utils/productManagement";
+import {applyDiscount, createProduct, deleteProduct, getOrgInfo, updateProduct} from "./utils/productManagement";
+import {requestVerification} from "./utils/verification";
 
 dotenv.config();
 
@@ -21,7 +22,7 @@ OrgMgmt.listen(portNumber, () => {
 OrgMgmt.get("/products", async (req: Request, res: Response) => {
     try {
         const { org_id } = req.body;
-        const data = await getOrgProducts(org_id);
+        const data = await getOrgInfo(org_id);
         res.status(200).send(JSON.stringify(data));
     } catch (error) {
         console.error("Error fetching products:", error);
@@ -75,5 +76,51 @@ OrgMgmt.put("/apply-discount", async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Error applying discount:", error);
         res.status(500).send({ error: "Failed to apply discount" });
+    }
+})
+
+// Verification Operations
+
+
+OrgMgmt.post("/request-verification", async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { org_id } = req.body;
+        let org_info = await getOrgInfo(org_id);
+        if (!org_info) {
+            return res.status(404).send({ error: "Organisation not found" });
+        }
+        if (org_info[0].is_verified) {
+            return res.status(400).send({ error: "Organisation already verified" });
+        } else {
+            await requestVerification(org_id);
+            return res.status(200).send({ message: "Verification requested successfully" });
+        }
+    } catch (error) {
+        console.error("Error requesting verification:", error);
+        res.status(500).send({ error: "Failed to request verification" });
+    }
+})
+
+// // Verification Status
+OrgMgmt.get("/verification-status", async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { org_id } = req.body;
+        const org_info = await getOrgInfo(org_id);
+
+        if (!org_info) {
+            return res.status(404).send({ error: "Organisation not found" });
+        }
+        const is_verified = org_info[0].is_verified;
+        if (is_verified) {
+            return res.status(200).send({ verified: true });
+        } else if (!is_verified) {
+            return res.status(200).send({ verified: false });
+        } else {
+            return res.status(400).send({ error: "Verification status unknown" });
+        }
+    } catch (error) {
+        console.error("Error fetching verification status:", error);
+        res.status(500).send({ error: "Failed to fetch verification status" });
+
     }
 })
