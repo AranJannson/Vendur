@@ -13,7 +13,7 @@ import { mostReviewedProduct, highestReviewedProduct, productsByReviewValue, dat
 import {listOfOrgInvValue, averageOrganisationProductRating, orgNumberOfSales, orgTotalRevenueList, orgAverageOrderValue} from "./utils/organisationsAnalytics"
 import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder } from "./utils/orderAnalytics";
 import { userOrderList, userAvgOrderList } from "./utils/userAnalytics";
-import {listenToPresenceEvents} from "./utils/metadata";
+import {presenceCheck} from "./utils/metadata";
 import * as meta  from "./utils/metadata";
 
 
@@ -284,10 +284,10 @@ Analytics.get("/avgItemPriceCategory", async (req: Request, res: Response) => {
     res.send(JSON.stringify(avgItemPrice, null, 2))
 });
 
-Analytics.get("/userMetaPresence", async (req: Request, res: Response) => {
+Analytics.get("/presenceCheck", async (req: Request, res: Response) => {
 
-    const avgItemPrice = await listenToPresenceEvents()
+    const presenceC = await presenceCheck()
 
-    console.log(avgItemPrice);
-    res.send(JSON.stringify(avgItemPrice, null, 2))
+    console.log(presenceC);
+    res.send(JSON.stringify(presenceC, null, 2))
 });
