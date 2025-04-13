@@ -6,6 +6,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.scss";
 import Header from "@/app/components/global/Header";
 import Footer from "@/app/components/global/Footer";
+import ClickTrackerWrapper from "@/app/components/wrappers/ClickTrackerWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,9 +35,11 @@ export default function RootLayout({
       ><StackProvider app={stackServerApp}>
           <Providers>
       <StackTheme>
-          <Header/>
-                {children}
-          <Footer/>
+          <ClickTrackerWrapper>
+              <Header/>
+              {children}
+              <Footer/>
+          </ClickTrackerWrapper>
         </StackTheme>
               </Providers>
       </StackProvider></body>
