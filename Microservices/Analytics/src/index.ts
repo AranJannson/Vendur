@@ -15,6 +15,7 @@ import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOr
 import { userOrderList, userAvgOrderList } from "./utils/userAnalytics";
 import {presenceCheck} from "./utils/metadata";
 import * as meta  from "./utils/metadata";
+import trackClicks, {returnAllClickCountPages} from "./utils/track-clicks";
 
 
 dotenv.config();
@@ -290,4 +291,28 @@ Analytics.get("/presenceCheck", async (req: Request, res: Response) => {
 
     console.log(presenceC);
     res.send(JSON.stringify(presenceC, null, 2))
+});
+
+Analytics.post("/track-clicks", async (req: Request, res: Response): Promise<any> => {
+
+    const { page } = req.body;
+
+    const output = await trackClicks(page);
+
+    if (!output) {
+        return res.status(400).json({ message: "Click failed to be registered" });
+    }
+
+    res.status(200).json({message: "Succses"});
+
+});
+
+Analytics.get("/pages-clicks", async (req: Request, res: Response): Promise<any> => {
+    const { data, error } = await returnAllClickCountPages();
+
+    if (error) {
+        return res.status(500).json({ error });
+    }
+
+    res.status(200).json(data);
 });
