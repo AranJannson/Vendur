@@ -1,0 +1,76 @@
+version: '3.9'
+
+services:
+  Analytics_MS:
+    build:
+      context: "./Microservices/Analytics"
+    container_name: Analytics_MS
+    env_file:
+      - "./Microservices/Analytics/.env"
+    ports:
+      - "8000:8000"
+    networks:
+      - my_network
+
+  Catalogue_MS:
+    build:
+      context: "./Microservices/Catalog"
+    container_name: Catalogue_MS
+    env_file:
+      - "./Microservices/Catalog/.env"
+    ports:
+      - "8001:8001"
+    networks:
+      - my_network
+
+  Payment_MS:
+    build:
+      context: "./Microservices/Payment"
+    container_name: Payment_MS
+    env_file:
+      - "./Microservices/Payment/.env"
+    ports:
+      - "8002:8002"
+    networks:
+      - my_network
+  Admin_MS:
+    build:
+      context: "./Microservices/Admin"
+    container_name: Admin_MS
+    env_file:
+      - "./Microservices/Admin/.env"
+    ports:
+      - "5078:5078"
+    networks:
+      - my_network
+
+  OrganisationManagement_MS:
+    build:
+      context: "./Microservices/OrgMgmt"
+    container_name: OrganisationManagement_MS
+    env_file:
+      - "./Microservices/OrgMgmt/.env"
+    ports:
+      - "8003:8003"
+    networks:
+      - my_network
+
+
+  Frontend:
+    build: "./NextJS (Frontend)"
+    container_name: Frontend
+    env_file:
+      - "./NextJS (Frontend)/.env.local"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - Catalogue_MS
+      - Admin_MS
+      - Payment_MS
+      - OrganisationManagement_MS
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge

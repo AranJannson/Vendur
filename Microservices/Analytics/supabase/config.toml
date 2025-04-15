@@ -1,0 +1,178 @@
+# For detailed configuration reference documentation, visit:
+# https://supabase.com/docs/guides/local-development/cli/config
+# A string used to distinguish different Supabase projects on the same host. Defaults to the
+# working directory name when running `supabase init`.
+project_id = "Analytics"
+
+[api]
+enabled = true
+# New port for API endpoints.
+port = 60001
+# Schemas to expose in your API.
+schemas = ["public", "graphql_public"]
+# Extra schemas added to the search_path.
+extra_search_path = ["public", "extensions"]
+# Maximum number of rows to return.
+max_rows = 1000
+
+[api.tls]
+# Enable HTTPS endpoints locally using a self-signed certificate.
+enabled = false
+
+[db]
+# New port for the local database.
+port = 60002
+# New port for the shadow database used by db diff command.
+shadow_port = 60003
+# The database major version.
+major_version = 15
+
+[db.pooler]
+enabled = false
+# New port for the connection pooler.
+port = 60004
+# Server connection reuse mode.
+pool_mode = "transaction"
+# Default pool size.
+default_pool_size = 20
+# Maximum number of client connections.
+max_client_conn = 100
+
+[db.migrations]
+# List of schema migration files.
+schema_paths = []
+
+[db.seed]
+# Enable seeding after migrations.
+enabled = true
+# List of seed SQL file paths.
+sql_paths = ["./seed.sql"]
+
+[realtime]
+enabled = true
+# (Additional realtime settings can be configured here)
+
+[studio]
+enabled = true
+# New port for Supabase Studio.
+port = 60005
+# External URL of the API server that the frontend connects to.
+api_url = "http://127.0.0.1"
+
+[inbucket]
+enabled = true
+# New port for the email testing server web interface.
+port = 60006
+# (Optional: uncomment to expose additional email testing ports)
+
+[storage]
+enabled = true
+# Maximum allowed file size.
+file_size_limit = "50MiB"
+
+[auth]
+enabled = true
+# New site URL with updated port.
+site_url = "http://127.0.0.1:60009"
+# Updated allowed redirect URLs.
+additional_redirect_urls = ["https://127.0.0.1:60009"]
+# Token expiry time.
+jwt_expiry = 3600
+# Enable refresh token rotation.
+enable_refresh_token_rotation = true
+# Refresh token reuse interval.
+refresh_token_reuse_interval = 10
+# Enable new user signups.
+enable_signup = true
+# Disallow anonymous sign-ins.
+enable_anonymous_sign_ins = false
+# Disallow manual linking of accounts.
+enable_manual_linking = false
+# Minimum password length.
+minimum_password_length = 6
+# Password strength requirements.
+password_requirements = ""
+
+[auth.email]
+# Enable email signups.
+enable_signup = true
+# Require double confirmation for email changes.
+double_confirm_changes = true
+# Email confirmation settings.
+enable_confirmations = false
+secure_password_change = false
+# Minimum interval between emails.
+max_frequency = "1s"
+# OTP length and expiry.
+otp_length = 6
+otp_expiry = 3600
+
+[auth.sms]
+# Disable SMS signups.
+enable_signup = false
+enable_confirmations = false
+# Template for OTP messages.
+template = "Your code is {{ .Code }}"
+max_frequency = "5s"
+
+[auth.sms.twilio]
+enabled = false
+account_sid = ""
+message_service_sid = ""
+# Use environment variable substitution for the auth token.
+auth_token = "env(SUPABASE_AUTH_SMS_TWILIO_AUTH_TOKEN)"
+
+[auth.mfa]
+# Maximum MFA factors allowed.
+max_enrolled_factors = 10
+
+[auth.mfa.totp]
+enroll_enabled = false
+verify_enabled = false
+
+[auth.mfa.phone]
+enroll_enabled = false
+verify_enabled = false
+otp_length = 6
+template = "Your code is {{ .Code }}"
+max_frequency = "5s"
+
+[auth.external.apple]
+enabled = false
+client_id = ""
+# Use environment variable substitution for the secret.
+secret = "env(SUPABASE_AUTH_EXTERNAL_APPLE_SECRET)"
+redirect_uri = ""
+url = ""
+skip_nonce_check = false
+
+[auth.third_party.firebase]
+enabled = false
+
+[auth.third_party.auth0]
+enabled = false
+
+[auth.third_party.aws_cognito]
+enabled = false
+
+[edge_runtime]
+enabled = true
+# Use oneshot policy for edge functions.
+policy = "oneshot"
+# New port for attaching the Chrome inspector for debugging edge functions.
+inspector_port = 60011
+
+[analytics]
+enabled = true
+# New port for the analytics service.
+port = 60008
+# Backend type.
+backend = "postgres"
+
+[experimental]
+# Experimental configuration options.
+orioledb_version = ""
+s3_host = "env(S3_HOST)"
+s3_region = "env(S3_REGION)"
+s3_access_key = "env(S3_ACCESS_KEY)"
+s3_secret_key = "env(S3_SECRET_KEY)"
