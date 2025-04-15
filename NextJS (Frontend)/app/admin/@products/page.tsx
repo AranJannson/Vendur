@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
 
 
@@ -19,21 +18,19 @@ export type Item = {
 
 
 export default function Products() {
-    const supabase = createClient();
     const [products, setProducts] = useState<Item[]>([]);
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const { data, error } = await supabase.from("items").select("*");
-            if (error) {
-                console.error("Error fetching items:", error);
-            } else {
-                setProducts(data);
-            }
-        };
+            const response = await fetch('http://localhost:8000/getItems', {
+                method: 'GET',
+            });
+            const data = await response.json();
+            setProducts(data);
+        };  
 
         fetchProducts();
-    }, [supabase]);
+    }, []);
 
     return (
         <div className="aspect-[2/1] rounded-xl shadow-xl bg-primary-300 max-h-96 p-6 flex flex-col">
