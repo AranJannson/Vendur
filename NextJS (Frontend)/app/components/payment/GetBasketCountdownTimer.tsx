@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export default function GetBasketCountdownTimer() {
+export default function GetBasketCountdownTimer({ basketLength }: {basketLength: number}) {
     const [age, setAge] = useState("");
 
     useEffect(() => {
@@ -27,7 +27,7 @@ export default function GetBasketCountdownTimer() {
             eventSource.close();
         };
 
-    }, []);
+    }, [basketLength]);
 
 
     return (

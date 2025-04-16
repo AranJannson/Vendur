@@ -1,33 +1,28 @@
-"use client";
-
-export default function DeleteItemButton({ item }: { item: any }) {
-    
-    const handleClick = async () => {
-
-        const response = await fetch("http://localhost:8002/deletevalue", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({ id: item.id, size: item.size }),
+export default function DeleteItemButton({ item, refreshBasket }: {item: any, refreshBasket: any}) {
+    const handleDelete = async () => {
+      try {
+        await fetch("http://localhost:8002/deletevalue", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ id: item.id, size: item.size }),
         });
-
-        if (response.ok) {
-            console.log("Removed item");
-            window.location.reload();
-        } else {
-            console.error("Failed to remove item");
-        }
-
+  
+        refreshBasket(); // ✅ update state after deletion
+      } catch (error) {
+        console.error("Error deleting item:", error);
+      }
     };
-
+  
     return <div>
         <button type="submit"
             className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4"
-            onClick={handleClick}
+            onClick={handleDelete}
             >
                     Remove this item
         </button>
     </div>;
-}
+  }
+  

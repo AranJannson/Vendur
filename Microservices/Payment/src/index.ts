@@ -54,10 +54,10 @@ Payment.post("/setcookie", (req: Request, res: Response) => {
         basket[existingItemIndex].quantity += value.quantity;
     }
     
-    res.cookie(basketCookieName, JSON.stringify(basket), {maxAge: duration, httpOnly: true, sameSite: "lax", domain: "localhost"});
+    res.cookie(basketCookieName, JSON.stringify(basket), {maxAge: duration, httpOnly: true, sameSite: "lax"});
     
     const expiryTime = Date.now()
-    res.cookie(expiryCookieName, expiryTime, { maxAge: duration });
+    res.cookie(expiryCookieName, expiryTime, {maxAge: duration, httpOnly: true, sameSite: "lax"});
 
     res.json({ message: "Cookie set", basket });
 
@@ -126,6 +126,9 @@ Payment.delete("/deletevalue", async (req: Request, res: Response) => {
     
     const { id, size } = req.body;
 
+    console.log("id: ", id)
+    console.log("size: ", size)
+
     if (!id) {
         return res.json([]);;
     }
@@ -138,14 +141,18 @@ Payment.delete("/deletevalue", async (req: Request, res: Response) => {
 
     const updatedBasket = basket.filter((item: { id: string, size?: string | null }) => !(item.id === id && item.size === size));
     
-    res.cookie(basketCookieName, JSON.stringify(updatedBasket), { maxAge: duration, httpOnly: true, sameSite: "lax", domain: "localhost"});
-    
     if (updatedBasket.length == 0){
+        res.clearCookie(basketCookieName);
         res.clearCookie(expiryCookieName);
-        res.json({event: "expired"});
-    } else (
-        res.json({ message: "Item removed", basket: updatedBasket })
-    );
+        res.json({ event: "expired" });
+    } else {
+        res.cookie(basketCookieName, JSON.stringify(updatedBasket), {
+            maxAge: duration,
+            httpOnly: true,
+            sameSite: "lax"
+        });
+        res.json({ message: "Item removed", basket: updatedBasket });
+    }
 
 });
 
