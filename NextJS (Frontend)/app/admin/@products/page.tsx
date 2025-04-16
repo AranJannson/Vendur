@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-
+import DeleteItemBtn from "@/app/components/admin/DeleteItemBtn";
 
 export type Item = {
     id: number;
@@ -47,12 +47,10 @@ export default function Products() {
                                 <h3 className="text-lg font-semibold">{product.name}</h3>
                             </div>
                             <div className="flex justify-end h-fit items-center content-center gap-4">
-                                <Link href={`/products/${product.id}`} className="bg-secondary-500 rounded-lg p-2 transition-colors hover:bg-secondary-400">
+                                <Link href={`/products/${product.name}`} className="bg-secondary-500 rounded-lg p-2 transition-colors hover:bg-secondary-400">
                                     Details
                                 </Link>
-                                <Link href={`#`} className="bg-secondary-500 rounded-lg p-2 transition-colors hover:bg-secondary-400">
-                                    Remove Product
-                                </Link>
+                                <DeleteItemBtn productId={product.id}/>
                             </div>
                         </li>
                     ))

@@ -1,6 +1,11 @@
 import { ReactNode } from 'react';
 import {AdminHeader} from "@/app/components/admin/AdminHeader";
 
+export const metadata = {
+  title: "Admin | Vendur",
+  description: "",
+};
+
 export default function Layout({
   children,
   analytics,
