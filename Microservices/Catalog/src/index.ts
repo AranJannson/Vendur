@@ -5,6 +5,7 @@ import searchCatalogue from "./utils/search";
 import checkStock from "./utils/fetchIItemInfo";
 import {fetchAllReviews, reviews, makeReview, checkIfItemHasReview} from "./utils/reviews";
 import {fetchCatalouge, fetchItemsBasedOnCategory, fetchOrgProducts, fetchStock} from "./utils/fetchCatalog";
+import {modifyStockQuantity} from "./utils/modifyStock";
 
 dotenv.config();
 
@@ -31,6 +32,19 @@ Catalog.get("/getItems", async (req: Request, res: Response) => {
         res.status(500).send({error: "Could not fetch the catalogue"});
     }
 
+
+});
+
+
+Catalog.post("/modifyStockQuantity", async (req: Request, res: Response) => {
+
+    const { item_id, quantity } = req.body;
+
+    try{
+        await modifyStockQuantity(item_id, quantity);
+    }catch (error){
+        res.status(500).send({error: `Could not modify the stock for item ${item_id}`});
+    }
 
 });
 
