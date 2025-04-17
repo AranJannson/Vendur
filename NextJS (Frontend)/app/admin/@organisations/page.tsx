@@ -1,9 +1,9 @@
 import OrgInfo from "@/app/components/admin/OrgInfo";
 export default function Organisations() {
     return (
-        <div className="bg-secondary-400 h-40 rounded-xl shadow-xl m-4 p-4">
+        <div className="bg-secondary-400 rounded-xl m-4 p-5">
 
-            <h2 className="font-bold text-3xl text-center">Organisations</h2>
+            <h2 className="font-bold text-3xl text-center pb-5">Organisations</h2>
             <OrgInfo/>
         </div>
     )
