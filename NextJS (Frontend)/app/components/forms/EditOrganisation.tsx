@@ -19,7 +19,7 @@ type Props = {
   };
 
 async function getOrganisation(vendur_id: number) {
-    const res = await fetch('http://localhost:5078/admin/orgDetails', {
+    const res = await fetch('/api/admin/orgDetails', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ vendur_id }),
@@ -49,8 +49,8 @@ const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         website,
         address,
     };
-    // TODO: Change this to actually use the API route instead of the backend directly
-    const response = await fetch('http://localhost:5078/admin/editOrgDetails', {
+    
+    const response = await fetch('/api/admin/orgEdit', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
