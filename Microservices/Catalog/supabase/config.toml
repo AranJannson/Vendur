@@ -4,7 +4,7 @@ project_id = "Catalouge"
 
 [api]
 enabled = true
-port = 55321
+port = 65432
 schemas = ["public", "graphql_public"]
 extra_search_path = ["public", "extensions"]
 max_rows = 1000
@@ -13,13 +13,13 @@ max_rows = 1000
 enabled = false
 
 [db]
-port = 55322
-shadow_port = 55320
+port = 65433
+shadow_port = 65434
 major_version = 15
 
 [db.pooler]
 enabled = false
-port = 55329
+port = 65437
 pool_mode = "transaction"
 default_pool_size = 20
 max_client_conn = 100
@@ -36,13 +36,13 @@ enabled = true
 
 [studio]
 enabled = true
-port = 55323
+port = 65435
 api_url = "http://127.0.0.1"
 openai_api_key = "env(OPENAI_API_KEY)"
 
 [inbucket]
 enabled = true
-port = 55324
+port = 65436
 
 [storage]
 enabled = true
@@ -116,11 +116,11 @@ enabled = false
 [edge_runtime]
 enabled = true
 policy = "oneshot"
-inspector_port = 8183
+inspector_port = 65439
 
 [analytics]
 enabled = true
-port = 55327
+port = 65438
 backend = "postgres"
 
 [experimental]
