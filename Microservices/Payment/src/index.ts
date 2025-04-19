@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 // @ts-ignore
 import cookieParser from "cookie-parser";
+import orderProcessing from "./utils/orders/orderProccessing";
 
 dotenv.config();
 
@@ -21,6 +22,22 @@ Payment.use(
 Payment.use(cookieParser());
 
 const portNumber = 8002;
+
+
+Payment.post("/orderProcessing", async (req: Request, res: Response) => {
+
+    const { basket, user_id } = req.body;
+
+    try{
+        await orderProcessing(basket, user_id);
+
+        res.status(200).json({event: "Order Processed Successfully"});
+    }catch (error){
+        res.status(500).json({error: "Order Was Not Processed Successfully"});
+    }
+
+
+});
 
 Payment.post("/setcookie", (req: Request, res: Response) => {
     console.log("Cookie Setting...")
