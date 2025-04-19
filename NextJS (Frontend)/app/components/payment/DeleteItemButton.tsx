@@ -15,12 +15,11 @@ export default function DeleteItemButton({ item, refreshBasket }: {item: any, re
     const handleDelete = async () => {
   
       try {
-
-        const[itemResponse, stockResponse] = await Promise.all([deleteItem(item), modifyStock(item, item.quantity)]);
-        refreshBasket(); 
-
+        const[itemResponse, stockResponse] = await Promise.all([deleteItem(item), modifyStock(item, +item.quantity)]);
       } catch (error) {
         console.error("Error deleting item:", error);
+      } finally{
+        refreshBasket(); 
       }
 
     };

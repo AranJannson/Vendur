@@ -59,12 +59,13 @@ export default function AddToCheckoutButton( { item, formId }: { item: any, form
 
         const[itemResponse, stockResponse] = await Promise.all([postItem(item, selectedQuantity, size), modifyStock(item, -selectedQuantity)]);
 
+        
+    } catch (error) {
+        console.error("Failed to add item: ", error);
+    } finally {
         window.location.reload();
-
-        } catch (error) {
-            console.error("Failed to add item: ", error);
-        }
-    };
+    }
+};
 
     return <div>
         <button type="button"
