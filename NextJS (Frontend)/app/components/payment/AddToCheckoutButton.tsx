@@ -22,7 +22,7 @@ async function postItem(item: any, quantity: Number, size: String | null){
     return response.json();
 }
 
-async function modifyStock(item: any, quantity: number){
+export async function modifyStock(item: any, quantity: number){
     
     const item_id = item.id;
 
