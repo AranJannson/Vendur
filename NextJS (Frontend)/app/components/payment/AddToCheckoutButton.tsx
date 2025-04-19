@@ -1,5 +1,52 @@
 "use client";
 
+async function postItem(item: any, quantity: Number, size: String | null){
+    const response = await fetch("http://localhost:8002/setcookie", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+            name: "basket",
+            value: {
+                id: item.id, 
+                name:item.name,
+                price: item.discount === null || item.discount === 0 ? ( item.price ) : ((item.price * (1 - item.discount / 100))),
+                image: item.image,
+                quantity: quantity,
+                size: size,
+            }
+        }),
+    });   
+    return response.json();
+}
+
+async function modifyStock(item: any, quantity: number){
+    
+    const item_id = item.id;
+
+    const stockResponse = await fetch(`http://localhost:8000/getStock?item_id=${item_id}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+  
+    const stockData = await stockResponse.json();
+  
+    const newQuantity = stockData.quantity + quantity;
+  
+    const quantityResponse = await fetch('http://localhost:8000/modifyStockQuantity', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ item_id: item_id, quantity: newQuantity }),
+      });
+
+    return quantityResponse.json();
+}
+
 export default function AddToCheckoutButton( { item, formId }: { item: any, formId: string }) {
     
     const handleClick = async () => {
@@ -10,59 +57,9 @@ export default function AddToCheckoutButton( { item, formId }: { item: any, form
         const sizeInput = form?.querySelector("select[name='size']") as HTMLInputElement;
         const size = sizeInput ? String(sizeInput.value) : null;
 
-        const stockResponse = await fetch(`http://localhost:8000/getStock?item_id=${item.id}`, {
-            method: "GET",
-            credentials: "include",
-        });        
-
-        if (!stockResponse.ok) {
-            throw new Error(`Failed to fetch stock: ${stockResponse.statusText}`);
-        }
-        
-        const stockData = await stockResponse.json();
-        console.log("stockToChange: ", stockData.quantity);
-
-        const cookieResponse = await fetch("http://localhost:8002/setcookie", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                name: "basket",
-                value: {
-                    id: item.id, 
-                    name:item.name,
-                    price: item.discount === null || item.discount === 0 ? ( item.price ) : ((item.price * (1 - item.discount / 100))),
-                    image: item.image,
-                    quantity: selectedQuantity,
-                    size: size,
-                }
-            }),
-        });
-
-        if (!cookieResponse.ok) {
-            throw new Error(`Failed to fetch cookie: ${cookieResponse.statusText}`);
-        }
+        const[itemResponse, stockResponse] = await Promise.all([postItem(item, selectedQuantity, size), modifyStock(item, -selectedQuantity)]);
 
         window.location.reload();
-
-        const quantityResponse = await fetch(`http://localhost:8000/modifyStockQuantity`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                    item_id: item.id, 
-                    quantity: stockData.quantity - selectedQuantity,
-                })
-            ,
-        });
-
-        if (!quantityResponse.ok) {
-            throw new Error(`Failed to fetch quantity: ${quantityResponse.statusText}`);
-        }
 
         } catch (error) {
             console.error("Failed to add item: ", error);
