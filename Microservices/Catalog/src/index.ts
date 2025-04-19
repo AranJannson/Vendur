@@ -44,10 +44,10 @@ Catalog.post("/modifyStockQuantity", async (req: Request, res: Response) => {
     const { item_id, quantity } = req.body;
 
     console.log(`modifyStockQuantity// item_id: ${item_id}, quantity: ${quantity}`)
-    await modifyStockQuantity(item_id, quantity);
+
     try{
         await modifyStockQuantity(item_id, quantity);
-
+        res.status(200).send({ message: "Stock modified successfully" });
     }catch (error){
         res.status(500).send({error: `Could not modify the stock for item ${item_id}`});
     }
