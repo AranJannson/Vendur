@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 // @ts-ignore
 import cookieParser from "cookie-parser";
-import orderProcessing from "./utils/orders/orderProccessing";
+import orderProcessing, {getOrderDetails} from "./utils/orders/orderProccessing";
 
 dotenv.config();
 
@@ -36,6 +36,24 @@ Payment.post("/orderProcessing", async (req: Request, res: Response) => {
         res.status(500).json({error: "Order Was Not Processed Successfully"});
     }
 
+
+});
+
+Payment.post("/getOrderDetails", async (req: Request, res: Response) => {
+
+    const { order_id } = req.body;
+
+    try{
+        const orderDetails = await getOrderDetails(order_id);
+
+        if (orderDetails){
+            res.status(200).json({event: "Order Details Retrieved Successfully", orderDetails});
+        }else{
+            res.status(500).json({error: "Order Details Were Not Retrieved Successfully"});
+        }
+    }catch (error){
+        res.status(500).json({error: "Order Details Were Not Retrieved Successfully"});
+    }
 
 });
 
