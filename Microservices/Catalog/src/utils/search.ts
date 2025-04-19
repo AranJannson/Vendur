@@ -8,6 +8,12 @@ export default async function searchCatalogue(query: string, filters: string[] =
         return data;
     }
 
+    // If blank, return all items
+    if (query === null || undefined || "" || "null" || "undefined") {
+        const { data } = await supabase.from('items').select();
+        return data;
+    }
+
     // URL template = /search?query=apple&filters=category_fruit,sort_price
     // http://localhost:3000/search?query=l&filters=category_Electronics%20%26%20Computing
 
@@ -69,6 +75,17 @@ export default async function searchCatalogue(query: string, filters: string[] =
     const sortNameDescFilter = filters.find(filter => filter.startsWith("sort_name_DESC"));
     if (sortNameDescFilter) {
         const { data } = await supabase.from('items').select().ilike('name', `%${query}%`).order("name", { ascending: false });
+        return data;
+    }
+    // Limit (Pagination)
+    // http://localhost:3000/search?query=apple&filters=limit_5,page_1
+    // using .range() in supabase
+    const limitFilter = filters.find(filter => filter.startsWith("limit_"));
+    const page = filters.find(filter => filter.startsWith("page_"));
+    if (limitFilter && page) {
+        const limit = parseInt(limitFilter.split("_")[1]);
+        const offset = (parseInt(page.split("_")[1]) - 1) * limit;
+        const { data } = await supabase.from('items').select().ilike('name', `%${query}%`).range(offset, offset + limit - 1);
         return data;
     }
 }

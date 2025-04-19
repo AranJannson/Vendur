@@ -33,7 +33,6 @@ services:
       - "8002:8002"
     networks:
       - my_network
-      -
   Admin_MS:
     build:
       context: "./Microservices/Admin"

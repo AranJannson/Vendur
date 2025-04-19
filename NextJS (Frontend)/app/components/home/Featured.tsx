@@ -5,9 +5,9 @@ export default function Featured() {
 
     return (
         <div className="w-full flex justify-center my-4 py-4 bg-primary-200 rounded-xl relative overflow-hidden">
-            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 cursor-pointer text-4xl text-gray-700 hover:text-gray-900 z-10">
+            {/* <div className="absolute left-4 top-1/2 transform -translate-y-1/2 cursor-pointer text-4xl text-gray-700 hover:text-gray-900 z-10">
                 <IoIosArrowBack />
-            </div>
+            </div> */}
 
             <div className="relative w-full mx-20 h-[300px] overflow-hidden">
                     <Image
@@ -19,9 +19,9 @@ export default function Featured() {
                     />
             </div>
 
-            <div className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer text-4xl text-gray-700 hover:text-gray-900 z-10">
+            {/* <div className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer text-4xl text-gray-700 hover:text-gray-900 z-10">
                 <IoIosArrowForward />
-            </div>
+            </div> */}
         </div>
     );
 }

@@ -1,13 +1,21 @@
-import { createClient } from '@/utils/supabase/server'
 import Link from "next/link";
 
-export default async function OneByFour() {
-    const supabase = await createClient();
-    const { data: items } = await supabase.from('items').select('*');
+interface Item {
+    id: number;
+    name: string;
+    image: string;
+    category: string;
+    discount: number;
+    rating: number;
+    price: number;
+}
 
-    if (!items) {
-        return <div>No items found</div>;
-    }
+export default async function OneByFour() {
+    const response = await fetch('http://localhost:8000/getItems', {
+        method: 'GET',
+    });
+
+    const items: Item[] = await response.json()
 
     const electronicsItems = items.filter((item) => item.category === 'Electronics & Computing').slice(0, 4);
     
@@ -32,7 +40,11 @@ export default async function OneByFour() {
             
             <div className="grid md:grid-cols-4 grid-cols-1 gap-8 p-4">
                 {categories.map((category, catIndex) => (
-                    <Link href={`/products`} key={catIndex} className="flex flex-col items-center">
+                    <Link href={{
+                        pathname: "/products",
+                        query: { category: category.name, sort: "relevance"},
+                      }}
+                    key={catIndex} className="flex flex-col items-center">
                         <h3 className="text-xl font-bold mb-4 text-[25px]">{category.name}</h3>
                         <div className="grid grid-cols-2 grid-rows-2 gap-4 bg-secondary-300 p-5 rounded-xl">
                         {category.items.map((item, itemIndex) => (
