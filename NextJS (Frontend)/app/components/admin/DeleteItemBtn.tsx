@@ -15,9 +15,9 @@ export default function DeleteItemBtn({ productId }: DeleteItemBtnProps) {
       const res = await fetch("http://localhost:5078/admin/deleteProduct", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ item_id: productId }),
+        body: JSON.stringify({ id: productId }),
       });
-
+      
       const data = await res.json();
 
       if (!res.ok) throw new Error(data.message || "Failed to delete");
@@ -29,6 +29,7 @@ export default function DeleteItemBtn({ productId }: DeleteItemBtnProps) {
       setShowConfirm(false);
       setLoading(false);
     }
+    window.location.reload()
   };
 
   return (

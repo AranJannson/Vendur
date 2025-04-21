@@ -85,6 +85,7 @@ const FormClientComponent: React.FC<Props> = ({ vendur_id }) => {
       if (!org) {
         return <div>-</div>;
       }
+      console.log(org);
 
     return (
     <div className="p-6 max-w mx-auto bg-white rounded-xl shadow-md space-y-6">

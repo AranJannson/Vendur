@@ -50,6 +50,7 @@ export default function Products() {
                                 <Link href={`/products/${product.name}`} className="bg-secondary-500 rounded-lg p-2 transition-colors hover:bg-secondary-400">
                                     Details
                                 </Link>
+                                {product.id}
                                 <DeleteItemBtn productId={product.id}/>
                             </div>
                         </li>
