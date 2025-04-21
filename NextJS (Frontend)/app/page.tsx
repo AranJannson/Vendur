@@ -5,6 +5,7 @@ import OneByFour from "@/app/components/ui/productDisplays/1x4";
 import OneByFourCat from "@/app/components/ui/productDisplays/1x4_category";
 import CarouselClient from "./components/animation/CarouselClient";
 import OneByFourHistory from "./components/ui/productDisplays/1x4_history";
+import CategoryDisplay from "./components/ui/productDisplays/category_display";
 import VendurSpotlight from "./components/home/VendurSpotlight";
 
 export const metadata = {
@@ -33,8 +34,8 @@ export default function Home() {
                 </div>
                 
 
-
-                <NavBar/>
+                <CategoryDisplay/>       
+                {/* <NavBar/> */}
 
                 <div className="w-full primary-200 h-10"/>
 

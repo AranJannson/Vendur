@@ -1,5 +1,8 @@
 import Link from "next/link"
-import Image from "next/image"
+import Products from "@/app/components/org/Products";
+import AddProduct from "@/app/components/forms/AddProducts";
+import VerificationStatus from "@/app/components/org/VerificationStatus";
+import OrgAnalytics from "@/app/components/org/Analytics";
 
 export default function OrganisationsManagement() {
 
@@ -15,24 +18,24 @@ export default function OrganisationsManagement() {
                         Manage Listings
                     </Link>
 
-                    <div className="w-full aspect-square max-h-fit bg-primary-200 rounded-lg shadow-xl grid grid-cols-2 gap-4 p-4">
-
-                        <Image src="https://dummyimage.com/400x400/fff/000" alt="Temp" width="200" height="150" className="rounded-xl"/>
-
-                        <Image src="https://dummyimage.com/400x400/fff/000" alt="Temp" width="200" height="150" className="rounded-xl"/>
-
-                        <Image src="https://dummyimage.com/400x400/fff/000" alt="Temp" width="200" height="150" className="rounded-xl"/>
-
-                        <Image src="https://dummyimage.com/400x400/fff/000" alt="Temp" width="200" height="150" className="rounded-xl"/>
-                    </div>
-
+                    <Products/>
 
                 </div>
 
                 <div className="col-span-2">
 
-                    <div className="w-full h-[70.5vh] bg-primary-200 rounded-lg shadow-xl">
+                    <div className="w-full h-[82vh] bg-primary-200 rounded-lg shadow-xl p-4 grid grid-cols-2 gap-4">
 
+                        <div className="flex flex-col gap-3">
+
+                            <VerificationStatus/>
+
+                            <OrgAnalytics/>
+
+                        </div>
+
+
+                        <AddProduct/>
 
                     </div>
 
@@ -48,5 +51,3 @@ export default function OrganisationsManagement() {
 
     );
 }
-
-// https://dummyimage.com/600x400/000/fff

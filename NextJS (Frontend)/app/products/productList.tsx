@@ -86,6 +86,7 @@ export default function ProductsList({ items }: ProductsListProps) {
     return (
         <div>
             <h1 className="text-4xl font-bold text-center md:w-auto">Vendur Products</h1>
+            
             <div className="flex items-center justify-end mb-4 flex items-center gap-2">
                 <label className="text-lg font-semibold">Filter Category:</label>
                 <select
@@ -100,6 +101,9 @@ export default function ProductsList({ items }: ProductsListProps) {
                     ))}
                 </select>
             </div>
+            
+            
+            
 
             <div className="flex items-center justify-end mb-4 flex items-center gap-2">
                 <label className="text-lg font-semibold">Sort by:</label>

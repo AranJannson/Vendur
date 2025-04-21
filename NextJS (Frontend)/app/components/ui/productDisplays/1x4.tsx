@@ -1,19 +1,22 @@
-import { createClient } from '@/utils/supabase/server'
 import Link from "next/link";
 
+interface Item {
+    id: number;
+    name: string;
+    image: string;
+    category: string;
+    discount: number;
+    rating: number;
+    price: number;
+}
+
 export default async function OneByFour() {
-    const supabase = await createClient();
-    const { data: items } = await supabase.from('items').select('*');
+    const response = await fetch('http://localhost:8000/getItems', {
+        method: 'GET',
+    });
 
-    if (!items) {
-        return <div>No items found</div>;
-    }
-
+    const items: Item[] = await response.json()
     const discountedItems = items.filter(item => item.discount !== null && item.discount > 0);
-
-    if (discountedItems.length === 0) {
-        return <div>No discounted items available</div>;
-    }
 
     return (
         <div className="bg-primary-200 m-4 rounded-lg max-w-screen">
@@ -24,11 +27,12 @@ export default async function OneByFour() {
                         key={index}
                         className="relative group aspect-square rounded-xl bg-secondary-100 p-2 m-10 text-center flex justify-center items-center flex-col gap-2"
                     >
+
                         <img
                             src={item.image}
                             alt={item.name}
-                            width="150"
-                            height="150"
+                            width="250"
+                            height="250"
                             className="aspect-square object-contain"
                         />
                         <Link
@@ -43,6 +47,7 @@ export default async function OneByFour() {
                                 </span>
                             </span>
                         </Link>
+                        {/* {item.name} */}
                         <h2 className="font-bold text-xl flex flex-col">
                             <span>
                                 <p className="font-semibold p-1 bg-red-400 rounded-lg text-sm">Limited Time Deal</p>
@@ -52,8 +57,9 @@ export default async function OneByFour() {
                             <span className="ml-2 text-red-500 font-bold">
                                 £{(item.price * (1 - item.discount / 100)).toFixed(2)}
                             </span>
-
+                        
                         </h2>
+                        
                     </div>
                 ))}
             </div>
