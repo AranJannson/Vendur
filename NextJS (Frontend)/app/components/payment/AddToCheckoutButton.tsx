@@ -26,9 +26,13 @@ export async function modifyStock(item: any, quantity: number){
     
     const item_id = item.id;
 
-    const stockResponse = await fetch(`http://localhost:8000/getStock?item_id=${item_id}`, {
-        method: 'GET',
+    const stockResponse = await fetch('http://localhost:8000/getStock', {
+        method: 'POST',
         credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+          },
+        body: JSON.stringify({ item_id: item_id}),
       });
   
     const stockData = await stockResponse.json();
