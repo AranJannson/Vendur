@@ -1,6 +1,7 @@
 import DeleteBasketButton from "@/app/components/payment/DeleteBasketButton";
 import DeleteItemButton from "@/app/components/payment/DeleteItemButton";
 import { useEffect, useState } from "react";
+import GetBasketCountdownTimer from "./GetBasketCountdownTimer";
 
 interface Item {
   id: string;
@@ -85,6 +86,7 @@ export default function GetBasket({ setBasketLength }: {setBasketLength: any}) {
             ))}
           </ul>
           {basket.length != 1 && <DeleteBasketButton basket={basket} refreshBasket={fetchBasket} />}
+          <GetBasketCountdownTimer basket={basket}/>
         </div>
       ) : (
         <p>No items in basket.</p>
