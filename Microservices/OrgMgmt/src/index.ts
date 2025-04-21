@@ -1,8 +1,16 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import {applyDiscount, createProduct, deleteProduct, getOrgInfo, updateProduct} from "./utils/productManagement";
+import {
+    applyDiscount,
+    createProduct,
+    deleteProduct,
+    getOrgInfo,
+    getProducts,
+    updateProduct
+} from "./utils/productManagement";
 import {requestVerification} from "./utils/verification";
+import {getOrderById} from "./utils/orderManagment";
 
 dotenv.config();
 
@@ -17,12 +25,23 @@ const portNumber = 8003;
 OrgMgmt.listen(portNumber, () => {
     console.log(`OrgMgmt is running on port ${portNumber}`);
 });
-
-// CRUD Operations for products
 OrgMgmt.get("/organisation", async (req: Request, res: Response) => {
     try {
         const { org_id } = req.body;
         const data = await getOrgInfo(org_id);
+        res.status(200).send(JSON.stringify(data));
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).send({ error: "Failed to fetch products" });
+    }
+})
+
+// CRUD Operations for products
+// Fetch all products from an organisation
+OrgMgmt.get("/products", async (req: Request, res: Response) => {
+    try {
+        const { org_id } = req.body;
+        const data = await getProducts(org_id)
         res.status(200).send(JSON.stringify(data));
     } catch (error) {
         console.error("Error fetching products:", error);
@@ -101,7 +120,7 @@ OrgMgmt.post("/request-verification", async (req: Request, res: Response): Promi
     }
 })
 
-// // Verification Status
+// Verification Status
 OrgMgmt.get("/verification-status", async (req: Request, res: Response): Promise<any> => {
     try {
         const { org_id } = req.body;
@@ -122,5 +141,17 @@ OrgMgmt.get("/verification-status", async (req: Request, res: Response): Promise
         console.error("Error fetching verification status:", error);
         res.status(500).send({ error: "Failed to fetch verification status" });
 
+    }
+})
+
+// Order operations
+// Get order by id
+OrgMgmt.get("/order", async (req: Request, res: Response) => {
+    try {
+        const { order_id } = req.body;
+        const data = await getOrderById(order_id)
+        res.status(200).send(JSON.stringify(data));
+    } catch (error) {
+        console.error("Error fetching order:", error);
     }
 })

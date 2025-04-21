@@ -9,12 +9,24 @@ export const getOrgInfo = async (org_id: any) => {
         .eq("id", org_id)
 
     if (error) {
-        throw new Error(`Error fetching products: ${error.message}`);
+        throw new Error(`Error fetching org details: ${error.message}`);
     }
     return data;
 }
 
 // CRUD Operations for products
+export const getProducts = async (org_id: any) => {
+    const { data, error } = await supabase
+        .from("items")
+        .select()
+        .eq("org_id", org_id)
+
+    if (error) {
+        throw new Error(`Error fetching product: ${error.message}`);
+    }
+    return data;
+}
+
 export const createProduct = async (product: any) => {
     const { data, error } = await supabase
         .from("items")

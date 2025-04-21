@@ -3,7 +3,7 @@ project_id = "OrgMgmt_Microservice_2"
 
 [api]
 enabled = true
-port = 56321  # Changed from previous iterations
+port = 59321  # Changed from previous iterations
 schemas = ["public", "graphql_public"]
 extra_search_path = ["public", "extensions"]
 max_rows = 1000
@@ -12,13 +12,13 @@ max_rows = 1000
 enabled = false
 
 [db]
-port = 56322  # Changed from previous iterations
-shadow_port = 56320  # Changed from previous iterations
+port = 59322  # Changed from previous iterations
+shadow_port = 59320  # Changed from previous iterations
 major_version = 15
 
 [db.pooler]
 enabled = false
-port = 56329  # Changed from previous iterations
+port = 59329  # Changed from previous iterations
 pool_mode = "transaction"
 default_pool_size = 20
 max_client_conn = 100
@@ -35,13 +35,13 @@ enabled = true
 
 [studio]
 enabled = true
-port = 56323  # Changed from previous iterations
+port = 59323  # Changed from previous iterations
 api_url = "http://127.0.0.1"
 openai_api_key = "env(OPENAI_API_KEY)"
 
 [inbucket]
 enabled = true
-port = 56324  # Changed from previous iterations
+port = 59324  # Changed from previous iterations
 
 [storage]
 enabled = true
