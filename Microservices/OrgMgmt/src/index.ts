@@ -19,7 +19,7 @@ OrgMgmt.listen(portNumber, () => {
 });
 
 // CRUD Operations for products
-OrgMgmt.get("/products", async (req: Request, res: Response) => {
+OrgMgmt.get("/organisation", async (req: Request, res: Response) => {
     try {
         const { org_id } = req.body;
         const data = await getOrgInfo(org_id);
