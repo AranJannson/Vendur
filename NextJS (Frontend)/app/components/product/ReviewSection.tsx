@@ -3,7 +3,7 @@ import ReviewForm from "@/app/components/forms/ReviewForm";
 export default function ReviewSection({ reviews, item_id}) {
     return (
         <div
-    className = "bg-secondary-100 m-4 rounded-lg p-5 flex flex-col gap-4" >
+    className = "bg-secondary-100 m-4 rounded-lg p-5 flex flex-col gap-4 shadow-xl" >
         <h2
     className = "text-2xl font-bold" > Reviews < /h2>
 

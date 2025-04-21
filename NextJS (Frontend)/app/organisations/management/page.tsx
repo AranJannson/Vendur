@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Products from "@/app/components/org/Products";
-import AddProduct from "@/app/components/forms/AddProducts";
+import AddProducts from "@/app/components/forms/AddProducts";
 import VerificationStatus from "@/app/components/org/VerificationStatus";
 import OrgAnalytics from "@/app/components/org/Analytics";
 
@@ -35,7 +35,7 @@ export default function OrganisationsManagement() {
                         </div>
 
 
-                        <AddProduct/>
+                        <AddProducts/>
 
                     </div>
 
