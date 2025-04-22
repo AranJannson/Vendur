@@ -47,7 +47,7 @@ export async function changeStatus(order_group_id: string, status: string) {
     const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process.env.PUBLIC_SUPABASE_ANON_KEY as string);
 
     try {
-        const { data, error } = await supabase.from("orders").update({ status }).eq("order_group_id", order_group_id);
+        const { data, error } = await supabase.from("orders").update("status", status).eq("order_group_id", order_group_id);
 
         if (error) {
             console.error("Error updating order status:", error);
@@ -60,3 +60,43 @@ export async function changeStatus(order_group_id: string, status: string) {
         return null;
     }
 }
+
+export async function changeStatusIndividual(order_id: string, status: string) {
+    const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process.env.PUBLIC_SUPABASE_ANON_KEY as string);
+
+    try {
+        const { data, error } = await supabase.from("orders").update("status", status ).eq("id", order_id);
+
+        if (error) {
+            console.error("Error updating order status:", error);
+            return null;
+        }
+
+        return data;
+    } catch (error) {
+        console.error("Error updating order status:", error);
+        return null;
+    }
+}
+
+export async function cancelOrder(order_group_id: string){
+
+    const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process.env.PUBLIC_SUPABASE_ANON_KEY as string);
+
+    try {
+        const { data, error } = await supabase.from("orders").update({ status: "cancelled" }).eq("order_group_id", order_group_id);
+
+        if (error) {
+            console.error("Error canceling order:", error);
+            return null;
+        }
+
+        return data;
+    } catch (error) {
+        console.error("Error canceling order:", error);
+        return null;
+    }
+
+}
+
+
