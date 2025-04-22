@@ -1,15 +1,4 @@
-import { modifyStock } from "@/utils/catalogue/utils";
-
-async function deleteItem (item: any) {
-  await fetch("http://localhost:8002/deletevalue", {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({ id: item.id, size: item.size }),
-  });
-}
+import { deleteItem, modifyStock } from "@/utils/catalogue/utils";
 
 export default function DeleteItemButton({ item, refreshBasket }: {item: any, refreshBasket: any}) {
     const handleDelete = async () => {
@@ -33,4 +22,3 @@ export default function DeleteItemButton({ item, refreshBasket }: {item: any, re
         </button>
     </div>;
   }
-  

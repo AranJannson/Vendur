@@ -1,9 +1,10 @@
-export const originalStock = new Map<number, number>();
-
 export function setOriginalStock(item_id: number, quantity: number) {
-    if (!originalStock.has(item_id)) {
-        originalStock.set(item_id, quantity);
-      }
+  sessionStorage.setItem(`originalStock-${item_id}`, String(quantity));
+}
+
+export function getOriginalStock(item_id: number): number | null {
+  const stored = sessionStorage.getItem(`originalStock-${item_id}`);
+  return stored ? Number(stored) : null;
 }
 
 export async function postItem(item: any, quantity: Number, size: String | null){
@@ -28,17 +29,29 @@ export async function postItem(item: any, quantity: Number, size: String | null)
     return response.json();
 }
 
+export async function deleteItem (item: any) {
+  await fetch("http://localhost:8002/deletevalue", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ id: item.id, size: item.size }),
+  });
+}
+
 export async function revertStock(item: any){
     
     const item_id = item.id as number;
-  
+    const originalQuantity = getOriginalStock(item_id)
+
     const quantityResponse = await fetch('http://localhost:8000/modifyStockQuantity', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ item_id: item_id, quantity: originalStock.get(item_id) }),
+        body: JSON.stringify({ item_id: item_id, quantity: originalQuantity}),
       });
 
     return quantityResponse.json();

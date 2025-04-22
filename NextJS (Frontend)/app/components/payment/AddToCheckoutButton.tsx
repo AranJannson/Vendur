@@ -1,9 +1,18 @@
 "use client";
 
+import React, { useEffect } from "react";
 import { modifyStock, postItem, setOriginalStock } from "@/utils/catalogue/utils";
 
 export default function AddToCheckoutButton( { item, formId, originalStock }: { item: any, formId: string, originalStock: number }) {
     
+    useEffect(() => {
+        const key = `hasSetStock-${item.id}`;
+        if (!sessionStorage.getItem(key)) {
+          setOriginalStock(item.id, originalStock);
+          sessionStorage.setItem(key, "true");
+        }
+      }, [item.id, originalStock]);
+
     const handleClick = async () => {
         try {
         const form = document.getElementById(formId) as HTMLFormElement;
@@ -12,7 +21,6 @@ export default function AddToCheckoutButton( { item, formId, originalStock }: { 
         const sizeInput = form?.querySelector("select[name='size']") as HTMLInputElement;
         const size = sizeInput ? String(sizeInput.value) : null;
 
-        setOriginalStock(item.id, originalStock);
         const[itemResponse, stockResponse] = await Promise.all([postItem(item, selectedQuantity, size), modifyStock(item, -selectedQuantity)]);
         
     } catch (error) {
