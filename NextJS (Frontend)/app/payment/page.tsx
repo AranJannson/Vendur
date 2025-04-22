@@ -16,7 +16,6 @@ export default function Payment() {
             <div>
                 Welcome to checkout, you are signed in
                 <GetBasket setBasketLength={setBasketLength}/>
-                <GetBasketCountdownTimer basketLength={basketLength}/>
             </div>
         ) : (
             <div>
