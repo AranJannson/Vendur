@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 // @ts-ignore
 import cookieParser from "cookie-parser";
-import orderProcessing, {getOrderDetails} from "./utils/orders/orderProccessing";
+import orderProcessing, {changeStatus, changeStatusIndividual, getOrderDetails} from "./utils/orders/orderProccessing";
 
 dotenv.config();
 
@@ -22,6 +22,43 @@ Payment.use(
 Payment.use(cookieParser());
 
 const portNumber = 8002;
+
+Payment.post("/updateOrderStatusByGroup", async (req: Request, res: Response) => {
+
+
+    const { order_group_id, status } = req.body;
+
+    try {
+        const orderDetails = await changeStatus(order_group_id, status);
+
+        if (orderDetails) {
+            res.status(200).json({event: "Order Status Updated Successfully"});
+        } else {
+            res.status(500).json({error: "Order Status Was Not Retrieved Successfully"});
+        }
+    }catch (error){
+        res.status(500).json({error: "Order Status Was Not Retrieved Successfully"});
+    }
+
+
+});
+
+Payment.post("/updateOrderStatusIndividualItem", async (req: Request, res: Response) => {
+
+    const {order_id, status} = req.body;
+
+    try {
+        const orderDetails = await changeStatusIndividual(order_id, status);
+
+        if (orderDetails) {
+            res.status(200).json({event: "Order Status Updated Successfully"});
+        } else {
+            res.status(500).json({error: "Order Status Was Not Retrieved Successfully"});
+        }
+    } catch (error) {
+        res.status(500).json({error: "Order Status Was Not Retrieved Successfully"});
+    }
+});
 
 
 Payment.post("/orderProcessing", async (req: Request, res: Response) => {
