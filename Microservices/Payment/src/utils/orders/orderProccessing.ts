@@ -25,11 +25,11 @@ export default async function orderProcessing(basket: Item[], user_id: string) {
 
 }
 
-export async function getOrderDetails(order_id: string) {
+export async function getOrderDetails(order_group_id: string) {
     const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process.env.PUBLIC_SUPABASE_ANON_KEY as string);
 
     try {
-        const { data, error } = await supabase.from("orders").select("*").eq("id", order_id);
+        const { data, error } = await supabase.from("orders").select("*").eq("order_group_id", order_group_id);
 
         if (error) {
             console.error("Error fetching order details:", error);
@@ -39,6 +39,24 @@ export async function getOrderDetails(order_id: string) {
         return data;
     } catch (error) {
         console.error("Error fetching order details:", error);
+        return null;
+    }
+}
+
+export async function changeStatus(order_group_id: string, status: string) {
+    const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process.env.PUBLIC_SUPABASE_ANON_KEY as string);
+
+    try {
+        const { data, error } = await supabase.from("orders").update({ status }).eq("order_group_id", order_group_id);
+
+        if (error) {
+            console.error("Error updating order status:", error);
+            return null;
+        }
+
+        return data;
+    } catch (error) {
+        console.error("Error updating order status:", error);
         return null;
     }
 }
