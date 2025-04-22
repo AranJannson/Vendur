@@ -1,7 +1,7 @@
 "use client";
 
+import { revertStock } from "@/utils/catalogue/utils";
 import { useEffect, useState } from "react";
-import { modifyStock } from "./AddToCheckoutButton";
 
 export default function GetBasketCountdownTimer({ basket }: {basket: any[]}) {
     const [age, setAge] = useState("");
@@ -14,7 +14,7 @@ export default function GetBasketCountdownTimer({ basket }: {basket: any[]}) {
             const data = JSON.parse(event.data);
             if (data.age === "0hr 0m 0s") {
                 basket.forEach((item) => {
-                    modifyStock(item, +item.quantity)
+                    revertStock(item)
                 })
                 window.location.reload()
             } else {

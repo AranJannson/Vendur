@@ -1,6 +1,6 @@
 "use client";
+import { revertStock } from "@/utils/catalogue/utils";
 import { useState } from "react";
-import { modifyStock } from "./AddToCheckoutButton";
 
 export default function DeleteBasketButton({basket, refreshBasket}: {basket: any[], refreshBasket: any}) {
     const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ export default function DeleteBasketButton({basket, refreshBasket}: {basket: any
             });
             
             basket.forEach((item) => {
-                modifyStock(item, +item.quantity)
+                revertStock(item);
             })
 
         } catch (error) {

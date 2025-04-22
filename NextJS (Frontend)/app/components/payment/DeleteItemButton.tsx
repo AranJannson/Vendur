@@ -1,4 +1,4 @@
-import { modifyStock } from "./AddToCheckoutButton";
+import { modifyStock } from "@/utils/catalogue/utils";
 
 async function deleteItem (item: any) {
   await fetch("http://localhost:8002/deletevalue", {

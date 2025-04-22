@@ -8,14 +8,13 @@ import { useState } from "react";
 export default function Payment() {
 
     const user = useUser();
-    const [basketLength, setBasketLength] = useState<number>(0);
 
     return (
         <div> 
         { user? (
             <div>
                 Welcome to checkout, you are signed in
-                <GetBasket setBasketLength={setBasketLength}/>
+                <GetBasket/>
             </div>
         ) : (
             <div>

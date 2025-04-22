@@ -157,6 +157,7 @@ export default async function ItemPage({ params }: { params: { item: string } })
                                     <AddToCheckoutButton 
                                         item={item} 
                                         formId="itemForm"
+                                        originalStock={availableQuantity}
                                         />
                                 )}
                             </div>

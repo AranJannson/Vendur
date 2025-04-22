@@ -1,57 +1,8 @@
 "use client";
 
-async function postItem(item: any, quantity: Number, size: String | null){
-    const response = await fetch("http://localhost:8002/setcookie", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-            name: "basket",
-            value: {
-                id: item.id, 
-                name:item.name,
-                price: item.discount === null || item.discount === 0 ? ( item.price ) : ((item.price * (1 - item.discount / 100))),
-                image: item.image,
-                quantity: quantity,
-                size: size,
-            }
-        }),
-    });   
-    return response.json();
-}
+import { modifyStock, postItem, setOriginalStock } from "@/utils/catalogue/utils";
 
-export async function modifyStock(item: any, quantity: number){
-    
-    const item_id = item.id;
-
-    const stockResponse = await fetch('http://localhost:8000/getStock', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-          },
-        body: JSON.stringify({ item_id: item_id}),
-      });
-  
-    const stockData = await stockResponse.json();
-  
-    const newQuantity = stockData.quantity + quantity;
-  
-    const quantityResponse = await fetch('http://localhost:8000/modifyStockQuantity', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ item_id: item_id, quantity: newQuantity }),
-      });
-
-    return quantityResponse.json();
-}
-
-export default function AddToCheckoutButton( { item, formId }: { item: any, formId: string }) {
+export default function AddToCheckoutButton( { item, formId, originalStock }: { item: any, formId: string, originalStock: number }) {
     
     const handleClick = async () => {
         try {
@@ -61,8 +12,8 @@ export default function AddToCheckoutButton( { item, formId }: { item: any, form
         const sizeInput = form?.querySelector("select[name='size']") as HTMLInputElement;
         const size = sizeInput ? String(sizeInput.value) : null;
 
+        setOriginalStock(item.id, originalStock);
         const[itemResponse, stockResponse] = await Promise.all([postItem(item, selectedQuantity, size), modifyStock(item, -selectedQuantity)]);
-
         
     } catch (error) {
         console.error("Failed to add item: ", error);

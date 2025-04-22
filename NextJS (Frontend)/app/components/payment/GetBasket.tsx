@@ -12,7 +12,7 @@ interface Item {
   image: string;
 }
 
-export default function GetBasket({ setBasketLength }: {setBasketLength: any}) {
+export default function GetBasket() {
   const [basket, setBasket] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,9 +32,7 @@ export default function GetBasket({ setBasketLength }: {setBasketLength: any}) {
 
       const data: Item[] = await response.json();
       setBasket(data);
-      setBasketLength(data.length);
     } catch (error) {
-      setBasketLength(0);
       console.error("Error fetching basket:", error);
     } finally {
       setLoading(false);
@@ -76,7 +74,7 @@ export default function GetBasket({ setBasketLength }: {setBasketLength: any}) {
                 <input
                   type="number"
                   defaultValue={item.quantity}
-                  max="10"
+                  max= {item.quantity > 10 ? 10 : item.quantity}
                   min="1"
                   className="p-2 bg-primary-200 rounded-full w-20"
                   name="quantity"
