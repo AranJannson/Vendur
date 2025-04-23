@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { modifyStock, postItem, setOriginalStock } from "@/utils/catalogue/utils";
+import { modifyStock, setOriginalStock } from "@/utils/catalogue/utils";
+import { postItem } from "@/utils/payment/utils";
 
 export default function AddToCheckoutButton( { item, formId, originalStock }: { item: any, formId: string, originalStock: number }) {
     

@@ -1,4 +1,5 @@
-import { deleteItem, modifyStock } from "@/utils/catalogue/utils";
+import { modifyStock } from "@/utils/catalogue/utils";
+import { deleteItem } from "@/utils/payment/utils";
 
 export default function DeleteItemButton({ item, refreshBasket }: {item: any, refreshBasket: any}) {
     const handleDelete = async () => {
