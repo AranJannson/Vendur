@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     try {
-        const payload = await req.json();
+        const item_id = await req.json();
 
         const response = await fetch(`http://localhost:8000/checkIfItemHasReview`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(item_id)
         });
 
         const json = await response.json();

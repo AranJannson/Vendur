@@ -40,14 +40,11 @@ export default async function ItemPage({ params }: { params: { item: string } })
     if (!item) {
         return <div>Error loading item: Item not found</div>;
     }
-    const reviewsResponse = await fetch('http://localhost:3000/api/review/get-item-reviews?item_id=${item.id}', {
+    const reviewsResponse = await fetch(`http://localhost:3000/api/review/get-item-reviews?item_id=${item.id}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
     });
     const reviews = await reviewsResponse.json();
-
+    
     if (reviewsResponse.status !== 200) {
         console.error("Error fetching reviews:", reviews);
     }
@@ -70,19 +67,17 @@ export default async function ItemPage({ params }: { params: { item: string } })
         },
         body: JSON.stringify({ item_id: item.id }),
     });
-    const stock_response = await stockResponse.json();
-    console.log(stock_response)
     let stock = 0; //Default
-    // if (stockResponse.ok) {
-    //     try {
-    //         const stockData = await stockResponse.json();
-    //         stock = stockData?.quantity ?? 0;
-    //     } catch (error) {
-    //         console.error("Error parsing stock data:", error);
-    //     }
-    // } else {
-    //     console.error("Error fetching stock:", stockResponse.status, stockResponse.statusText);
-    // }
+    if (stockResponse.ok) {
+        try {
+            const stockData = await stockResponse.json();
+            stock = stockData?.quantity ?? 0;
+        } catch (error) {
+            console.error("Error parsing stock data:", error);
+        }
+    } else {
+        console.error("Error fetching stock:", stockResponse.status, stockResponse.statusText);
+    }
 
     const availableQuantity = stock;
     const discount = ((item.price * (1 - item.discount / 100)).toFixed(2));
@@ -190,7 +185,7 @@ export default async function ItemPage({ params }: { params: { item: string } })
                 <p>{item.description}</p>
             </div>
             {/* Review section */}
-            {/* <ReviewSection reviews={reviews} item_id={item.id} /> */}
+            <ReviewSection reviews={reviews} item_id={item.id} />
         </div>
     );
 }
