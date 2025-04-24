@@ -3,6 +3,17 @@ import AddToCheckoutButton from '@/app/components/payment/AddToCheckoutButton';
 import ReviewSection from "@/app/components/product/ReviewSection";
 import StarRating from "@/app/components/product/StarRating";
 
+interface Item {
+    id: number;
+    name: string;
+    image: string;
+    category: string;
+    description: string;
+    discount: number;
+    rating: number;
+    price: number;
+}
+
 //@ts-ignore
 export async function generateMetadata({ params }: { params: { item: string } }) {
     const item = await params.item;
@@ -18,53 +29,60 @@ export async function generateMetadata({ params }: { params: { item: string } })
 export default async function ItemPage({ params }: { params: { item: string } }) {
     const itemName = params.item;
     const decodedItemName = decodeURIComponent(itemName);
-    // TODO: Change this to work with api routes
-    const itemResponse = await fetch(`http://localhost:8000/getItems`);
-    const items = await itemResponse.json();
+    const item_response = await fetch('http://localhost:3000/api/getItems', {
+        method: 'GET',
+    });
+
+    const items: Item[] = await item_response.json()
     
     const item = items.find((i: any) => i.name === decodedItemName);
 
     if (!item) {
         return <div>Error loading item: Item not found</div>;
     }
-    // TODO: Change this to work with api routes
-    const reviewsResponse = await fetch(`http://localhost:8000/reviews/${item.id}`);
+    const reviewsResponse = await fetch('http://localhost:3000/api/review/get-item-reviews?item_id=${item.id}', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
     const reviews = await reviewsResponse.json();
 
     if (reviewsResponse.status !== 200) {
         console.error("Error fetching reviews:", reviews);
     }
 
-    const ratingResponse = await fetch('http://localhost:8000/checkIfItemHasReview', {
+    const reviewResponse = await fetch('http://localhost:3000/api/review/check-item-review', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ item_id: item.id }),
     });
-    
-    const ratings = await ratingResponse.json();
+
+    const ratings = await reviewResponse.json();
     const rating = Array.isArray(ratings) && ratings.length > 0 ? ratings[0].rating : 0;
 
-    const stockResponse = await fetch(`http://localhost:8000/getStock`, {
+    const stockResponse = await fetch(`http://localhost:3000/api/getStock`, {
         method: 'POST',
-        body: JSON.stringify({ item_id: item.id }),
         headers: {
             'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify({ item_id: item.id }),
     });
-    
-    let stock = 0;
-    if (stockResponse.status === 200) {
-        try {
-            const stockData = await stockResponse.json();
-            stock = stockData?.quantity ?? 0;
-        } catch (error) {
-            console.error("Error parsing stock data:", error);
-        }
-    } else {
-        console.error("Error fetching stock:", stockResponse.status);
-    }
+    const stock_response = await stockResponse.json();
+    console.log(stock_response)
+    let stock = 0; //Default
+    // if (stockResponse.ok) {
+    //     try {
+    //         const stockData = await stockResponse.json();
+    //         stock = stockData?.quantity ?? 0;
+    //     } catch (error) {
+    //         console.error("Error parsing stock data:", error);
+    //     }
+    // } else {
+    //     console.error("Error fetching stock:", stockResponse.status, stockResponse.statusText);
+    // }
 
     const availableQuantity = stock;
     const discount = ((item.price * (1 - item.discount / 100)).toFixed(2));
@@ -172,7 +190,7 @@ export default async function ItemPage({ params }: { params: { item: string } })
                 <p>{item.description}</p>
             </div>
             {/* Review section */}
-            <ReviewSection reviews={reviews} item_id={item.id} />
+            {/* <ReviewSection reviews={reviews} item_id={item.id} /> */}
         </div>
     );
 }

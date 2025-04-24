@@ -20,7 +20,7 @@ interface Item {
 
 export default async function Products() {
 
-    const response = await fetch('http://localhost:8000/getItems', {
+    const response = await fetch('http://localhost:3000/api/getItems', {
         method: 'GET',
     });
 
@@ -29,7 +29,7 @@ export default async function Products() {
     const productsWithRatings = await Promise.all(
         items.map(async (item: Item) => {
 
-            const reviewResponse = await fetch('http://localhost:8000/checkIfItemHasReview', {
+            const reviewResponse = await fetch('http://localhost:3000/api/review/check-item-review', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
