@@ -11,7 +11,7 @@ interface Item {
 }
 
 export default async function OneByFour() {
-    const response = await fetch('http://localhost:8000/getItems', {
+    const response = await fetch('http://localhost:3000/api/getItems', {
         method: 'GET',
     });
 

@@ -1,8 +1,9 @@
 "use client";
 
 import { useUser } from "@stackframe/stack";
-import GetBasket from "./api/GetBasket";
+import GetBasket from "../components/payment/GetBasket";
 import GetBasketCountdownTimer from "../components/payment/GetBasketCountdownTimer";
+import { useState } from "react";
 
 export default function Payment() {
 
@@ -13,8 +14,7 @@ export default function Payment() {
         { user? (
             <div>
                 Welcome to checkout, you are signed in
-                <GetBasket />
-                <GetBasketCountdownTimer />
+                <GetBasket/>
             </div>
         ) : (
             <div>

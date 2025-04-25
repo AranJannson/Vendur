@@ -1,30 +1,42 @@
 "use client";
+import { revertStock } from "@/utils/catalogue/utils";
+import { useState } from "react";
 
-export default function DeleteBasketButton() {
+export default function DeleteBasketButton({basket, refreshBasket}: {basket: any[], refreshBasket: any}) {
+    const [loading, setLoading] = useState(false);
     
-    const handleClick = async () => {
+    const handleDelete = async () => {
+        try {
 
-        const response = await fetch("http://localhost:8002/deletecookie", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-        });
+            setLoading(true);
+            
+            await fetch("http://localhost:8002/deletecookie", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            });
+            
+            basket.forEach((item) => {
+                revertStock(item);
+            })
 
-        if (response.ok) {
-            console.log("Removed basket");
-            window.location.reload();
-        } else {
+        } catch (error) {
             console.error("Failed to remove basket");
+        } finally {
+            refreshBasket();
+            setLoading(false);
         }
 
     };
 
+    if (loading) return <p>Loading delete...</p>;
+
     return <div>
-        <button type="submit"
+        <button type="button"
             className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4"
-            onClick={handleClick}
+            onClick={handleDelete}
             >
                     Remove all items
         </button>
