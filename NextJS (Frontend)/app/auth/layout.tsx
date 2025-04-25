@@ -5,23 +5,17 @@ import Footer from "@/app/components/global/Footer";
 import {stackServerApp} from "@/stack";
 import {StackProvider, StackTheme} from "@stackframe/stack";
 
+export const metadata = {
+    title: "Sign Up | Vendur",
+    description: "",
+};
 
-export default function AuthLayout({
-                                       children,
-                                   }: Readonly<{
-    children: React.ReactNode;
-}>) {
+export default function AuthLayout({children,}: Readonly<{children: React.ReactNode;}>) {
     return (
-        <html lang="en">
-            <body>
-            <StackProvider app={stackServerApp}><StackTheme>
-                <Header/>
-                    <AuthPageWrapper>
-                        {children}
-                    </AuthPageWrapper>
-                <Footer/>
-            </StackTheme></StackProvider>
-            </body>
-        </html>
+        <StackProvider app={stackServerApp}><StackTheme>
+                <AuthPageWrapper>
+                    {children}
+                </AuthPageWrapper>
+        </StackTheme></StackProvider>
     );
 }

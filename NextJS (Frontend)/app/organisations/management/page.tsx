@@ -4,6 +4,11 @@ import AddProducts from "@/app/components/forms/AddProducts";
 import VerificationStatus from "@/app/components/org/VerificationStatus";
 import OrgAnalytics from "@/app/components/org/Analytics";
 
+export const metadata = {
+    title: "Org Management | Vendur",
+    description: "",
+  };
+
 export default function OrganisationsManagement() {
 
     return(

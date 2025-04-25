@@ -22,7 +22,7 @@ export default function Products() {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const response = await fetch('http://localhost:8000/getItems', {
+            const response = await fetch('/api/getItems', {
                 method: 'GET',
             });
             const data = await response.json();
@@ -50,7 +50,6 @@ export default function Products() {
                                 <Link href={`/products/${product.name}`} className="bg-secondary-500 rounded-lg p-2 transition-colors hover:bg-secondary-400">
                                     Details
                                 </Link>
-                                {product.id}
                                 <DeleteItemBtn productId={product.id}/>
                             </div>
                         </li>
