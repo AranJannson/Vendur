@@ -8,26 +8,22 @@ import {
     CarouselItem,
   } from "@/components/ui/carousel"
 
+
 export default function CarouselClient({className, category} : {className?: string, category: string}) {
 
     const [items, setItems] = useState<{ id: string; image: string; name: string }[]>([]);
 
-    const [activeIndex, setActiveIndex] = useState(0);
-
     useEffect(() => {
-
         async function fetchItems() {
-
-            const itemResponse = await fetch(`http://localhost:8000/getItems`);
-            const items = await itemResponse.json();
-
-            //@ts-ignore
+            const response = await fetch('/api/getItems', {
+                method: 'GET',
+            });
+            const items = await response.json();
             setItems(items);
+            console.log(items)
         }
         fetchItems();
     }, [])
-
-
 
  return(
 
