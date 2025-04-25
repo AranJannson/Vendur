@@ -1,18 +1,23 @@
 import { ReactNode } from 'react';
 import {AdminHeader} from "@/app/components/admin/AdminHeader";
 
+export const metadata = {
+  title: "Admin | Vendur",
+  description: "",
+};
+
 export default function Layout({
   children,
   analytics,
   products,
-    verification,
-    organisations
+  verification,
+  organisations
 }: {
   children?: ReactNode
   analytics: ReactNode
   products: ReactNode
-    verification: ReactNode
-    organisations: ReactNode
+  verification: ReactNode
+  organisations: ReactNode
 }) {
   return (
     <>
@@ -39,9 +44,9 @@ export default function Layout({
         {organisations}
       </div>
 
-        <div>
-            {children}
-        </div>
+      <div className="w-full">
+        {children}
+      </div>
 
     </>
   )
