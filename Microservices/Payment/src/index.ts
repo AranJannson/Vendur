@@ -4,6 +4,7 @@ import cors from "cors";
 // @ts-ignore
 import cookieParser from "cookie-parser";
 import orderProcessing, {changeStatus, changeStatusIndividual, getOrderDetails} from "./utils/orders/orderProccessing";
+import Stripe from "stripe";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const Payment = express();
 const duration = 120 * 60 * 1000;
 const basketCookieName = "basket";
 const expiryCookieName = "expiry";
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
 Payment.use(express.json());
 Payment.use(
@@ -22,6 +24,35 @@ Payment.use(
 Payment.use(cookieParser());
 
 const portNumber = 8002;
+ 
+// @ts-ignore
+Payment.post('/createPaymentIntent', async (req, res) => {
+    try {
+      const { items } = req.body;
+
+      items.forEach((item: any) => {
+        console.log("//createPaymentIntent item.id: ", item.id, ", quantity: ", item.quantity)
+      });
+  
+      // Calculate the total price manually
+      const amount = items.reduce((total: number, item: any) => {
+        return total + item.price * item.quantity * 100;
+      }, 0);
+
+      console.log("AMOUNT: ", amount);
+  
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount,
+        currency: 'gbp',
+        automatic_payment_methods: { enabled: true },
+      });
+  
+      res.json({ clientSecret: paymentIntent.client_secret });
+    } catch (error) {
+      console.error('Error creating payment intent:', error);
+      res.status(500).json({ error: error });
+    }
+  });
 
 Payment.post("/updateOrderStatusByGroup", async (req: Request, res: Response) => {
 
