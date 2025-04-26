@@ -28,7 +28,7 @@ export async function modifyStock(item: any, quantity: number){
     
     const item_id = item.id;
 
-    const stockResponse = await fetch('http://localhost:8000/getStock', {
+    const stockResponse = await fetch('http://localhost:3000/api/getStock', {
         method: 'POST',
         credentials: 'include',
         headers: {

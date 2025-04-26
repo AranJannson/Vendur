@@ -3,6 +3,9 @@ import DeleteItemButton from "@/app/components/payment/DeleteItemButton";
 import { useEffect, useState } from "react";
 import GetBasketCountdownTimer from "./GetBasketCountdownTimer";
 import { getOriginalStock, modifyStock } from "@/utils/catalogue/utils";
+import {loadStripe} from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import { CheckoutForm } from './CheckoutForm'
 
 interface Item {
   id: string;
@@ -13,10 +16,13 @@ interface Item {
   image: string;
 }
 
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+
 export default function GetBasket() {
   const [basket, setBasket] = useState<Item[]>([]);
   const [basketLoading, setBasketLoading] = useState(true);
   const [quantityLoading, setQuantityLoading] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   const fetchBasket = async () => {
     try {
@@ -40,6 +46,20 @@ export default function GetBasket() {
       setBasketLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!basket || basket.length === 0) return;
+
+    fetch('http://localhost:8002/createPaymentIntent', {
+      method: 'POST',
+      credentials: "include",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: basket })
+    })
+    .then(res => res.json())
+    .then(data => setClientSecret(data.clientSecret))
+    .catch(error => console.error("Error fetching client secret:", error));
+  }, [basket]);
 
   useEffect(() => {
     fetchBasket();
@@ -131,6 +151,11 @@ export default function GetBasket() {
             <DeleteBasketButton basket={basket} refreshBasket={fetchBasket} />
           )}
           {quantityLoading && "Loading quantity..."}
+          {clientSecret && (
+            <Elements stripe={stripePromise} options={{ clientSecret }}>
+              <CheckoutForm />
+            </Elements>
+          )}
           <GetBasketCountdownTimer basket={basket} />
         </div>
       ) : (
