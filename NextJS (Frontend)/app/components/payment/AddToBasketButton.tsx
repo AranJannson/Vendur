@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { modifyStock, setOriginalStock } from "@/utils/catalogue/utils";
 import { postItem } from "@/utils/payment/utils";
 
-export default function AddToCheckoutButton( { item, formId, originalStock }: { item: any, formId: string, originalStock: number }) {
+export default function AddToBasketButton( { item, formId, originalStock }: { item: any, formId: string, originalStock: number }) {
     
     useEffect(() => {
         const key = `hasSetStock-${item.id}`;
@@ -36,7 +36,7 @@ export default function AddToCheckoutButton( { item, formId, originalStock }: { 
             className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4"
             onClick={handleClick}
             >
-                    Add to checkout
+                    Add to Basket
         </button>
     </div>;
 }

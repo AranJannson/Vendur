@@ -1,11 +1,9 @@
 import DeleteBasketButton from "@/app/components/payment/DeleteBasketButton";
 import DeleteItemButton from "@/app/components/payment/DeleteItemButton";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import GetBasketCountdownTimer from "./GetBasketCountdownTimer";
 import { getOriginalStock, modifyStock } from "@/utils/catalogue/utils";
-import {loadStripe} from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-import { CheckoutForm } from './CheckoutForm'
+import { fetchBasket } from "@/utils/payment/utils";
 
 interface Item {
   id: string;
@@ -16,54 +14,21 @@ interface Item {
   image: string;
 }
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-
 export default function GetBasket() {
   const [basket, setBasket] = useState<Item[]>([]);
   const [basketLoading, setBasketLoading] = useState(true);
   const [quantityLoading, setQuantityLoading] = useState(false);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
 
-  const fetchBasket = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/api/getBasket", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // <-- include cookies!
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch basket");
-      }
-
-      const data: Item[] = await response.json();
-      setBasket(data);
-    } catch (error) {
-      console.error("Error fetching basket:", error);
-    } finally {
-      setBasketLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!basket || basket.length === 0) return;
-
-    fetch('http://localhost:8002/createPaymentIntent', {
-      method: 'POST',
-      credentials: "include",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: basket })
-    })
-    .then(res => res.json())
-    .then(data => setClientSecret(data.clientSecret))
-    .catch(error => console.error("Error fetching client secret:", error));
-  }, [basket]);
-
-  useEffect(() => {
-    fetchBasket();
+  const loadBasket = useCallback(async () => {
+    setBasketLoading(true);
+    const data = await fetchBasket();
+    setBasket(data);
+    setBasketLoading(false);
   }, []);
+
+  useEffect(() => {
+    loadBasket();
+  }, [loadBasket]);
 
   if (basketLoading) return <p>Loading basket...</p>;
 
@@ -96,12 +61,17 @@ export default function GetBasket() {
                       defaultValue={item.size}
                       onChange={(e) => {
                         const value = e.target.value;
-                        if (value.length === 1){
-                          setBasket((prevBasket) => 
-                          prevBasket.map((basketItem) =>
-                          basketItem.id === item.id ? { ...basketItem, size: value as Item["size"]} : basketItem))
+                        if (value.length === 1) {
+                          setBasket((prevBasket) =>
+                            prevBasket.map((basketItem) =>
+                              basketItem.id === item.id
+                                ? { ...basketItem, size: value as Item["size"] }
+                                : basketItem
+                            )
+                          );
                         }
-                      }}>
+                      }}
+                    >
                       <option value="S">S</option>
                       <option value="M">M</option>
                       <option value="L">L</option>
@@ -112,20 +82,22 @@ export default function GetBasket() {
                 <label className="font-bold ml-1">Quantity</label>
                 <select
                   value={item.quantity} // Set selected value to current quantity
-                  onChange={ async (e) => {
+                  onChange={async (e) => {
                     if (quantityLoading) return; // Prevent multiple clicks while basketLoading
-                  
+
                     setQuantityLoading(true); // Set basketLoading to true when request starts
-                  
+
                     try {
                       const newQuantity = parseInt(e.target.value);
                       const difference = item.quantity - newQuantity;
-                  
+
                       await modifyStock(item, difference);
-                  
+
                       setBasket((prevBasket) =>
                         prevBasket.map((basketItem) =>
-                          basketItem.id === item.id ? { ...basketItem, quantity: newQuantity } : basketItem
+                          basketItem.id === item.id
+                            ? { ...basketItem, quantity: newQuantity }
+                            : basketItem
                         )
                       );
                     } catch (error) {
@@ -137,26 +109,34 @@ export default function GetBasket() {
                   className="p-2 bg-primary-200 rounded-full w-13 ml-2"
                   name="quantity"
                 >
-                  {Array.from({ length: Math.min(getOriginalStock(Number(item.id)) || 0, 10) }, (_, i) => i + 1).map((qty) => (
+                  {Array.from(
+                    {
+                      length: Math.min(
+                        getOriginalStock(Number(item.id)) || 0,
+                        10
+                      ),
+                    },
+                    (_, i) => i + 1
+                  ).map((qty) => (
                     <option key={qty} value={qty}>
                       {qty}
                     </option>
                   ))}
                 </select>
-                <DeleteItemButton item={item} refreshBasket={fetchBasket} />
+                <DeleteItemButton item={item} refreshBasket={loadBasket} />
               </li>
             ))}
           </ul>
           {basket.length != 1 && (
-            <DeleteBasketButton basket={basket} refreshBasket={fetchBasket} />
+            <DeleteBasketButton basket={basket} refreshBasket={loadBasket} />
           )}
           {quantityLoading && "Loading quantity..."}
-          {clientSecret && (
-            <Elements stripe={stripePromise} options={{ clientSecret }}>
-              <CheckoutForm />
-            </Elements>
-          )}
           <GetBasketCountdownTimer basket={basket} />
+          <a href="/payment/checkout">
+            <button className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4">
+              Go to Checkout
+            </button>
+          </a>
         </div>
       ) : (
         <p>No items in basket.</p>

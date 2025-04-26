@@ -9,7 +9,7 @@ export default function DeleteItemButton({ item, refreshBasket }: {item: any, re
       } catch (error) {
         console.error("Error deleting item:", error);
       } finally{
-        refreshBasket(); 
+        await refreshBasket(); 
       }
 
     };

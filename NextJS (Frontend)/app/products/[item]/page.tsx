@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import AddToCheckoutButton from '@/app/components/payment/AddToCheckoutButton';
+import AddToBasketButton from '@/app/components/payment/AddToBasketButton';
 import ReviewSection from "@/app/components/product/ReviewSection";
 import StarRating from "@/app/components/product/StarRating";
 
@@ -167,7 +167,7 @@ export default async function ItemPage({ params }: { params: { item: string } })
                                         Notify Me
                                     </button>
                                 ) : (
-                                    <AddToCheckoutButton 
+                                    <AddToBasketButton 
                                         item={item} 
                                         formId="itemForm"
                                         originalStock={availableQuantity}
