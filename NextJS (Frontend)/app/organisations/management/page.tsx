@@ -40,6 +40,7 @@ export default async function OrganisationsManagement() {
                     </h1>
 
                     <Products/>
+                    <AddToOrg/>
 
                 </div>
 
