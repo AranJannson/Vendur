@@ -25,7 +25,7 @@ const portNumber = 8003;
 OrgMgmt.listen(portNumber, () => {
     console.log(`OrgMgmt is running on port ${portNumber}`);
 });
-OrgMgmt.get("/organisation", async (req: Request, res: Response) => {
+OrgMgmt.post("/organisation", async (req: Request, res: Response) => {
     try {
         const { org_id } = req.body;
         const data = await getOrgInfo(org_id);
@@ -103,7 +103,9 @@ OrgMgmt.put("/apply-discount", async (req: Request, res: Response) => {
 
 OrgMgmt.post("/request-verification", async (req: Request, res: Response): Promise<any> => {
     try {
-        const { org_id } = req.body;
+        const { org_id, name, email, description, productInfo, shippingMethod } = req.body.product;
+        console.log('Received org_id:', org_id);
+        console.log("Received request body:", req.body);
         let org_info = await getOrgInfo(org_id);
         if (!org_info) {
             return res.status(404).send({ error: "Organisation not found" });
@@ -111,7 +113,7 @@ OrgMgmt.post("/request-verification", async (req: Request, res: Response): Promi
         if (org_info[0].is_verified) {
             return res.status(400).send({ error: "Organisation already verified" });
         } else {
-            await requestVerification(org_id);
+            await requestVerification(org_id, name, email, description, productInfo, shippingMethod);
             return res.status(200).send({ message: "Verification requested successfully" });
         }
     } catch (error) {
@@ -121,7 +123,7 @@ OrgMgmt.post("/request-verification", async (req: Request, res: Response): Promi
 })
 
 // Verification Status
-OrgMgmt.get("/verification-status", async (req: Request, res: Response): Promise<any> => {
+OrgMgmt.post("/verification-status", async (req: Request, res: Response): Promise<any> => {
     try {
         const { org_id } = req.body;
         const org_info = await getOrgInfo(org_id);
