@@ -1,37 +1,86 @@
 "use client";
+import { useState, useEffect } from 'react';
 
 export default function VerificationRequestForm() {
+
+    interface OrgData {
+        name: string;
+        email: string;
+        description: string;
+      }
+
+    const org_id = 1;
+    const [orgData, setOrgData] = useState<OrgData | null>(null); // We expect OrgData or null
+    const [loading, setLoading] = useState(true);
+
+    
+
+    const fetchData = async () => {
+        try {
+        const res = await fetch('/api/organisations/verification/getOrgInfo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ org_id }),
+            });  
+            
+            const data: OrgData = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+                setOrgData(data[0]);
+              } else {
+                setOrgData(null);
+              }
+
+        } catch (error) {
+        console.error("Error fetching data:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const name = formData.get('name');
-        const organisationEmail = formData.get('organisationEmail');
+        const email = formData.get('organisationEmail');
         const description = formData.get('description');
         const productInfo = formData.get('productInfo');
         const shippingMethod = formData.get('shippingMethod');
         const documents = formData.get('documents');
 
+        const org_id = 1;
         const payload = {
             product : {
+                org_id: org_id,
                 name,
                 description,
+                email,
                 productInfo,
-                organisationEmail,
                 shippingMethod,
-                documents,
-                org_id: 1
+                //documents
             }
         };
-        // TODO: Change this to actually use the API route instead of the backend directly
-        const response = await fetch('http://localhost:8003/verificationReq', {
+        //to do: change to api
+        const response = await fetch('http://localhost:8003/request-verification', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
         });
 
-        alert(response.ok ? 'Product added successfully' : 'Failed to add product');
+        if (response.ok) {
+            alert('Verification form sent successfully');
+            window.location.reload();
+        } else {
+            alert('Failed to send request: Server Error:');
+        }
     };
+
+    if (!orgData) {
+        return <p>No organisation data available</p>;
+      }
 
     return (
         <form onSubmit={onSubmit} className="flex flex-col gap-4 p-4 bg-primary-100 rounded-lg shadow-md">
@@ -40,16 +89,27 @@ export default function VerificationRequestForm() {
             <div className="flex flex-col gap-2 bg-background-200 p-2 rounded-lg">
                 <span className="flex flex-col gap-2">
                     <label>Organisation Name</label>
-                    <input type="text" name="name" placeholder="Org Name" required className="p-2 rounded-lg"/>
+                    <input type="text" name="name" placeholder="Org Name" required className="p-2 rounded-lg bg-background-100"/>
                 </span>
 
                 <span className="flex flex-col gap-2">
                     <label>Org Description</label>
-                    <textarea name="description" placeholder="Org Description" required className="p-2 rounded-lg"/>
+                    <textarea name="description" placeholder="Org Description" required className="p-2 rounded-lg bg-background-100"/>
                 </span>
+
+                <span className="flex flex-col gap-2">
+                    <label htmlFor="organisation-email">Organisation Email</label>
+                    <input
+                        type="email"
+                        name="organisationEmail"
+                        placeholder="Org Email"
+                        required
+                        className="p-2 rounded-lg bg-background-100"
+                    />
+                  </span>
             </div>
 
-            <div className="flex flex-col gap-2 bg-background-200 p-2 rounded-lg">
+            <div className="flex flex-col gap-2 bg-background-200 p-2 rounded-lg bg-background-50">
                   <span className="flex flex-col gap-2">
                     <label htmlFor="documents">Documents (Upload Section)</label>
                     <input
@@ -66,18 +126,7 @@ export default function VerificationRequestForm() {
             </div>
 
 
-            <div className="flex flex-col gap-2 bg-background-200 p-2 rounded-lg">
-                  <span className="flex flex-col gap-2">
-                    <label htmlFor="organisation-email">Organisation Email</label>
-                    <input
-                        type="email"
-                        name="organisationEmail"
-                        placeholder="Org Email"
-                        required
-                        className="p-2 rounded-lg"
-                    />
-                  </span>
-            </div>
+            
 
             <div className="flex flex-col gap-2 bg-background-200 p-2 rounded-lg">
                   <span className="flex flex-col gap-2">
@@ -85,11 +134,11 @@ export default function VerificationRequestForm() {
                         <select
                             name="productInfo"
                             required
-                            className="p-2 rounded-lg"
+                            className="p-2 rounded-lg bg-background-50"
                             defaultValue=""
 
                         >
-                              <option value="" disabled selected>Select product type</option>
+                              <option value="" disabled>Select product type</option>
                               <option value="self-made">Self-made items</option>
                               <option value="third-party">Third-party items</option>
                               <option value="dropshipping">Dropshipping products</option>
@@ -102,10 +151,10 @@ export default function VerificationRequestForm() {
                         <select
                             name="shippingMethod"
                             required
-                            className="p-2 rounded-lg"
+                            className="p-2 rounded-lg bg-background-50"
                             defaultValue=""
                         >
-                              <option value="" disabled selected>How will you deliver your products?</option>
+                              <option value="" disabled>How will you deliver your products?</option>
                               <option value="courier">Courier</option>
                               <option value="pickup">Pickup</option>
                               <option value="local-delivery">Local Delivery</option>
