@@ -3,18 +3,14 @@ import Products from "@/app/components/org/Products";
 import AddProducts from "@/app/components/forms/AddProducts";
 import VerificationStatus from "@/app/components/org/VerificationStatus";
 import OrgAnalytics from "@/app/components/org/Analytics";
+import { stackServerApp } from "@/stack";
 
-export const metadata = {
-    title: "Org Management | Vendur",
-    description: "",
-  };
-
-export default function OrganisationsManagement() {
+export default async function OrganisationsManagement() {
+    const user = await stackServerApp.getUser({ or: 'redirect' });
+    const allTeams = await user.listTeams();
 
     return(
-
         <>
-
             <div className="grid grid-cols-3 h-full w-full m-4 gap-8 max-w-[97vw]">
 
                 <div className="flex flex-col gap-8">

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GoPlus } from "react-icons/go";
+import {stackServerApp} from "@/stack";
 
 interface Item{
     id: number;
@@ -16,10 +17,13 @@ interface Item{
 
 export default async function Products(){
 
+    const user = await stackServerApp.getUser({ or: 'redirect' });
+    const allTeams = await user.listTeams();
+
     // CRUD, Create, Read, Update, Delete
     // Create a new product Form
 
-    const orgID: number = 1; // TODO: Get the orgID from the user
+    const orgID: string = allTeams[0]?.id;
 
     const response = await fetch('http://localhost:8000/getOrgItems', {
         method: 'POST',
