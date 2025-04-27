@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import Modal from '@/app/components/org/OrgVerificationFormModal';
 import VerificationRequestForm from '@/app/components/forms/VerificationRequestForm';
 
-const org_id = 1; //TEMPORARY ORG ID! (Set in DB to)
+interface VerificationStatusProps {
+    id: string;
+  }
 
-const VerificationStatus = () => {
+const VerificationStatus: React.FC<VerificationStatusProps> = ({ id }) => {
 
     const [checkIfVerified, setCheckIfVerified] = useState<boolean | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,12 +29,13 @@ const VerificationStatus = () => {
     
         const fetchData = async () => {
           try {
+            console.log("ID: " + id);
             const res = await fetch('/api/organisations/verification/check', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ org_id }),
+                body: JSON.stringify({ id }),
               });  
                 const data = await res.json();
                 setCheckIfVerified(data.verified);
@@ -45,7 +48,7 @@ const VerificationStatus = () => {
 
         useEffect(() => {
             fetchData();
-        }, [org_id]); //Live update
+        }, [id]); //Live update
 
     return (
         <div className="bg-primary-100 shadow-xl rounded-xl p-4 h-fit">
@@ -63,7 +66,7 @@ const VerificationStatus = () => {
                 </div>
             )}
             <Modal isOpen={isModalOpen} onClose={closeModal}>
-                <VerificationRequestForm />
+                <VerificationRequestForm id={id}/>
             </Modal>
             
         </div>

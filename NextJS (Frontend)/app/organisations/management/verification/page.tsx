@@ -1,14 +1,14 @@
-import VerificationRequestForm from "@/app/components/forms/VerificationRequestForm";
+// import VerificationRequestForm from "@/app/components/forms/VerificationRequestForm";
 
-export default function VerificationPage(){
+// export default function VerificationPage(){
 
-    return(
+//     return(
 
-      <>
+//       <>
 
-        <VerificationRequestForm/>
+//         <VerificationRequestForm/>
 
 
-      </>
-    );
-}
+//       </>
+//     );
+// }

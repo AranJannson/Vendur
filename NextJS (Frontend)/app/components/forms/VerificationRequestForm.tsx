@@ -1,7 +1,11 @@
 "use client";
 import { useState, useEffect } from 'react';
 
-export default function VerificationRequestForm() {
+interface VerificationRequestFormProps {
+    id: string;
+}
+
+export default function VerificationRequestForm({ id }: VerificationRequestFormProps) {
 
     interface OrgData {
         name: string;
@@ -9,7 +13,6 @@ export default function VerificationRequestForm() {
         description: string;
       }
 
-    const org_id = 1;
     const [orgData, setOrgData] = useState<OrgData | null>(null); // We expect OrgData or null
     const [loading, setLoading] = useState(true);
 
@@ -22,10 +25,11 @@ export default function VerificationRequestForm() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ org_id }),
+            body: JSON.stringify({ id }),
             });  
             
             const data: OrgData = await res.json();
+            console.log(data)
             if (Array.isArray(data) && data.length > 0) {
                 setOrgData(data[0]);
               } else {
@@ -36,6 +40,7 @@ export default function VerificationRequestForm() {
         console.error("Error fetching data:", error);
         }
     };
+
 
     useEffect(() => {
         fetchData();
@@ -50,11 +55,9 @@ export default function VerificationRequestForm() {
         const productInfo = formData.get('productInfo');
         const shippingMethod = formData.get('shippingMethod');
         const documents = formData.get('documents');
-
-        const org_id = 1;
         const payload = {
             product : {
-                org_id: org_id,
+                org_id: id,
                 name,
                 description,
                 email,

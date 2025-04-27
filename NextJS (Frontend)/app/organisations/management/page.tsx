@@ -8,6 +8,7 @@ import { stackServerApp } from "@/stack";
 export default async function OrganisationsManagement() {
     const user = await stackServerApp.getUser({ or: 'redirect' });
     const allTeams = await user.listTeams();
+    const id = allTeams[0]?.id;
 
     if (allTeams.length === 0) {
         return (
@@ -27,7 +28,7 @@ export default async function OrganisationsManagement() {
         );
     }
 
-
+    console.log("ID in page: " + id);
     return(
         <>
             <div className="grid grid-cols-3 h-full w-full m-4 gap-8 max-w-[97vw]">
@@ -48,8 +49,8 @@ export default async function OrganisationsManagement() {
 
                         <div className="flex flex-col gap-3">
 
-                            <VerificationStatus/>
-
+                            <VerificationStatus id={id}/>
+                            
                             <OrgAnalytics/>
 
                         </div>
