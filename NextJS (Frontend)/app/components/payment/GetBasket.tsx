@@ -19,6 +19,10 @@ export default function GetBasket() {
   const [basketLoading, setBasketLoading] = useState(true);
   const [quantityLoading, setQuantityLoading] = useState(false);
 
+  const amount = basket.reduce((total: number, item: any) => {
+    return total + item.price * item.quantity;
+  }, 0);
+
   const loadBasket = useCallback(async () => {
     setBasketLoading(true);
     const data = await fetchBasket();
@@ -131,6 +135,7 @@ export default function GetBasket() {
             <DeleteBasketButton basket={basket} refreshBasket={loadBasket} />
           )}
           {quantityLoading && "Loading quantity..."}
+          <p>Total: £{amount.toFixed(2)}</p>
           <GetBasketCountdownTimer basket={basket} />
           <a href="/payment/checkout">
             <button className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4">

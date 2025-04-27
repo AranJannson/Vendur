@@ -24,6 +24,10 @@ function Checkout() {
   const [basketLoading, setBasketLoading] = useState(true);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
+  const amount = basket.reduce((total: number, item: any) => {
+    return total + item.price * item.quantity;
+  }, 0);
+
   useEffect(() => {
     if (!basket || basket.length === 0) return;
 
@@ -52,6 +56,7 @@ function Checkout() {
 
   return (
     <div>
+      <p>Total: £{amount.toFixed(2)}</p>
       {clientSecret && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <CheckoutForm />
