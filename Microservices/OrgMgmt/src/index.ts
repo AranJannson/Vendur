@@ -121,7 +121,7 @@ OrgMgmt.post("/request-verification", async (req: Request, res: Response): Promi
 })
 
 // Verification Status
-OrgMgmt.get("/verification-status", async (req: Request, res: Response): Promise<any> => {
+OrgMgmt.post("/verification-status", async (req: Request, res: Response): Promise<any> => {
     try {
         const { org_id } = req.body;
         const org_info = await getOrgInfo(org_id);
