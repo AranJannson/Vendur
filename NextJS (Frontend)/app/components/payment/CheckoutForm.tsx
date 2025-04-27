@@ -1,10 +1,10 @@
 "use client";
 
-import Loading from "@/app/loading";
 import {
   useStripe,
   useElements,
   PaymentElement,
+  AddressElement,
 } from "@stripe/react-stripe-js";
 import { FormEvent, useState } from "react";
 
@@ -21,6 +21,9 @@ export const CheckoutForm = () => {
       return;
     }
 
+    const address = elements.getElement(AddressElement);
+    const addressDetails = await address?.getValue();
+
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
@@ -32,6 +35,7 @@ export const CheckoutForm = () => {
     if (error) {
       setErrorMessage(error.message || "An unexpected error occurred.");
     } else {
+
       await fetch("http://localhost:8002/deletecookie", {
         method: "DELETE",
         headers: {
@@ -49,6 +53,7 @@ export const CheckoutForm = () => {
       {detailsLoading && <p>Loading Details...</p>}
       <div className={detailsLoading ? "invisible": "visible"}>
         <PaymentElement onReady={() => setDetailsLoading(false)}/>
+        <AddressElement options={{mode: 'shipping'}}/>
         <button
           disabled={!stripe || !elements}
           className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4"

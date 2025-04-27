@@ -41,9 +41,9 @@ export default function GetBasket() {
       <h2>Basket:</h2>
       {basket && basket.length > 0 ? (
         <div>
-          <ul>
+          <ul className="flex gap-8 overflow-x-auto p-4">
             {basket.map((item, index) => (
-              <li key={index} className="mb-4">
+              <div key={index} className="mb-4">
                 <h2 className="text-xl font-bold">{item.name}</h2>
                 <div className="bg-secondary-100 max-w-[10rem] max-h-[10rem] p-4 m-4 rounded-lg flex justify-center">
                   <img
@@ -87,7 +87,7 @@ export default function GetBasket() {
                 <select
                   value={item.quantity} // Set selected value to current quantity
                   onChange={async (e) => {
-                    if (quantityLoading) return; // Prevent multiple clicks while basketLoading
+                    if (quantityLoading) return; // Prevent multiple cdivcks while basketLoading
 
                     setQuantityLoading(true); // Set basketLoading to true when request starts
 
@@ -128,7 +128,7 @@ export default function GetBasket() {
                   ))}
                 </select>
                 <DeleteItemButton item={item} refreshBasket={loadBasket} />
-              </li>
+              </div>
             ))}
           </ul>
           {basket.length != 1 && (
