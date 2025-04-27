@@ -24,6 +24,10 @@ function Checkout() {
   const [basketLoading, setBasketLoading] = useState(true);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
+  const amount = basket.reduce((total: number, item: any) => {
+    return total + item.price * item.quantity;
+  }, 0);
+
   useEffect(() => {
     if (!basket || basket.length === 0) return;
 
@@ -52,6 +56,28 @@ function Checkout() {
 
   return (
     <div>
+      <h2>Items:</h2>
+      <ul className="flex gap-8 overflow-x-auto p-4">
+        {basket.map((item, index) => (
+          <li key={index} className="mb-4">
+            <h2 className="text-xl font-bold">{item.name}</h2>
+            <div className="bg-secondary-100 max-w-[10rem] max-h-[10rem] p-4 m-4 rounded-lg flex justify-center">
+              <img
+                src={item.image}
+                alt={item.name}
+                width="200"
+                height="200"
+                className="object-contain"
+              />
+            </div>
+            <p>Id: {item.id}</p>
+            <p>Price: £{item.price.toFixed(2)}</p>
+            <p>{item.size && `Size: ${item.size}`}</p>
+            <p>Quantity: {item.quantity}</p>
+          </li>
+        ))}
+      </ul>
+      <p>Total: £{amount.toFixed(2)}</p>
       {clientSecret && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <CheckoutForm />
