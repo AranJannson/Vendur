@@ -4,7 +4,6 @@ import AddProducts from "@/app/components/forms/AddProducts";
 import VerificationStatus from "@/app/components/org/VerificationStatus";
 import OrgAnalytics from "@/app/components/org/Analytics";
 import { stackServerApp } from "@/stack";
-import AddToOrg from "@/app/components/forms/AddToOrg";
 
 export default async function OrganisationsManagement() {
     const user = await stackServerApp.getUser({ or: 'redirect' });
@@ -40,7 +39,6 @@ export default async function OrganisationsManagement() {
                     </h1>
 
                     <Products/>
-                    <AddToOrg/>
 
                 </div>
 
@@ -64,7 +62,6 @@ export default async function OrganisationsManagement() {
                 </div>
 
                 <div className="w-full h-20 bg-primary-200 rounded-lg shadow-xl col-span-3">
-                    {/*<AddToOrg/>*/}
                 </div>
 
             </div>
