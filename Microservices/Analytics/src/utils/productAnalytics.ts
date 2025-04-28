@@ -134,7 +134,7 @@ export async function oldAvgItemPricePerCategory(){
 export async function avgItemPricePerCategory(org_id: string){
     const {data, error} = await catalogSupabase
         .from("items")
-        .select("category, price, org_id")
+        .select("category, price, org_id").eq(org_id, org_id)
 
     if (error){
         console.log("Error fetching items:", error);
