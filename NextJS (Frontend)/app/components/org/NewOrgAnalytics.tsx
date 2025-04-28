@@ -5,7 +5,7 @@ type AvgItemPrice = {
     avgPrice: number;
 };
 
-export default async function OrgAnalytics(){
+export default async function NewestOrgAnalytics(){
     const user = await stackServerApp.getUser({ or: 'redirect' });
     const allTeams = await user.listTeams();
     const orgID: string = allTeams[0]?.id;
@@ -22,7 +22,7 @@ export default async function OrgAnalytics(){
     return(
 
         <div>
-            <h1 className="font-bold text-xl mb-4">Analytics</h1>
+            <h1 className="font-bold text-xl mb-4">Newest Analytics</h1>
             {JSON.stringify(data)}
         </div>
 

@@ -4,6 +4,8 @@ import AddProducts from "@/app/components/forms/AddProducts";
 import VerificationStatus from "@/app/components/org/VerificationStatus";
 import OrgAnalytics from "@/app/components/org/Analytics";
 import { stackServerApp } from "@/stack";
+import NewestOrgAnalytics from "@/app/components/org/NewOrgAnalytics";
+
 
 export default async function OrganisationsManagement() {
     const user = await stackServerApp.getUser({ or: 'redirect' });
@@ -50,7 +52,7 @@ export default async function OrganisationsManagement() {
 
                             <VerificationStatus id={id}/>
                             
-                            <OrgAnalytics/>
+                            <NewestOrgAnalytics/>
 
                         </div>
 
