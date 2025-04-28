@@ -98,7 +98,7 @@ export async function itemSalesList() {
 }
 
 // Returns a list of all categories and the average price of an item in each category
-export async function avgItemPricePerCategory(){
+export async function oldAvgItemPricePerCategory(){
     const {data, error} = await catalogSupabase
         .from("items")
         .select("category, price")
@@ -112,6 +112,43 @@ export async function avgItemPricePerCategory(){
         const category = item.category;
         const price = item.price;
         if(!categoryCount[category]){
+            categoryCount[category] ={total:0, price:0}
+        }
+        categoryCount[category].total+=1;
+        categoryCount[category].price+=price;
+    })
+
+    const avgItemCategoryPrice: Record<string, number> = {};
+    let avg: 0
+
+    for (const category in categoryCount){
+        const{total, price} = categoryCount[category];
+        avg = price / total;
+        avgItemCategoryPrice[category] =(avgItemCategoryPrice[category] || 0) + avg;
+    }
+
+    return avgItemCategoryPrice;
+}
+
+// Returns a list of all categories and the average price of an item in each category
+export async function avgItemPricePerCategory(org_id: string){
+    const {data, error} = await catalogSupabase
+        .from("items")
+        .select("category, price, org_id")
+
+    if (error){
+        console.log("Error fetching items:", error);
+        return 0;
+    }
+    const categoryCount: Record<string, {total:0, price:0}>={};
+    data.forEach((item) => {
+        const category = item.category;
+        const price = item.price;
+        const orgId = item.org_id;
+        if (orgId == org_id){
+
+        }
+        if(!categoryCount[category] && orgId == org_id){
             categoryCount[category] ={total:0, price:0}
         }
         categoryCount[category].total+=1;

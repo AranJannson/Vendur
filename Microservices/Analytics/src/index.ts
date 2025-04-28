@@ -5,7 +5,8 @@ import {
     itemSalesList,
     mostPopularCategoryByItemsListed,
     mostPopularCategoryBySalesList,
-    avgItemPricePerCategory
+    avgItemPricePerCategory,
+    oldAvgItemPricePerCategory
 } from "./utils/productAnalytics"
 import { fetchAllProducts } from "./utils/fetchAllProducts";
 import { inventoryValue, lowerStock, outOfStock, mostValuableStockItem, listOfItemStockValue } from "./utils/stockAnalysis";
@@ -73,8 +74,7 @@ Analytics.get("/inventoryValue", async (req: Request, res: Response) => {
 
     console.log("The inventory value is:", totalInvValue);
     res.send(JSON.stringify(totalInvValue, null, 2))
-}); 
-
+});
 
 Analytics.get("/lowerStock", async (req: Request, res: Response) => {
 
@@ -277,9 +277,9 @@ Analytics.get("/avgQuantityOrderList", async (req: Request, res: Response) => {
     res.send(JSON.stringify(avgQuantityList, null, 2))
 });
 
-Analytics.get("/avgItemPriceCategory", async (req: Request, res: Response) => {
+Analytics.get("/oldAvgItemPriceCategory", async (req: Request, res: Response) => {
 
-    const avgItemPrice = await avgItemPricePerCategory()
+    const avgItemPrice = await oldAvgItemPricePerCategory()
 
     console.log(avgItemPrice);
     res.send(JSON.stringify(avgItemPrice, null, 2))
@@ -315,4 +315,13 @@ Analytics.get("/pages-clicks", async (req: Request, res: Response): Promise<any>
     }
 
     res.status(200).json(data);
+});
+
+Analytics.post("/avgItemPriceCategory", async (req: Request, res: Response) => {
+
+    const { org_id } = req.body;
+    const avgItemPrice = await avgItemPricePerCategory(org_id)
+
+    console.log(avgItemPrice);
+    res.send(JSON.stringify(avgItemPrice, null, 2))
 });
