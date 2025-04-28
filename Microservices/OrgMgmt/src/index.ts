@@ -27,8 +27,8 @@ OrgMgmt.listen(portNumber, () => {
 });
 OrgMgmt.post("/organisation", async (req: Request, res: Response) => {
     try {
-        const { org_id } = req.body;
-        const data = await getOrgInfo(org_id);
+        const { id } = req.body;
+        const data = await getOrgInfo(id);
         res.status(200).send(JSON.stringify(data));
     } catch (error) {
         console.error("Error fetching products:", error);
@@ -40,8 +40,8 @@ OrgMgmt.post("/organisation", async (req: Request, res: Response) => {
 // Fetch all products from an organisation
 OrgMgmt.get("/products", async (req: Request, res: Response) => {
     try {
-        const { org_id } = req.body;
-        const data = await getProducts(org_id)
+        const { id } = req.body;
+        const data = await getProducts(id)
         res.status(200).send(JSON.stringify(data));
     } catch (error) {
         console.error("Error fetching products:", error);
@@ -125,8 +125,8 @@ OrgMgmt.post("/request-verification", async (req: Request, res: Response): Promi
 // Verification Status
 OrgMgmt.post("/verification-status", async (req: Request, res: Response): Promise<any> => {
     try {
-        const { org_id } = req.body;
-        const org_info = await getOrgInfo(org_id);
+        const { id } = req.body;
+        const org_info = await getOrgInfo(id);
 
         if (!org_info) {
             return res.status(404).send({ error: "Organisation not found" });
