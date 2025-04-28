@@ -29,7 +29,6 @@ const VerificationStatus: React.FC<VerificationStatusProps> = ({ id }) => {
     
         const fetchData = async () => {
           try {
-            console.log("ID: " + id);
             const res = await fetch('/api/organisations/verification/check', {
                 method: 'POST',
                 headers: {

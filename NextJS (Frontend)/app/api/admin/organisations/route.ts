@@ -5,19 +5,20 @@ export async function GET(req: NextRequest) {
         const response = await fetch("http://localhost:5078/admin/getAllOrgs", {
             method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
-            return NextResponse.json({ error: errorData.error }, { status: response.status });
+            throw new Error();
         }
 
-        const data = await response.json();
-        return NextResponse.json(data, { status: 200 });
+        const text = await response.text();
+        const data = JSON.parse(text);
+
+        return NextResponse.json(data)    
     } catch (error) {
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        console.error("Error:", error);
+        return Response.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

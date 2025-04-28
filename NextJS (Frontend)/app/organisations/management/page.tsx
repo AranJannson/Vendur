@@ -28,7 +28,6 @@ export default async function OrganisationsManagement() {
         );
     }
 
-    console.log("ID in page: " + id);
     return(
         <>
             <div className="grid grid-cols-3 h-full w-full m-4 gap-8 max-w-[97vw]">

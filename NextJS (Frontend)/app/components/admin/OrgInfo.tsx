@@ -50,19 +50,23 @@ const OrgInfo = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 10;
 
-    useEffect(() => {
+    
       const fetchData = async () => {
         try {
           const res = await fetch('/api/admin/organisations');
+          if (!res.ok) {
+            throw new Error(`Network Error: ${res.statusText}`);
+          }
           const data = await res.json();
           setData(data);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       };
-  
+    useEffect(() => {
       fetchData();
     }, []);
+    
   
     const sortedData = [...data].sort((a, b) => {
       if (sortConfig.key) {

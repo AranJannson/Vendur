@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from 'react';
 
 interface Organisation {
-    id: number;
+    id: string;
     name: string;
     description: string;
     email: string;
@@ -15,17 +15,16 @@ interface Organisation {
 }
 
 type Props = {
-    vendur_id: number;
+    id: string;
   };
 
-async function getOrganisation(vendur_id: number) {
+async function getOrganisation(id: string) {
     const res = await fetch('/api/admin/orgDetails', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ vendur_id }),
+      body: JSON.stringify({ id }),
       cache: 'no-store'
     });
-    
     return res.json() as Promise<Organisation>;
   }
 
@@ -66,13 +65,13 @@ const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       }
   };
  
-const FormClientComponent: React.FC<Props> = ({ vendur_id }) => {
+const FormClientComponent: React.FC<Props> = ({ id }) => {
     const [org, setOrg] = useState<Organisation | null>(null);
 
     useEffect(() => {
         const fetchOrg = async () => {
           try {
-            const org = await getOrganisation(vendur_id);
+            const org = await getOrganisation(id);
             setOrg(org);
           } catch (error) {
             console.error('Error fetching organization:', error);
@@ -80,12 +79,11 @@ const FormClientComponent: React.FC<Props> = ({ vendur_id }) => {
         };
     
         fetchOrg();
-      }, [vendur_id]);
+      }, [id]);
 
       if (!org) {
         return <div>-</div>;
       }
-      console.log(org);
 
     return (
     <div className="p-6 max-w mx-auto bg-white rounded-xl shadow-md space-y-6">
