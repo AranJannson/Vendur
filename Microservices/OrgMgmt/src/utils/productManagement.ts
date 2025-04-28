@@ -2,8 +2,26 @@ import { connectCatalogue } from "./dbConnect";
 
 const supabase = connectCatalogue();
 
+<<<<<<< Updated upstream
 export const getOrgProducts = async (org_id: any) => {
     const { data, error } = await supabase
+=======
+export const getOrgInfo = async (id: any) => {
+    const { data, error } = await org_supabase
+        .from("orgs")
+        .select()
+        .eq("id", id)
+
+    if (error) {
+        throw new Error(`Error fetching org details: ${error.message}`);
+    }
+    return data;
+}
+
+// CRUD Operations for products
+export const getProducts = async (org_id: any) => {
+    const { data, error } = await cat_supabase
+>>>>>>> Stashed changes
         .from("items")
         .select()
         .eq("org_id", org_id)

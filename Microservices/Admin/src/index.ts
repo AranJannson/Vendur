@@ -37,15 +37,12 @@ Admin.get('/admin/getAllOrgs', async (req: Request, res: Response): Promise<any>
     if (!orgs) {
         return res.status(500).json({ error: "Failed to fetch organisations" });
       }
-    
       res.json(orgs);
 });
 
 Admin.post('/admin/orgDetails', async (req: Request, res: Response): Promise<any> => {
-    const { vendur_id } = req.body;
-    console.log(vendur_id);
-    const org = await orgDetails(vendur_id);
-    console.log(org);
+    const { id } = req.body;
+    const org = await orgDetails(id);
     if (!org) {
         return res.status(500).json({ error: "Failed to fetch organisation" });
       }
