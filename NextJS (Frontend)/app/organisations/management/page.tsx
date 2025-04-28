@@ -5,6 +5,7 @@ import VerificationStatus from "@/app/components/org/VerificationStatus";
 import OrgAnalytics from "@/app/components/org/Analytics";
 import { stackServerApp } from "@/stack";
 import NewestOrgAnalytics from "@/app/components/org/NewOrgAnalytics";
+import OrgAvgPriceCategoryGraph from "@/app/components/org/orgAvgPriceCategoryGraph";
 
 
 export default async function OrganisationsManagement() {
@@ -52,7 +53,7 @@ export default async function OrganisationsManagement() {
 
                             <VerificationStatus id={id}/>
                             
-                            <NewestOrgAnalytics/>
+
 
                         </div>
 
@@ -62,8 +63,17 @@ export default async function OrganisationsManagement() {
                     </div>
 
                 </div>
+                <div className="w-full h-fit bg-primary-200 rounded-lg shadow-xl col-span-3 grid grid-cols-3 gap-4 mt-8">
+                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                        <h2 className="text-base font-light p-2">Avg Price Of Product (By Category)</h2>
+                        <OrgAvgPriceCategoryGraph/>
 
-                <div className="w-full h-20 bg-primary-200 rounded-lg shadow-xl col-span-3">
+                    </div>
+                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                        <h2 className="text-2xl font-bold p-2">Avg Price Of Product (By Category)</h2>
+                        <OrgAvgPriceCategoryGraph/>
+
+                    </div>
                 </div>
 
             </div>

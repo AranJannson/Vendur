@@ -23,7 +23,10 @@ export default async function NewestOrgAnalytics(){
 
         <div>
             <h1 className="font-bold text-xl mb-4">Newest Analytics</h1>
-            {JSON.stringify(data)}
+            <p>{JSON.stringify(Object.keys(data))}</p>
+            <p>{JSON.stringify(Object.values(data))}</p>
+            {/*{JSON.stringify(data)}*/}
+
         </div>
 
 
