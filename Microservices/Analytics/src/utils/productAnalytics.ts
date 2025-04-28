@@ -140,31 +140,35 @@ export async function avgItemPricePerCategory(org_id: string){
         console.log("Error fetching items:", error);
         return 0;
     }
-    const categoryCount: Record<string, {total:0, price:0}>={};
-    data.forEach((item) => {
-        const category = item.category;
-        const price = item.price;
-        const orgId = item.org_id;
-        if (orgId == org_id){
 
+    if (data.length<2){
+        return data;
+
+    } else {
+        const categoryCount: Record<string, {total:0, price:0}>={};
+        data.forEach((item) => {
+            const category = item.category;
+            const price = item.price;
+            const orgId = item.org_id;
+            if(!categoryCount[category] && orgId == org_id){
+                categoryCount[category] ={total:0, price:0}
+            }
+            categoryCount[category].total+=1;
+            categoryCount[category].price+=price;
+        })
+
+        const avgItemCategoryPrice: Record<string, number> = {};
+        let avg: 0
+
+        for (const category in categoryCount){
+            const{total, price} = categoryCount[category];
+            avg = price / total;
+            avgItemCategoryPrice[category] =(avgItemCategoryPrice[category] || 0) + avg;
         }
-        if(!categoryCount[category] && orgId == org_id){
-            categoryCount[category] ={total:0, price:0}
-        }
-        categoryCount[category].total+=1;
-        categoryCount[category].price+=price;
-    })
 
-    const avgItemCategoryPrice: Record<string, number> = {};
-    let avg: 0
-
-    for (const category in categoryCount){
-        const{total, price} = categoryCount[category];
-        avg = price / total;
-        avgItemCategoryPrice[category] =(avgItemCategoryPrice[category] || 0) + avg;
+        return avgItemCategoryPrice;
     }
 
-    return avgItemCategoryPrice;
 }
 
 
