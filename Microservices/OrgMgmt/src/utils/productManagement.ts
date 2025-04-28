@@ -4,11 +4,11 @@ import { connect } from "./dbConnect";
 const cat_supabase = connectCatalogue();
 const org_supabase = connect();
 
-export const getOrgInfo = async (org_id: any) => {
+export const getOrgInfo = async (id: any) => {
     const { data, error } = await org_supabase
         .from("orgs")
         .select()
-        .eq("id", org_id)
+        .eq("id", id)
 
     if (error) {
         throw new Error(`Error fetching org details: ${error.message}`);
