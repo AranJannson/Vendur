@@ -7,9 +7,8 @@ create table public.items (
   description text null default 'No Description Provided'::text,
   category text null,
   discount bigint null,
-  org_id bigint null,
+  org_id text null,
   constraint items_pkey primary key (id),
-  constraint items_org_id_fkey foreign KEY (org_id) references organisations (id),
   constraint items_discount_check check (
       (
           (discount > 0)

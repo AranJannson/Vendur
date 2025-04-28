@@ -10,7 +10,7 @@ export async function fetchCatalouge(){
 }
 
 
-export async function fetchOrgProducts(org_id: number){
+export async function fetchOrgProducts(org_id: string){
 
     const { data } = await supabase.from("items").select("*").eq("org_id", org_id);
 

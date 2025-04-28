@@ -5,6 +5,7 @@ import searchCatalogue from "./utils/search";
 import checkStock from "./utils/fetchIItemInfo";
 import {fetchAllReviews, reviews, makeReview, checkIfItemHasReview} from "./utils/reviews";
 import {fetchCatalouge, fetchItemsBasedOnCategory, fetchOrgProducts, fetchStock} from "./utils/fetchCatalog";
+import {modifyStockQuantity} from "./utils/modifyStock";
 
 dotenv.config();
 
@@ -12,7 +13,10 @@ const Catalog = express();
 
 Catalog.use(express.json());
 
-Catalog.use(cors());
+Catalog.use(cors({
+    origin: "http://localhost:3000",
+    credentials: true
+}));
 
 const portNumber = 8000;
 
@@ -31,6 +35,22 @@ Catalog.get("/getItems", async (req: Request, res: Response) => {
         res.status(500).send({error: "Could not fetch the catalogue"});
     }
 
+
+});
+
+
+Catalog.post("/modifyStockQuantity", async (req: Request, res: Response) => {
+
+    const { item_id, quantity } = req.body;
+
+    console.log(`modifyStockQuantity// item_id: ${item_id}, quantity: ${quantity}`)
+
+    try{
+        await modifyStockQuantity(item_id, quantity);
+        res.status(200).send({ message: "Stock modified successfully" });
+    }catch (error){
+        res.status(500).send({error: `Could not modify the stock for item ${item_id}`});
+    }
 
 });
 
@@ -54,11 +74,13 @@ Catalog.post("/getStock", async (req: Request, res: Response) => {
 
     const { item_id } = req.body;
 
+    console.log("getStock// item id: ", item_id)
+
     try{
 
         const data = await fetchStock(item_id);
 
-        res.status(200).send(data);
+        res.send(data);
 
     }catch (error){
         res.status(500).send({error: `Could not fetch the stock for item ${item_id}`});
