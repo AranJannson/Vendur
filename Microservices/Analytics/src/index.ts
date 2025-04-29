@@ -335,11 +335,10 @@ Analytics.post("/revampedOrgInvList", async (req: Request, res: Response) => {
 });
 
 Analytics.post("/orgRatingList", async (req: Request, res: Response) => {
-
-    const {org_id} = req.body
-    const ratingList = await orgProductRatingList(org_id)
+    const { org_id } = req.body;
+    const ratingList = await orgProductRatingList(org_id);
 
     console.log(ratingList);
-    res.send(JSON.stringify(ratingList, null, 2))
+    res.send(JSON.stringify(ratingList, null, 2));
 });
 
