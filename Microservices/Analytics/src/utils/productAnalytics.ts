@@ -14,38 +14,6 @@ const analyticsSupabase = createClient(
 );
 
 // Returns list of categories by number of items listed with category
-export async function oldMostPopularCategoryByItemsListed() {
-    const { data, error } = await catalogSupabase.from("items").select("category");
-
-    if (error) {
-        console.error("Error fetching items:", error);
-        return null;
-    }
-
-    const categoryCount: Record<string, number> = {};
-
-    data.forEach((item) => {
-        const category = item.category;
-        if (category) {
-            categoryCount[category] = (categoryCount[category] || 0) + 1;
-        }
-    });
-
-    let mostFrequentCategory: string | null = null;
-    let maxCount = 0;
-
-    for (const category in categoryCount) {
-        if (categoryCount[category] > maxCount) {
-            mostFrequentCategory = category;
-            maxCount = categoryCount[category];
-        }
-    }
-
-    // Return the most frequent category and its count
-    return mostFrequentCategory ? { category: mostFrequentCategory, count: maxCount } : null;
-}
-
-// Returns list of categories by number of items listed with category
 export async function mostPopularCategoryByItemsListed(org_id: string) {
     const { data, error } = await catalogSupabase.from("items").select("category").eq("org_id", org_id)
 
@@ -73,6 +41,7 @@ export async function mostPopularCategoryByItemsListed(org_id: string) {
 
 }
 
+//NEED TO ADJUST WITH PAYMENT TABLE
 // Returns a list of all categories in descending order of number of sales
 export async function mostPopularCategoryBySalesList() {
     const { data, error } = await catalogSupabase.from("orders").select("price, item:items!id (name, category)");
@@ -98,6 +67,7 @@ export async function mostPopularCategoryBySalesList() {
         .sort((a, b) => b[1] - a[1]);
 }
 
+//NEED TO ADJUST WITH PAYMENT TABLE
 // Returns a list of products in descending order of number of sales
 export async function itemSalesList() {
     const { data, error } = await catalogSupabase.from("orders").select("item_id, item:items!id(name)");
