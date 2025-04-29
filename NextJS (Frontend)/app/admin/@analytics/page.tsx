@@ -15,7 +15,7 @@ export default function Analytics() {
             </div>
 
             <div className="p-4">
-                <AdminAnalytics/>
+                {/* <AdminAnalytics/> */}
             </div>
 
 

@@ -7,6 +7,10 @@ import { stackServerApp } from "@/stack";
 import NewestOrgAnalytics from "@/app/components/org/NewOrgAnalytics";
 import OrgAvgPriceCategoryGraph from "@/app/components/org/orgAvgPriceCategoryGraph";
 
+export const metadata = {
+    title: "Org Management | Vendur",
+    description: "",
+  };
 
 export default async function OrganisationsManagement() {
     const user = await stackServerApp.getUser({ or: 'redirect' });

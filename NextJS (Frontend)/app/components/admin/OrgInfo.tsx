@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
-
 import Link from "next/link";
+
 interface Organisation {
     id: number;
     name: string;
@@ -15,35 +15,6 @@ interface Organisation {
 }
 
 const OrgInfo = () => {
-
-    //const vendur_id = 1;
-
-    // const response = await fetch('http://localhost:5078/admin/orgDetails', {
-    //     method: 'POST',
-    //     headers: {'Content-Type': 'application/json'},
-    //     body: JSON.stringify({
-    //         vendur_id: vendur_id
-    //     })
-    // });
-
-    // const orgs: Organisation = await response.json();
-
-    // return (
-    //     <div className="w-full h-20 bg-secondary-400 rounded-b-xl">
-    //         hello
-    //         <p>{orgs.name}</p>
-    //     </div>
-    // )
-
-    // const response = await fetch('http://localhost:5078/admin/getAllOrgs', {
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // })
-    
-
-    // const data = await response.json();
 
     const [data, setData] = useState<Organisation[]>([]);
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'asc' });

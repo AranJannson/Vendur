@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import DeleteItemBtn from "@/app/components/admin/DeleteItemBtn";
+import VerifcationRequest from "@/app/components/admin/ViewVerificationRequest";
 
 export type Item = {
     id: number;
