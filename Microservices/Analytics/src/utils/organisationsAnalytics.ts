@@ -12,7 +12,7 @@ const analyticsSupabase = createClient(
 
 
 // Returns a list of organisations and their respective amount for inventory value
-export async function listOfOrgInvValue() {
+export async function listOfAllOrgInvValue() {
     const orgQuery = await catalogSupabase
         .from("items")
         .select("id,price, org:organisations!org_id (name)");
@@ -53,6 +53,134 @@ export async function listOfOrgInvValue() {
     })
 
     return orgInventoryMap;
+}
+
+// Returns a list of organisations and their respective amount for inventory value
+export async function orgInvValue(org_id: string) {
+    const orgQuery = await catalogSupabase
+        .from("items")
+        .select("id,price,discount,org_id").eq("org_id", org_id);
+
+    if (orgQuery.error) {
+        console.error("Error fetching organisations:", orgQuery.error);
+        return 0;
+    }
+
+    const stockQuery = await catalogSupabase
+        .from("stock")
+        .select("item_id, quantity");
+
+    if (stockQuery.error) {
+        console.error("Error fetching stock:", stockQuery.error);
+        return 0;
+    }
+
+    if (orgQuery.data.length<2){
+        return orgQuery.data
+    } else {
+        const orgData = orgQuery.data;
+        const stockData = stockQuery.data;
+
+        let completePrice = 0;
+        let actualDiscountValue = 0;
+        const orgInventoryMap: Record<string, number>={};
+
+        orgData.forEach((item) => {
+            const itemId = item.id;
+            const price = item.price;
+            const discount = item.discount;
+            actualDiscountValue = (100 - discount)/100;
+            const orgId = item.org_id;
+            if (discount!=null){
+                completePrice = price * actualDiscountValue;
+            } else {
+                completePrice = price;
+            }
+
+                orgInventoryMap[itemId] = (orgInventoryMap[itemId] || 0) + completePrice;
+
+        })
+
+        let finalItemStockPrice = 0;
+        const orgFinalItemStockMap: Record<string, number>={};
+
+        stockData.forEach((item) => {
+            const stockItemId = item.item_id;
+            const quantity = item.quantity;
+            for (const key in orgInventoryMap) {
+                if (key == stockItemId){
+                    const itemPrice = orgInventoryMap[key];
+                    finalItemStockPrice = itemPrice * quantity;
+                    orgFinalItemStockMap[stockItemId] = (orgFinalItemStockMap[stockItemId] || 0) + finalItemStockPrice;
+                }
+            }
+        })
+        return orgFinalItemStockMap
+    }
+}
+
+// Returns a list of organisations and their respective amount for inventory value
+export async function dummyOrgInvValue() {
+    const orgQuery = await catalogSupabase
+        .from("items")
+        .select("id,price,discount,org_id");
+
+    if (orgQuery.error) {
+        console.error("Error fetching organisations:", orgQuery.error);
+        return 0;
+    }
+
+    const stockQuery = await catalogSupabase
+        .from("stock")
+        .select("item_id, quantity");
+
+    if (stockQuery.error) {
+        console.error("Error fetching stock:", stockQuery.error);
+        return 0;
+    }
+
+    if (orgQuery.data.length<2){
+        return orgQuery.data
+    } else {
+        const orgData = orgQuery.data;
+        const stockData = stockQuery.data;
+
+        let completePrice = 0;
+        let actualDiscountValue = 0;
+        const orgInventoryMap: Record<string, number>={};
+
+        orgData.forEach((item) => {
+            const itemId = item.id;
+            const price = item.price;
+            const discount = item.discount;
+            actualDiscountValue = (100 - discount)/100;
+            const orgId = item.org_id;
+            if (discount!=null){
+                completePrice = price * actualDiscountValue;
+            } else {
+                completePrice = price;
+            }
+            if (orgId=="67196320-d732-4135-a5b8-1b55fe125235"){
+                orgInventoryMap[itemId] = (orgInventoryMap[itemId] || 0) + completePrice;
+            }
+        })
+
+        let finalItemStockPrice = 0;
+        const orgFinalItemStockMap: Record<string, number>={};
+
+        stockData.forEach((item) => {
+            const stockItemId = item.item_id;
+            const quantity = item.quantity;
+            for (const key in orgInventoryMap) {
+                if (key == stockItemId){
+                    const itemPrice = orgInventoryMap[key];
+                    finalItemStockPrice = itemPrice * quantity;
+                    orgFinalItemStockMap[stockItemId] = (orgFinalItemStockMap[stockItemId] || 0) + finalItemStockPrice;
+                }
+            }
+        })
+        return orgFinalItemStockMap
+    }
 }
 
 // Returns a list of organisations and the average review for each organisation
