@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { getAllOrgs, deleteProductById, orgDetails, updateOrganisationByID } from "./utils/management";
+import { getAllOrgs, deleteProductById, orgDetails, updateOrganisationByID, getVerificationRequests, getVerificationRequest, denyVerificationRequest, acceptVerificationRequest} from "./utils/management";
 
 dotenv.config();
 
@@ -63,7 +63,44 @@ Admin.put('/admin/editOrgDetails', async (req, res): Promise<any> => {
       return res.status(500).json({ message: "Failed to update organisation" });
     }
 }
-  );
+);
+
+Admin.get('/admin/getVerificationRequests', async (req: Request, res: Response): Promise<any> => {
+  const orgs = await getVerificationRequests();
+  if (!orgs) {
+      return res.status(500).json({ error: "Failed to fetch" });
+    }
+    res.json(orgs);
+});
+
+Admin.post('/admin/getVerificationRequest', async (req: Request, res: Response): Promise<any> => {
+  const { id } = req.body;
+  const org = await getVerificationRequest(id);
+  if (!org) {
+      return res.status(500).json({ error: "Failed to fetch" });
+    }
+  
+    res.json(org.data);
+});
+
+Admin.delete('/admin/denyVerificationRequest', async (req: Request, res: Response): Promise<any> => {
+  const { id } = req.body;
+  const orgs = await denyVerificationRequest(id);
+  if (!orgs) {
+    return res.status(500).json({ error: "Failed to fetch or delete the request" });
+  }
+  res.json({ message: "Request denied successfully", data: orgs });
+});
+
+Admin.post('/admin/acceptVerificationRequest', async (req: Request, res: Response): Promise<any> => {
+  const { id, org_id, shippingMethod, productInfo } = req.body;
+  const org = await acceptVerificationRequest(id, org_id, shippingMethod, productInfo);
+  if (!org) {
+      return res.status(500).json({ error: "Failed to fetch" });
+    }
+  
+    res.json(org.data);
+});
 
 
 
@@ -125,4 +162,3 @@ Admin.put('/admin/editOrgDetails', async (req, res): Promise<any> => {
 //     res.send("Admin is running");
     
 // });
-
