@@ -66,18 +66,8 @@ export async function mostPopularCategoryByItemsListed(org_id: string) {
             }
         });
 
-        let mostFrequentCategory: string | null = null;
-        let maxCount = 0;
-
-        for (const category in categoryCount) {
-            if (categoryCount[category] > maxCount) {
-                mostFrequentCategory = category;
-                maxCount = categoryCount[category];
-            }
-        }
-
         // Return the most frequent category and its count
-        return mostFrequentCategory ? { category: mostFrequentCategory, count: maxCount } : null;
+        return categoryCount;
     }
 
 
