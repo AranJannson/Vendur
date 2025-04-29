@@ -16,7 +16,7 @@ export default function DeleteItemButton({ item, refreshBasket }: {item: any, re
   
     return <div>
         <button type="submit"
-            className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4"
+            className="bg-primary-300 p-4 rounded-lg transition-colors hover:bg-primary-200 px-8 mt-4"
             onClick={handleDelete}
             >
                     Remove this item
