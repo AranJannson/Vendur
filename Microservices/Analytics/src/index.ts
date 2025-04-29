@@ -16,7 +16,8 @@ import {listOfAllOrgInvValue,
     orgTotalRevenueList,
     orgAverageOrderValue,
     orgInvValue,
-    dummyOrgInvValue} from "./utils/organisationsAnalytics"
+    orgProductRatingList
+} from "./utils/organisationsAnalytics"
 import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder } from "./utils/orderAnalytics";
 import { userOrderList, userAvgOrderList } from "./utils/userAnalytics";
 import {presenceCheck} from "./utils/metadata";
@@ -333,10 +334,12 @@ Analytics.post("/revampedOrgInvList", async (req: Request, res: Response) => {
     res.send(JSON.stringify(inventoryValue, null, 2))
 });
 
-Analytics.get("/dummyorgInvList", async (req: Request, res: Response) => {
+Analytics.post("/orgRatingList", async (req: Request, res: Response) => {
 
-    const invList = await dummyOrgInvValue()
+    const {org_id} = req.body
+    const ratingList = await orgProductRatingList(org_id)
 
-    console.log(invList);
-    res.send(JSON.stringify(invList, null, 2))
+    console.log(ratingList);
+    res.send(JSON.stringify(ratingList, null, 2))
 });
+

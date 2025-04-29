@@ -10,7 +10,7 @@ const analyticsSupabase = createClient(
     process.env.PUBLIC_SUPABASE_ANON_KEY as string
 );
 
-
+// FOR ADMIN
 // Returns a list of organisations and their respective amount for inventory value
 export async function listOfAllOrgInvValue() {
     const orgQuery = await catalogSupabase
@@ -55,7 +55,7 @@ export async function listOfAllOrgInvValue() {
     return orgInventoryMap;
 }
 
-// Returns a list of organisations and their respective amount for inventory value
+// Returns a list of all organisation items and their stock value (item price x stock)
 export async function orgInvValue(org_id: string) {
     const orgQuery = await catalogSupabase
         .from("items")
@@ -94,20 +94,14 @@ export async function orgInvValue(org_id: string) {
             const price = item.price;
             const discount = item.discount;
             actualDiscountValue = (100 - discount)/100;
-            const orgId = item.org_id;
             if (discount!=null){
                 completePrice = price * actualDiscountValue;
             } else {
                 completePrice = price;
             }
-
                 orgInventoryMap[itemId] = (orgInventoryMap[itemId] || 0) + completePrice;
-
         })
-
-        let finalItemStockPrice = 0;
         const finalNameStockMap: Record<string, number> = {};
-
         stockData.forEach((item) => {
             const stockItemId = item.item_id;
             const quantity = item.quantity;
@@ -115,7 +109,6 @@ export async function orgInvValue(org_id: string) {
             if (orgInventoryMap[stockItemId] !== undefined) {
                 const itemPrice = orgInventoryMap[stockItemId];
                 const itemName = idToItemName[stockItemId]; // Use name instead of id now
-
                 finalNameStockMap[itemName] = (finalNameStockMap[itemName] || 0) + (itemPrice * quantity);
             }
         });
@@ -124,70 +117,7 @@ export async function orgInvValue(org_id: string) {
     }
 }
 
-// Returns a list of organisations and their respective amount for inventory value
-export async function dummyOrgInvValue() {
-    const orgQuery = await catalogSupabase
-        .from("items")
-        .select("id,price,discount,org_id");
-
-    if (orgQuery.error) {
-        console.error("Error fetching organisations:", orgQuery.error);
-        return 0;
-    }
-
-    const stockQuery = await catalogSupabase
-        .from("stock")
-        .select("item_id, quantity");
-
-    if (stockQuery.error) {
-        console.error("Error fetching stock:", stockQuery.error);
-        return 0;
-    }
-
-    if (orgQuery.data.length<2){
-        return orgQuery.data
-    } else {
-        const orgData = orgQuery.data;
-        const stockData = stockQuery.data;
-
-        let completePrice = 0;
-        let actualDiscountValue = 0;
-        const orgInventoryMap: Record<string, number>={};
-
-        orgData.forEach((item) => {
-            const itemId = item.id;
-            const price = item.price;
-            const discount = item.discount;
-            actualDiscountValue = (100 - discount)/100;
-            const orgId = item.org_id;
-            if (discount!=null){
-                completePrice = price * actualDiscountValue;
-            } else {
-                completePrice = price;
-            }
-            if (orgId=="67196320-d732-4135-a5b8-1b55fe125235"){
-                orgInventoryMap[itemId] = (orgInventoryMap[itemId] || 0) + completePrice;
-            }
-        })
-
-        let finalItemStockPrice = 0;
-        const orgFinalItemStockMap: Record<string, number>={};
-
-        stockData.forEach((item) => {
-            const stockItemId = item.item_id;
-            const quantity = item.quantity;
-            for (const key in orgInventoryMap) {
-                if (key == stockItemId){
-                    const itemPrice = orgInventoryMap[key];
-                    finalItemStockPrice = itemPrice * quantity;
-                    orgFinalItemStockMap[stockItemId] = (orgFinalItemStockMap[stockItemId] || 0) + finalItemStockPrice;
-                }
-            }
-        })
-        return orgFinalItemStockMap
-    }
-}
-
+// ADMIN
 // Returns a list of organisations and the average review for each organisation
 export async function averageOrganisationProductRating() {
     const itemOrgQuery = await catalogSupabase
@@ -253,6 +183,66 @@ export async function averageOrganisationProductRating() {
   
     return orgAverages;
   }
+
+export async function orgProductRatingList(org_id: string) {
+    const itemQuery = await catalogSupabase
+        .from("items")
+        .select("id, name, org_id").eq("org_id", org_id);
+
+    if (itemQuery.error) {
+        console.error("Error fetching organisations:", itemQuery.error);
+        return 0;
+    }
+
+    const reviewQuery = await catalogSupabase
+        .from("reviews")
+        .select("item_id, rating");
+
+    if (reviewQuery.error) {
+        console.error("Error fetching stock:", reviewQuery.error);
+        return 0;
+    }
+
+    if (itemQuery.data.length<2){
+        return itemQuery.data
+    } else {
+        const itemData = itemQuery.data;
+        const idToItemName: Record<string, string>={};
+        itemData.forEach((item) => {
+            idToItemName[item.id] = item.name;
+        })
+        const reviewData = reviewQuery.data;
+        const reviewList: { itemName: string; rating: number }[] = [];
+        reviewData.forEach((review) => {
+            const reviewItemId = review.item_id;
+            const rating = review.rating;
+
+            if (reviewItemId in idToItemName) {
+                const name = idToItemName[reviewItemId];
+                reviewList.push({ itemName: name, rating: rating });
+            }
+        })
+        const reviewSum: Record<string, number> = {};   // To track total sum
+        const reviewCount: Record<string, number> = {}; // To track number of ratings
+        for (const review of reviewList) {
+            const itemName = review.itemName
+            const rating = review.rating
+            if (!reviewSum[itemName]){
+                reviewSum[itemName] = 0;
+                reviewCount[itemName] = 0;
+            }
+            reviewSum[itemName] += rating;
+            reviewCount[itemName] +=1
+        }
+        const reviewAverage: Record<string, number> = {};
+        for (const itemName in reviewSum){
+            reviewAverage[itemName] = reviewSum[itemName]/reviewCount[itemName];
+        }
+        return reviewAverage
+    }
+}
+
+// ADMIN
 //Returns a list of organisations and the number of sales each respective organisation has had in descending order
 export async function orgNumberOfSales(){
     const orderQuery = await catalogSupabase
@@ -281,6 +271,7 @@ export async function orgNumberOfSales(){
         .sort((a, b) => b[1] - a[1]);
 }
 
+// PAYMENT
 // Returns a list of each organisation and how much total revenue they have made
 export async function orgTotalRevenueList(){
     const orderQuery = await catalogSupabase
@@ -309,6 +300,7 @@ export async function orgTotalRevenueList(){
         .sort((a, b) => b[1] - a[1]);
 }
 
+//PAYMENT TABLE
 // Returns a list of organisations and how the average order value for each
 export async function orgAverageOrderValue(){
     const orderQuery = await catalogSupabase
