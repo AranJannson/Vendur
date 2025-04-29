@@ -8,6 +8,7 @@ import NewestOrgAnalytics from "@/app/components/org/NewOrgAnalytics";
 import OrgAvgPriceCategoryGraph from "@/app/components/org/orgAvgPriceCategoryGraph";
 import OrgItemCategoryListedGraph from "@/app/components/org/orgItemsListedCategoryGraph";
 import OrgStockValue from "@/app/components/org/orgStockValue";
+import OrgAvgRatingGraph from "@/app/components/org/orgAvgReviewGraph";
 
 export const metadata = {
     title: "Org Management | Vendur",
@@ -82,6 +83,10 @@ export default async function OrganisationsManagement() {
                     <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
                         <h2 className="text-2xl font-light p-2">Org Stock Value</h2>
                         <OrgStockValue/>
+                    </div>
+                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                        <h2 className="text-2xl font-light p-2">Average Review Rating</h2>
+                        <OrgAvgRatingGraph/>
                     </div>
 
                 </div>
