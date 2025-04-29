@@ -59,7 +59,7 @@ export async function listOfAllOrgInvValue() {
 export async function orgInvValue(org_id: string) {
     const orgQuery = await catalogSupabase
         .from("items")
-        .select("id,price,discount,org_id").eq("org_id", org_id);
+        .select("id,name, price,discount,org_id").eq("org_id", org_id);
 
     if (orgQuery.error) {
         console.error("Error fetching organisations:", orgQuery.error);
@@ -79,6 +79,10 @@ export async function orgInvValue(org_id: string) {
         return orgQuery.data
     } else {
         const orgData = orgQuery.data;
+        const idToItemName: Record<string, string>={};
+        orgData.forEach((item) => {
+            idToItemName[item.id] = item.name;
+        })
         const stockData = stockQuery.data;
 
         let completePrice = 0;
@@ -102,20 +106,21 @@ export async function orgInvValue(org_id: string) {
         })
 
         let finalItemStockPrice = 0;
-        const orgFinalItemStockMap: Record<string, number>={};
+        const finalNameStockMap: Record<string, number> = {};
 
         stockData.forEach((item) => {
             const stockItemId = item.item_id;
             const quantity = item.quantity;
-            for (const key in orgInventoryMap) {
-                if (key == stockItemId){
-                    const itemPrice = orgInventoryMap[key];
-                    finalItemStockPrice = itemPrice * quantity;
-                    orgFinalItemStockMap[stockItemId] = (orgFinalItemStockMap[stockItemId] || 0) + finalItemStockPrice;
-                }
+
+            if (orgInventoryMap[stockItemId] !== undefined) {
+                const itemPrice = orgInventoryMap[stockItemId];
+                const itemName = idToItemName[stockItemId]; // Use name instead of id now
+
+                finalNameStockMap[itemName] = (finalNameStockMap[itemName] || 0) + (itemPrice * quantity);
             }
-        })
-        return orgFinalItemStockMap
+        });
+
+        return finalNameStockMap;
     }
 }
 
