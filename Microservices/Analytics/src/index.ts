@@ -6,7 +6,7 @@ import {
     mostPopularCategoryByItemsListed,
     mostPopularCategoryBySalesList,
     avgItemPricePerCategory,
-    oldAvgItemPricePerCategory
+    oldMostPopularCategoryByItemsListed
 } from "./utils/productAnalytics"
 import { fetchAllProducts } from "./utils/fetchAllProducts";
 import { inventoryValue, lowerStock, outOfStock, mostValuableStockItem, listOfItemStockValue } from "./utils/stockAnalysis";
@@ -60,7 +60,7 @@ Analytics.get("/fetchAllProducts", async (req: Request, res: Response) => {
 
 Analytics.get("/popularCategory", async (req: Request, res: Response) => {
 
-    const productList = await mostPopularCategoryByItemsListed()
+    const productList = await oldMostPopularCategoryByItemsListed()
 
     console.log("The most popular category is:", productList);
     res.send(JSON.stringify(productList, null, 2))
@@ -277,14 +277,6 @@ Analytics.get("/avgQuantityOrderList", async (req: Request, res: Response) => {
     res.send(JSON.stringify(avgQuantityList, null, 2))
 });
 
-Analytics.get("/oldAvgItemPriceCategory", async (req: Request, res: Response) => {
-
-    const avgItemPrice = await oldAvgItemPricePerCategory()
-
-    console.log(avgItemPrice);
-    res.send(JSON.stringify(avgItemPrice, null, 2))
-});
-
 Analytics.get("/presenceCheck", async (req: Request, res: Response) => {
 
     const presenceC = await presenceCheck()
@@ -324,4 +316,13 @@ Analytics.post("/avgItemPriceCategory", async (req: Request, res: Response) => {
 
     console.log(avgItemPrice);
     res.send(JSON.stringify(avgItemPrice, null, 2))
+});
+
+Analytics.post("/popularCategory", async (req: Request, res: Response) => {
+
+    const {org_id} = req.body
+    const productList = await mostPopularCategoryByItemsListed(org_id)
+
+    console.log("The most popular category is:", productList);
+    res.send(JSON.stringify(productList, null, 2))
 });
