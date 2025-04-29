@@ -6,12 +6,18 @@ import {
     mostPopularCategoryByItemsListed,
     mostPopularCategoryBySalesList,
     avgItemPricePerCategory,
-    oldMostPopularCategoryByItemsListed
 } from "./utils/productAnalytics"
 import { fetchAllProducts } from "./utils/fetchAllProducts";
 import { inventoryValue, lowerStock, outOfStock, mostValuableStockItem, listOfItemStockValue } from "./utils/stockAnalysis";
 import { mostReviewedProduct, highestReviewedProduct, productsByReviewValue, dateWithMostReviews, listOfReviewsPerDay, ratingDistribution} from "./utils/reviewAnalytics";
-import {listOfOrgInvValue, averageOrganisationProductRating, orgNumberOfSales, orgTotalRevenueList, orgAverageOrderValue} from "./utils/organisationsAnalytics"
+import {listOfAllOrgInvValue,
+    averageOrganisationProductRating,
+    orgNumberOfSales,
+    orgTotalRevenueList,
+    orgAverageOrderValue,
+    orgInvValue,
+    orgProductRatingList
+} from "./utils/organisationsAnalytics"
 import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder } from "./utils/orderAnalytics";
 import { userOrderList, userAvgOrderList } from "./utils/userAnalytics";
 import {presenceCheck} from "./utils/metadata";
@@ -56,15 +62,7 @@ Analytics.get("/fetchAllProducts", async (req: Request, res: Response) => {
     console.log("The modified version with catalog is:", productList);
 
     res.send(JSON.stringify(productList, null, 2))
-}); 
-
-Analytics.get("/popularCategory", async (req: Request, res: Response) => {
-
-    const productList = await oldMostPopularCategoryByItemsListed()
-
-    console.log("The most popular category is:", productList);
-    res.send(JSON.stringify(productList, null, 2))
-}); 
+});
 
 // Stock Analytic Tests
 
@@ -143,7 +141,7 @@ Analytics.get("/listOfReviewsPerDay", async (req: Request, res: Response) => {
 
 Analytics.get("/orgInvList", async (req: Request, res: Response) => {
 
-    const mostReviewedItem = await listOfOrgInvValue()
+    const mostReviewedItem = await listOfAllOrgInvValue()
 
     console.log(mostReviewedItem);
     res.send(JSON.stringify(mostReviewedItem, null, 2))
@@ -295,7 +293,7 @@ Analytics.post("/track-clicks", async (req: Request, res: Response): Promise<any
         return res.status(400).json({ message: "Click failed to be registered" });
     }
 
-    res.status(200).json({message: "Succses"});
+    res.status(200).json({message: "Success"});
 
 });
 
@@ -326,3 +324,21 @@ Analytics.post("/popularCategory", async (req: Request, res: Response) => {
     console.log("The most popular category is:", productList);
     res.send(JSON.stringify(productList, null, 2))
 });
+
+Analytics.post("/revampedOrgInvList", async (req: Request, res: Response) => {
+
+    const {org_id} = req.body
+    const inventoryValue = await orgInvValue(org_id)
+
+    console.log(inventoryValue);
+    res.send(JSON.stringify(inventoryValue, null, 2))
+});
+
+Analytics.post("/orgRatingList", async (req: Request, res: Response) => {
+    const { org_id } = req.body;
+    const ratingList = await orgProductRatingList(org_id);
+
+    console.log(ratingList);
+    res.send(JSON.stringify(ratingList, null, 2));
+});
+
