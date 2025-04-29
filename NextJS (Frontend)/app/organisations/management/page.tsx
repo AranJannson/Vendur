@@ -75,7 +75,7 @@ export default async function OrganisationsManagement() {
 
                     </div>
                     <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                        <h2 className="text-2xl font-bold p-2">Avg Price Of Product (By Category)</h2>
+                        <h2 className="text-2xl font-light p-2">Number of Listings (By Category)</h2>
                         <OrgItemCategoryListedGraph/>
 
                     </div>

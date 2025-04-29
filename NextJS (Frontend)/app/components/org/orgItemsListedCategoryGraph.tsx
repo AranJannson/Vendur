@@ -33,9 +33,9 @@ export default function OrgItemCategoryListedGraph() {
                     [data.category]: data.count
                 };
 
-                const labels = Object.keys(transformedData);
+                const labels = Object.keys(data);
                 console.log(labels);
-                const prices = Object.values(transformedData)
+                const prices = Object.values(data)
                 console.log(prices);
 
                 const chartFormattedData = {
