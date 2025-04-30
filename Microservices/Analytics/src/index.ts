@@ -9,7 +9,13 @@ import {
 } from "./utils/productAnalytics"
 import { fetchAllProducts } from "./utils/fetchAllProducts";
 import { inventoryValue, lowerStock, outOfStock, mostValuableStockItem, listOfItemStockValue } from "./utils/stockAnalysis";
-import { mostReviewedProduct, highestReviewedProduct, productsByReviewValue, dateWithMostReviews, listOfReviewsPerDay, ratingDistribution} from "./utils/reviewAnalytics";
+import { mostReviewedProduct,
+    highestReviewedProduct,
+    productsByReviewValue,
+    dateWithMostReviews,
+    oldListOfReviewsPerDay,
+    listOfReviewsPerDay,
+    ratingDistribution} from "./utils/reviewAnalytics";
 import {listOfAllOrgInvValue,
     averageOrganisationProductRating,
     orgNumberOfSales,
@@ -132,7 +138,7 @@ Analytics.get("/dateWithMostReviews", async (req: Request, res: Response) => {
 
 Analytics.get("/listOfReviewsPerDay", async (req: Request, res: Response) => {
 
-    const mostReviewedItem = await listOfReviewsPerDay()
+    const mostReviewedItem = await oldListOfReviewsPerDay()
 
     console.log(mostReviewedItem);
     res.send(JSON.stringify(mostReviewedItem, null, 2))
@@ -340,5 +346,13 @@ Analytics.post("/orgRatingList", async (req: Request, res: Response) => {
 
     console.log(ratingList);
     res.send(JSON.stringify(ratingList, null, 2));
+});
+
+Analytics.post("/reviewsPerDay", async (req: Request, res: Response) => {
+    const { org_id } = req.body;
+    const dailyReviews = await listOfReviewsPerDay(org_id)
+
+    console.log(dailyReviews);
+    res.send(JSON.stringify(dailyReviews, null, 2))
 });
 
