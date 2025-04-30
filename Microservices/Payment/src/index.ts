@@ -126,12 +126,13 @@ Payment.post("/getOrderDetails", async (req: Request, res: Response) => {
 });
 
 Payment.post("/setcookie", (req: Request, res: Response) => {
-    console.log("Cookie Setting...")
-    const { name, value } = req.body;
-    
-    console.log(name)
-    console.log(value)
-    
+    console.log("Cookie Setting...");
+    const { name, value, action } = req.body;
+
+    console.log(name);
+    console.log(value);
+    console.log("action: ", action);
+
     if (!name || !value) {
         return;
     }
@@ -145,25 +146,47 @@ Payment.post("/setcookie", (req: Request, res: Response) => {
         }
     }
 
-    console.log(typeof(value));
-
-    const existingItemIndex = basket.findIndex((item: { id: string; size?: string | null }) => 
-        item.id === value.id && item.size === value.size
+    const existingItemIndex = basket.findIndex(
+        (item: { id: string; size?: string | null }) =>
+            item.id === value.id && item.size === value.size
     );
 
-    if (existingItemIndex === -1) {
-        basket.push(value);
+    if (action === "changeQuantity") {
+        if (existingItemIndex !== -1) {
+            basket[existingItemIndex].quantity += value.quantity;
+            if (basket[existingItemIndex].quantity <= 0) {
+                basket.splice(existingItemIndex, 1);
+            }
+        } else if (value.quantity > 0) {
+            basket.push(value); // Optionally add if doesn't exist and quantity > 0
+        }
+    } else if (action === "changeSize") {
+        console.log("//setcookie Changing size to ", value.newSize)
+        if (existingItemIndex !== -1) {
+            basket[existingItemIndex].size = value.newSize;
+        } 
     } else {
-        basket[existingItemIndex].quantity += value.quantity;
+        if (existingItemIndex === -1) {
+            basket.push(value);
+        } else {
+            basket[existingItemIndex].quantity += value.quantity;
+        }
     }
-    
-    res.cookie(basketCookieName, JSON.stringify(basket), {maxAge: duration, httpOnly: true, sameSite: "lax"});
-    
-    const expiryTime = Date.now()
-    res.cookie(expiryCookieName, expiryTime, {maxAge: duration, httpOnly: true, sameSite: "lax"});
+
+    res.cookie(basketCookieName, JSON.stringify(basket), {
+        maxAge: duration,
+        httpOnly: true,
+        sameSite: "lax",
+    });
+
+    const expiryTime = Date.now();
+    res.cookie(expiryCookieName, expiryTime, {
+        maxAge: duration,
+        httpOnly: true,
+        sameSite: "lax",
+    });
 
     res.json({ message: "Cookie set", basket });
-
 });
 
 // @ts-ignore
