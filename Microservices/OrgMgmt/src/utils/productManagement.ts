@@ -56,13 +56,18 @@ export const deleteProduct = async (productId: any) => {
     const { data, error } = await cat_supabase
         .from("items")
         .delete()
-        .eq("id", productId)
+        .eq("id", productId);
 
     if (error) {
         throw new Error(`Error deleting product: ${error.message}`);
     }
+
+    if (!data || (data as any[]).length === 0) {
+        throw new Error("No product found to delete.");
+    }
+
     return data;
-}
+};
 
 // Applying Discounts to Products
 // If want to remove discount, pass null as discount value
@@ -79,6 +84,18 @@ export const applyDiscount = async (productId: any, discount: any) => {
 
     if (error) {
         throw new Error(`Error applying discount: ${error.message}`);
+    }
+    return data;
+}
+
+export const getProductByID = async (id: any) => {
+    const { data, error } = await cat_supabase
+        .from("items")
+        .select()
+        .eq("id", id)
+
+    if (error) {
+        throw new Error(`Error fetching product: ${error.message}`);
     }
     return data;
 }
