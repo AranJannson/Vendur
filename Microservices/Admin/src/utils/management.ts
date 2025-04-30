@@ -96,3 +96,12 @@ export async function denyVerificationRequest(id: number): Promise<{data: any, e
         }
     return { data, error: null };
     }
+
+export async function getVerificationRequestStatus(org_id: string) {
+    const { data, error } = await org_supabase.from('verification_requests').select('id').eq("org_id", org_id);
+    if (error) {
+        console.error("Supabase error:", error.message);
+        return null;
+    }
+    return data && data.length > 0;
+    }
