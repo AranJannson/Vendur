@@ -17,7 +17,7 @@ interface Item {
 export default function GetBasket() {
   const [basket, setBasket] = useState<Item[]>([]);
   const [basketLoading, setBasketLoading] = useState(true);
-  const [quantityLoading, setQuantityLoading] = useState(false);
+  const [detailsLoading, setDetailsLoading] = useState(false);
 
   const amount = basket.reduce((total: number, item: any) => {
     return total + item.price * item.quantity;
@@ -68,11 +68,12 @@ export default function GetBasket() {
                           <select
                               value={item.quantity}
                               onChange={async (e) => {
-                                if (quantityLoading) return;
-                                setQuantityLoading(true);
+                                if (detailsLoading) return;
+                                setDetailsLoading(true);
                                 try {
                                   const newQuantity = parseInt(e.target.value);
                                   const difference = item.quantity - newQuantity;
+                                  await postItem(item, -difference, item.size, item.size, "changeQuantity")
                                   await modifyStock(item, difference);
                                   setBasket((prev) =>
                                       prev.map((b) =>
@@ -82,7 +83,7 @@ export default function GetBasket() {
                                 } catch (err) {
                                   console.error(err);
                                 } finally {
-                                  setQuantityLoading(false);
+                                  setDetailsLoading(false);
                                 }
                               }}
                               className="p-2 bg-primary-300 rounded-full w-13"
@@ -101,13 +102,22 @@ export default function GetBasket() {
                                 <select
                                     defaultValue={item.size}
                                     onChange={async (e) => {
-                                      const value = e.target.value;
-                                      if (value.length === 1) {
-                                        setBasket((prev) =>
-                                            prev.map((b) =>
-                                                b.id === item.id ? { ...b, size: value as Item["size"] } : b
-                                            )
-                                        );
+                                      try{
+                                        if (detailsLoading) return;
+                                        setDetailsLoading(true);
+                                        const value = e.target.value;
+                                        await postItem(item, item.quantity, item.size, value, "changeSize")
+                                        if (value.length === 1) {
+                                          setBasket((prev) =>
+                                              prev.map((b) =>
+                                                  b.id === item.id ? { ...b, size: value as Item["size"] } : b
+                                              )
+                                          );
+                                        }
+                                      } catch (err) {
+                                        console.error(err);
+                                      } finally {
+                                        setDetailsLoading(false);
                                       }
                                     }}
                                     className="p-2 bg-primary-300 rounded-full w-13"
@@ -140,7 +150,7 @@ export default function GetBasket() {
 
                 <div className="bg-secondary-200 p-4 rounded-lg grid grid-cols-1 grid-rows-2 grid-rows-[auto_1fr] gap-4">
                   <div className="">
-                    {quantityLoading && "Loading quantity..."}
+                    {detailsLoading && "Loading details..."}
                     <p className="text-2xl"><b>Total:</b> £{amount.toFixed(2)}</p>
                   </div>
 
