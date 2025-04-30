@@ -3,7 +3,7 @@ import DeleteItemButton from "@/app/components/payment/DeleteItemButton";
 import { useCallback, useEffect, useState } from "react";
 import GetBasketCountdownTimer from "./GetBasketCountdownTimer";
 import { getOriginalStock, modifyStock } from "@/utils/catalogue/utils";
-import { fetchBasket } from "@/utils/payment/utils";
+import { fetchBasket, postItem } from "@/utils/payment/utils";
 
 interface Item {
   id: string;
@@ -100,7 +100,7 @@ export default function GetBasket() {
                                 <label className="font-bold md:ml-2">Size: </label>
                                 <select
                                     defaultValue={item.size}
-                                    onChange={(e) => {
+                                    onChange={async (e) => {
                                       const value = e.target.value;
                                       if (value.length === 1) {
                                         setBasket((prev) =>
@@ -144,7 +144,7 @@ export default function GetBasket() {
                     <p className="text-2xl"><b>Total:</b> £{amount.toFixed(2)}</p>
                   </div>
 
-                  <a href="/payment/checkout">
+                  <a href="/basket/checkout">
                     <button className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4">
                       Go to Checkout
                     </button>
