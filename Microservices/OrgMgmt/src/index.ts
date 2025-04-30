@@ -7,7 +7,8 @@ import {
     deleteProduct,
     getOrgInfo,
     getProducts,
-    updateProduct
+    updateProduct,
+    getProductByID
 } from "./utils/productManagement";
 import {requestVerification} from "./utils/verification";
 import {getOrderById} from "./utils/orderManagment";
@@ -157,3 +158,33 @@ OrgMgmt.get("/order", async (req: Request, res: Response) => {
         console.error("Error fetching order:", error);
     }
 })
+
+
+//Delete Item by ID
+OrgMgmt.post('/deleteProduct', async (req: Request, res: Response): Promise<any> => {
+    const { id } = req.body;
+    const { error } = await deleteProduct(id);
+    
+    if (error) {
+      return res.status(500).json({ message: error });
+    }
+  
+    return res.status(200).json({ message: 'Product deleted successfully' });
+  });
+
+//Get Item by ID
+  OrgMgmt.get("/getProductByID", async (req, res): Promise<any> => {
+    try {
+        const { id } = req.query;
+        if (!id) {
+            return res.status(400).send({ error: "Product ID is required" });
+        }
+
+        const data = await getProductByID(id);
+        
+        res.status(200).json(data);
+    } catch (error) {
+        console.error("Error fetching product:", error);
+        res.status(500).send({ error: "Failed to fetch product" });
+    }
+});
