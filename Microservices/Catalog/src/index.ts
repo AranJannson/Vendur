@@ -70,9 +70,9 @@ Catalog.post("/getOrgItems", async (req: Request, res: Response) => {
 });
 
 
-Catalog.get("/getStock", async (req: Request, res: Response) => {
+Catalog.post("/getStock", async (req: Request, res: Response) => {
 
-    const item_id = Number(req.query.item_id);
+    const { item_id } = req.body;
 
     console.log("getStock// item id: ", item_id)
 

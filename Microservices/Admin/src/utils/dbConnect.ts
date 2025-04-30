@@ -1,25 +1,11 @@
-import { drizzle } from 'drizzle-orm/postgres-js'
-import postgres from 'postgres'
+import { createClient } from "@supabase/supabase-js";
 
-export async function connect() {
-
-  try {
-    const connectionString = process.env.DATABASE_URL
-
-    if (!connectionString) {
-      throw new Error('DATABASE_URL is not defined')
-    }
-  
-    const client = postgres(connectionString, { prepare: false })
-  
-    return drizzle(client);
-
-  } catch (error) {
-
-    console.error(error);
-    return;
-
-  }
-
+export function connectCatalog() {
+  const supabase = createClient(process.env.CATALOUGE_SUPABASE_URL as string, process.env.CATALOUGE_SUPABASE_ANON_KEY as string);
+  return supabase;
 }
 
+export function connectOrgMgmt() {
+  const supabase = createClient(process.env.ORG_SUPABASE_URL as string, process.env.ORG_SUPABASE_ANON_KEY as string);
+  return supabase;
+}

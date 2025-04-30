@@ -1,8 +1,12 @@
 "use client";
 import { useState } from 'react';
+import { useUser } from "@stackframe/stack";
 
 export default function AddProducts() {
     const [category, setCategory] = useState("");
+
+    const user = useUser({ or: 'redirect' });
+    const allTeams = user.useTeams();
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -20,7 +24,7 @@ export default function AddProducts() {
                 price,
                 category,
                 image,
-                org_id: 1
+                org_id: allTeams[0]?.id,
             }
         };
         // TODO: Change this to actually use the API route instead of the backend directly

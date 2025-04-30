@@ -1,5 +1,6 @@
 import Image from "next/image";
 import PageClickViewer from "@/app/components/displays/PageClickViewer";
+import AdminAnalytics from "@/app/components/admin/Analytics";
 
 export default function Analytics() {
     return (
@@ -11,6 +12,10 @@ export default function Analytics() {
 
                 <PageClickViewer/>
 
+            </div>
+
+            <div className="p-4">
+                {/* <AdminAnalytics/> */}
             </div>
 
 

@@ -1,13 +1,21 @@
-import { createClient } from '@/utils/supabase/server'
 import Link from "next/link";
 
-export default async function DynamicGrid({ col, row }: { col: number; row: number }) {
-    const supabase = await createClient();
-    const { data: items } = await supabase.from('items').select('*');
+interface Item {
+    id: number;
+    name: string;
+    image: string;
+    category: string;
+    discount: number;
+    rating: number;
+    price: number;
+}
 
-    if (!items) {
-        return <div>No items found</div>
-    }
+export default async function DynamicGrid({ col, row }: { col: number; row: number }) {
+    const response = await fetch('http://localhost:3000/api/getItems', {
+        method: 'GET',
+    });
+
+    const items: Item[] = await response.json()
 
     return (
         <div className="bg-primary-200 m-4 rounded-lg">

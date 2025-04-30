@@ -1,15 +1,5 @@
-import { modifyStock } from "./AddToCheckoutButton";
-
-async function deleteItem (item: any) {
-  await fetch("http://localhost:8002/deletevalue", {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({ id: item.id, size: item.size }),
-  });
-}
+import { modifyStock } from "@/utils/catalogue/utils";
+import { deleteItem } from "@/utils/payment/utils";
 
 export default function DeleteItemButton({ item, refreshBasket }: {item: any, refreshBasket: any}) {
     const handleDelete = async () => {
@@ -19,18 +9,17 @@ export default function DeleteItemButton({ item, refreshBasket }: {item: any, re
       } catch (error) {
         console.error("Error deleting item:", error);
       } finally{
-        refreshBasket(); 
+        await refreshBasket(); 
       }
 
     };
   
     return <div>
         <button type="submit"
-            className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4"
+            className="bg-primary-300 p-4 rounded-lg transition-colors hover:bg-primary-200 px-8 mt-4"
             onClick={handleDelete}
             >
                     Remove this item
         </button>
     </div>;
   }
-  

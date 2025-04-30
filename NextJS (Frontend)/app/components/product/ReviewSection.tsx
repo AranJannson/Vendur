@@ -1,11 +1,26 @@
 import ReviewForm from "@/app/components/forms/ReviewForm";
 
-export default function ReviewSection({ reviews, item_id}) {
+interface Review {
+    id: string;
+    rating: number;
+    reviewText: string;
+  }
+  
+interface ItemStats {
+rating?: number;
+reviewsCount?: number;
+}
+  
+interface ReviewSectionProps {
+reviews: Review[] | null;
+item_id: string | number;
+item?: ItemStats;
+}
+
+export default function ReviewSection({ reviews = [], item_id, item = { rating: undefined, reviewsCount: 0 } }: ReviewSectionProps) {
     return (
-        <div
-    className = "bg-secondary-100 m-4 rounded-lg p-5 flex flex-col gap-4 shadow-xl" >
-        <h2
-    className = "text-2xl font-bold" > Reviews < /h2>
+        <div className = "bg-secondary-100 m-4 rounded-lg p-5 flex flex-col gap-4 shadow-xl" >
+        <h2 className = "text-2xl font-bold" > Reviews </h2>
 
     <div className="grid grid-cols-2 bg-primary-200 rounded-lg p-4">
         <h3 className="text-sm font-semibold">Average Rating: item.rating</h3>
@@ -16,25 +31,25 @@ export default function ReviewSection({ reviews, item_id}) {
         <h2 className="font-bold text-xl mb-3">Add a Review</h2>
         <ReviewForm item_id={item_id} />
     </div>
-
     <h2 className="text-2xl font-bold">Recent Reviews</h2>
     {/*<p>{item.reviews ? item.reviews : 'No reviews yet'}</p>*/}
-            {reviews.map((review) => (
-                <div key={review.id} className="bg-primary-200 rounded-lg p-5">
-                    <div className="text-2xl">
-                        {Array.from({ length: review.rating }).map((_, index) => (
-                        <span key={index}>★</span>
-                        ))}
-                        {Array.from({ length: 5 - review.rating }).map((_, index) => (
-                        <span key={index}>☆</span>
-                        ))}
-
-                    </div>
-
-
-                    <p>{review.reviewText}</p>
-                </div>
-                    ))}
+    {reviews?.length ? (
+        reviews.map((review) => (
+          <div key={review.id} className="bg-primary-200 rounded-lg p-5">
+            <div className="text-2xl">
+              {Array.from({ length: review.rating }).map((_, index) => (
+                <span key={index}>★</span>
+              ))}
+              {Array.from({ length: 5 - review.rating }).map((_, index) => (
+                <span key={index}>☆</span>
+              ))}
+            </div>
+            <p>{review.reviewText}</p>
+          </div>
+        ))
+      ) : (
+        <p>No reviews yet</p>
+      )}
 </div>
     )
 }

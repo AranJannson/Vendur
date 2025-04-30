@@ -1,22 +1,36 @@
 import { connectCatalogue } from "./dbConnect";
+import { connect } from "./dbConnect";
 
-const supabase = connectCatalogue();
+const cat_supabase = connectCatalogue();
+const org_supabase = connect();
 
-export const getOrgProducts = async (org_id: any) => {
-    const { data, error } = await supabase
-        .from("items")
+export const getOrgInfo = async (id: any) => {
+    const { data, error } = await org_supabase
+        .from("orgs")
         .select()
-        .eq("org_id", org_id)
+        .eq("id", id)
 
     if (error) {
-        throw new Error(`Error fetching products: ${error.message}`);
+        throw new Error(`Error fetching org details: ${error.message}`);
     }
     return data;
 }
 
 // CRUD Operations for products
+export const getProducts = async (org_id: any) => {
+    const { data, error } = await cat_supabase
+        .from("items")
+        .select()
+        .eq("org_id", org_id)
+
+    if (error) {
+        throw new Error(`Error fetching product: ${error.message}`);
+    }
+    return data;
+}
+
 export const createProduct = async (product: any) => {
-    const { data, error } = await supabase
+    const { data, error } = await cat_supabase
         .from("items")
         .insert([product])
 
@@ -27,7 +41,7 @@ export const createProduct = async (product: any) => {
 }
 
 export const updateProduct = async (productId: any, product: any) => {
-    const { data, error } = await supabase
+    const { data, error } = await cat_supabase
         .from("items")
         .update(product)
         .eq("id", productId)
@@ -39,16 +53,21 @@ export const updateProduct = async (productId: any, product: any) => {
 }
 
 export const deleteProduct = async (productId: any) => {
-    const { data, error } = await supabase
+    const { data, error } = await cat_supabase
         .from("items")
         .delete()
-        .eq("id", productId)
+        .eq("id", productId);
 
     if (error) {
         throw new Error(`Error deleting product: ${error.message}`);
     }
+
+    if (!data || (data as any[]).length === 0) {
+        throw new Error("No product found to delete.");
+    }
+
     return data;
-}
+};
 
 // Applying Discounts to Products
 // If want to remove discount, pass null as discount value
@@ -57,7 +76,7 @@ export const applyDiscount = async (productId: any, discount: any) => {
         throw new Error("Discount must be between 0 and 100");
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await cat_supabase
         .from("items")
         .update({ discount })
         .eq("id", productId)
@@ -65,6 +84,18 @@ export const applyDiscount = async (productId: any, discount: any) => {
 
     if (error) {
         throw new Error(`Error applying discount: ${error.message}`);
+    }
+    return data;
+}
+
+export const getProductByID = async (id: any) => {
+    const { data, error } = await cat_supabase
+        .from("items")
+        .select()
+        .eq("id", id)
+
+    if (error) {
+        throw new Error(`Error fetching product: ${error.message}`);
     }
     return data;
 }

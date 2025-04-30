@@ -14,37 +14,34 @@ const analyticsSupabase = createClient(
 );
 
 // Returns list of categories by number of items listed with category
-export async function mostPopularCategoryByItemsListed() {
-    const { data, error } = await catalogSupabase.from("items").select("category");
+export async function mostPopularCategoryByItemsListed(org_id: string) {
+    const { data, error } = await catalogSupabase.from("items").select("category").eq("org_id", org_id)
 
     if (error) {
         console.error("Error fetching items:", error);
-        return null;
+        return error;
     }
 
-    const categoryCount: Record<string, number> = {};
+    if (data.length<2){
+        return data
+    } else {
+        const categoryCount: Record<string, number> = {};
 
-    data.forEach((item) => {
-        const category = item.category;
-        if (category) {
-            categoryCount[category] = (categoryCount[category] || 0) + 1;
-        }
-    });
+        data.forEach((item) => {
+            const category = item.category;
+            if (category) {
+                categoryCount[category] = (categoryCount[category] || 0) + 1;
+            }
+        });
 
-    let mostFrequentCategory: string | null = null;
-    let maxCount = 0;
-
-    for (const category in categoryCount) {
-        if (categoryCount[category] > maxCount) {
-            mostFrequentCategory = category;
-            maxCount = categoryCount[category];
-        }
+        // Return the most frequent category and its count
+        return categoryCount;
     }
 
-    // Return the most frequent category and its count
-    return mostFrequentCategory ? { category: mostFrequentCategory, count: maxCount } : null;
+
 }
 
+//NEED TO ADJUST WITH PAYMENT TABLE
 // Returns a list of all categories in descending order of number of sales
 export async function mostPopularCategoryBySalesList() {
     const { data, error } = await catalogSupabase.from("orders").select("price, item:items!id (name, category)");
@@ -69,6 +66,8 @@ export async function mostPopularCategoryBySalesList() {
     return Object.entries(categoryCount)
         .sort((a, b) => b[1] - a[1]);
 }
+
+//NEED TO ADJUST WITH PAYMENT TABLE
 // Returns a list of products in descending order of number of sales
 export async function itemSalesList() {
     const { data, error } = await catalogSupabase.from("orders").select("item_id, item:items!id(name)");
@@ -98,36 +97,44 @@ export async function itemSalesList() {
 }
 
 // Returns a list of all categories and the average price of an item in each category
-export async function avgItemPricePerCategory(){
+export async function avgItemPricePerCategory(org_id: string){
     const {data, error} = await catalogSupabase
         .from("items")
-        .select("category, price")
+        .select("category, price, org_id").eq("org_id", org_id)
 
     if (error){
         console.log("Error fetching items:", error);
         return 0;
     }
-    const categoryCount: Record<string, {total:0, price:0}>={};
-    data.forEach((item) => {
-        const category = item.category;
-        const price = item.price;
-        if(!categoryCount[category]){
-            categoryCount[category] ={total:0, price:0}
+
+    if (data.length<2){
+        return data;
+
+    } else {
+        const categoryCount: Record<string, {total:0, price:0}>={};
+        data.forEach((item) => {
+            const category = item.category;
+            const price = item.price;
+            const orgId = item.org_id;
+            if(!categoryCount[category] && orgId == org_id){
+                categoryCount[category] ={total:0, price:0}
+            }
+            categoryCount[category].total+=1;
+            categoryCount[category].price+=price;
+        })
+
+        const avgItemCategoryPrice: Record<string, number> = {};
+        let avg: 0
+
+        for (const category in categoryCount){
+            const{total, price} = categoryCount[category];
+            avg = price / total;
+            avgItemCategoryPrice[category] =(avgItemCategoryPrice[category] || 0) + avg;
         }
-        categoryCount[category].total+=1;
-        categoryCount[category].price+=price;
-    })
 
-    const avgItemCategoryPrice: Record<string, number> = {};
-    let avg: 0
-
-    for (const category in categoryCount){
-        const{total, price} = categoryCount[category];
-        avg = price / total;
-        avgItemCategoryPrice[category] =(avgItemCategoryPrice[category] || 0) + avg;
+        return avgItemCategoryPrice;
     }
 
-    return avgItemCategoryPrice;
 }
 
 

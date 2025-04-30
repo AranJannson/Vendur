@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { GoPlus } from "react-icons/go";
+import {stackServerApp} from "@/stack";
+import DeleteItemBtn from "@/app/components/org/DeleteItemBtn";
+import SearchBar from "@/app/components/org/SearchBar";
 
 interface Item{
     id: number;
@@ -16,10 +19,10 @@ interface Item{
 
 export default async function Products(){
 
-    // CRUD, Create, Read, Update, Delete
-    // Create a new product Form
+    const user = await stackServerApp.getUser({ or: 'redirect' });
+    const allTeams = await user.listTeams();
 
-    const orgID: number = 1; // TODO: Get the orgID from the user
+    const orgID: string = allTeams[0]?.id;
 
     const response = await fetch('http://localhost:8000/getOrgItems', {
         method: 'POST',
@@ -38,14 +41,15 @@ export default async function Products(){
             <div className="relative bg-background-300 w-full h-fit text-center rounded-lg p-4 text-xl font-bold flex flex-row justify-center">
                 <h1> Products </h1>
 
-                <div className="absolute right-4 top-2 transition-colors hover:cursor-pointer hover:bg-primary-500 justify-center content-center bg-primary-400 h-fit p-3 rounded-full text-2xl items-end ">
+                {/* <div className="absolute right-4 top-2 transition-colors hover:cursor-pointer hover:bg-primary-500 justify-center content-center bg-primary-400 h-fit p-3 rounded-full text-2xl items-end ">
                     <GoPlus />
-                </div>
+                </div> */}
 
             </div>
 
             <div>
                 <input  className="bg-background-300 p-4 rounded-lg shadow-md flex flex-row gap-4 placeholder:text-gray-700 w-full" placeholder="Search..."/>
+                
             </div>
 
             <div className="grid grid-cols-1 gap-4 overflow-y-scroll max-h-[50vh] rounded-lg">
@@ -68,10 +72,10 @@ export default async function Products(){
                                     Edit
                                 </Link>
 
-                                <Link href={`#`} className="bg-red-500 h-fit w-2/3 text-center p-3 font-semibold rounded-xl transition-colors hover:bg-red-600">
-                                    Delete
-                                </Link>
-
+                                <div className="bg-red-500 h-fit w-2/3 text-center p-3 font-semibold rounded-xl transition-colors hover:bg-red-600">
+                                    <DeleteItemBtn productId={item.id}/>
+                                </div>
+                                
 
                             </div>
                         </div>
