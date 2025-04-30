@@ -204,7 +204,7 @@ export async function oldListOfReviewsPerDay(){
 export async function listOfReviewsPerDay(org_id: string){
     const {data, error} = await catalogSupabase
         .from("reviews")
-        .select("id, rating, created_at, item:items!id (id, org_id)"). eq("org_id", org_id)
+        .select("rating, created_at, item:items!id (id, org_id)"). eq("item.org_id", org_id)
 
     if (error){
         console.log("Error fetching reviews:", error);
