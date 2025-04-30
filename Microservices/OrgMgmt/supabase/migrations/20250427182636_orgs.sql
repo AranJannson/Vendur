@@ -5,7 +5,7 @@ create table public.orgs (
   description text not null,
   email text not null,
   telephone text not null,
-  website text not null,
+  website text,
   address text not null,
   product_type text null,
   shipping_type text null,
