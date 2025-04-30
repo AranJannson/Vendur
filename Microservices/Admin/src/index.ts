@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { getAllOrgs, deleteProductById, orgDetails, updateOrganisationByID, getVerificationRequests, getVerificationRequest, denyVerificationRequest, acceptVerificationRequest} from "./utils/management";
+import { getAllOrgs, deleteProductById, orgDetails, updateOrganisationByID, getVerificationRequests, getVerificationRequest, denyVerificationRequest, acceptVerificationRequest, getVerificationRequestStatus} from "./utils/management";
 
 dotenv.config();
 
@@ -102,6 +102,16 @@ Admin.post('/admin/acceptVerificationRequest', async (req: Request, res: Respons
     res.json(org.data);
 });
 
+Admin.post('/admin/check-request-status', async (req: Request, res: Response): Promise<any> => {
+  const { org_id } = req.body;
+  try {
+    const status = await getVerificationRequestStatus(org_id);
+    return res.status(200).json(status); // true or false
+  } catch (error) {
+    console.error("Internal server error:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 
 
