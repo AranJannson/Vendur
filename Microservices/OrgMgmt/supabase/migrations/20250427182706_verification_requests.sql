@@ -7,6 +7,7 @@ create table public.verification_requests (
   description text null,
   "productInfo" text null,
   "shippingMethod" text null,
+  active boolean not null default true,
   constraint verification_requests_pkey primary key (id),
   constraint verification_requests_org_id_fkey foreign KEY (org_id) references orgs (id)
 ) TABLESPACE pg_default;
