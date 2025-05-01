@@ -6,6 +6,8 @@ import {
     mostPopularCategoryByItemsListed,
     mostPopularCategoryBySalesList,
     avgItemPricePerCategory,
+    categoriesByItemsListed,
+    categoriesByAverageItemPrice
 } from "./utils/productAnalytics"
 import { inventoryValue, lowerStock, outOfStock, listOfItemStockValue } from "./utils/stockAnalysis";
 import {highestReviewedProduct,
@@ -284,5 +286,21 @@ Analytics.post("/reviewsPerDay", async (req: Request, res: Response) => {
 
     console.log(dailyReviews);
     res.send(JSON.stringify(dailyReviews, null, 2))
+});
+
+Analytics.get("/categoriesItemListed", async (req: Request, res: Response) => {
+
+    const total = await categoriesByItemsListed()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/categoriesAverageItemPrice", async (req: Request, res: Response) => {
+
+    const total = await categoriesByAverageItemPrice()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
 });
 
