@@ -244,6 +244,7 @@ export async function orgProductRatingList(org_id: string) {
 
 // ADMIN
 //Returns a list of organisations and the number of sales each respective organisation has had in descending order
+// WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
 export async function orgNumberOfSales(){
     const orderQuery = await catalogSupabase
         .from("orders")
@@ -271,8 +272,8 @@ export async function orgNumberOfSales(){
         .sort((a, b) => b[1] - a[1]);
 }
 
-// PAYMENT
 // Returns a list of each organisation and how much total revenue they have made
+// WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
 export async function orgTotalRevenueList(){
     const orderQuery = await catalogSupabase
         .from("orders")
@@ -300,8 +301,8 @@ export async function orgTotalRevenueList(){
         .sort((a, b) => b[1] - a[1]);
 }
 
-//PAYMENT TABLE
 // Returns a list of organisations and how the average order value for each
+// WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
 export async function orgAverageOrderValue(){
     const orderQuery = await catalogSupabase
         .from("orders")

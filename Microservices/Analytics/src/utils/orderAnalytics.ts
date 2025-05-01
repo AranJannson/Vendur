@@ -13,6 +13,7 @@ const analyticsSupabase = createClient(
 );
 
 // Returns value of total revenue
+// WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
 export async function totalSalesEver() {
     const {data, error} = await catalogSupabase
         .from("orders")
@@ -34,6 +35,7 @@ export async function totalSalesEver() {
 }
 
 // Shows list of how many sales happened per day (actual number of orders, not order value)
+// WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
 export async function orderNumberDailyList() {
     const {data, error} = await catalogSupabase
     .from("orders").select("created_at, price")
@@ -58,6 +60,7 @@ export async function orderNumberDailyList() {
 }
 
 // Returns a list of revenue per day
+// WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
 export async function totalRevenuePerDayList() {
     const {data, error} = await catalogSupabase
     .from("orders").select("created_at, price")
@@ -83,6 +86,7 @@ export async function totalRevenuePerDayList() {
 }
 
 // Returns a list of days and the average order value for these days
+// WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
 export async function averageOrderValuePerDayList() {
     const {data, error} = await catalogSupabase
         .from("orders").select("created_at, price")
@@ -118,6 +122,7 @@ export async function averageOrderValuePerDayList() {
 }
 
 // Returns a list of items and the average quantity when said item is ordered
+// WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
 export async function avgQuantityPerItemInOrder(){
     const {data, error} = await catalogSupabase
     .from("orders").select("item_id, quantity")

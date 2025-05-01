@@ -7,10 +7,8 @@ import {
     mostPopularCategoryBySalesList,
     avgItemPricePerCategory,
 } from "./utils/productAnalytics"
-import { fetchAllProducts } from "./utils/fetchAllProducts";
-import { inventoryValue, lowerStock, outOfStock, mostValuableStockItem, listOfItemStockValue } from "./utils/stockAnalysis";
-import { mostReviewedProduct,
-    highestReviewedProduct,
+import { inventoryValue, lowerStock, outOfStock, listOfItemStockValue } from "./utils/stockAnalysis";
+import {highestReviewedProduct,
     productsByReviewValue,
     dateWithMostReviews,
     oldListOfReviewsPerDay,
@@ -25,9 +23,6 @@ import {listOfAllOrgInvValue,
     orgProductRatingList
 } from "./utils/organisationsAnalytics"
 import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder } from "./utils/orderAnalytics";
-import { userOrderList, userAvgOrderList } from "./utils/userAnalytics";
-import {presenceCheck} from "./utils/metadata";
-import * as meta  from "./utils/metadata";
 import trackClicks, {returnAllClickCountPages} from "./utils/track-clicks";
 
 
@@ -43,31 +38,6 @@ const portNumber = 8001;
 
 Analytics.listen(portNumber, () => {
     console.log(`Analytics is running on port ${portNumber}`);
-});
-
-// Analytics.get("/orderAverage", async (req: Request, res: Response) => {
-
-//     const orderAvg = await getOrderAverage()
-
-//     console.log("This is the Order Average:", orderAvg);
-
-// }); 
-
-// Analytics.get("/orderDates", async (req: Request, res: Response) => {
-
-//     const popularDay = await mostPopularDate()
-
-//     console.log("This was the most popular day:", popularDay);
-
-// }); 
-
-Analytics.get("/fetchAllProducts", async (req: Request, res: Response) => {
-
-    const productList = await fetchAllProducts()
-
-    console.log("The modified version with catalog is:", productList);
-
-    res.send(JSON.stringify(productList, null, 2))
 });
 
 // Stock Analytic Tests
@@ -94,22 +64,6 @@ Analytics.get("/outOfStock", async (req: Request, res: Response) => {
 
     console.log("These are the items out of stock:", outOfStockList);
     res.send(JSON.stringify(outOfStockList, null, 2))
-}); 
-
-Analytics.get("/highValueStockItem", async (req: Request, res: Response) => {
-
-    const highStockItem = await mostValuableStockItem()
-
-    console.log("This item has the highest value:", highStockItem);
-    res.send(JSON.stringify(highStockItem, null, 2))
-});
-
-Analytics.get("/mostReviewedProduct", async (req: Request, res: Response) => {
-
-    const mostReviewedItem = await mostReviewedProduct()
-
-    console.log("This is the product with the most reviews", mostReviewedItem);
-    res.send(JSON.stringify(mostReviewedItem, null, 2))
 });
 
 Analytics.get("/productReviewList", async (req: Request, res: Response) => {
@@ -257,36 +211,12 @@ Analytics.get("/avgOrderPerDayList", async (req: Request, res: Response) => {
     res.send(JSON.stringify(avgDayList, null, 2))
 });
 
-Analytics.get("/userOrderList", async (req: Request, res: Response) => {
-
-    const userOrderNumberList = await userOrderList()
-
-    console.log(userOrderNumberList);
-    res.send(JSON.stringify(userOrderNumberList, null, 2))
-});
-
-Analytics.get("/userAvgOrderList", async (req: Request, res: Response) => {
-
-    const userOrderAverageList = await userAvgOrderList()
-
-    console.log(userOrderAverageList);
-    res.send(JSON.stringify(userOrderAverageList, null, 2))
-});
-
 Analytics.get("/avgQuantityOrderList", async (req: Request, res: Response) => {
 
     const avgQuantityList = await avgQuantityPerItemInOrder()
 
     console.log(avgQuantityList);
     res.send(JSON.stringify(avgQuantityList, null, 2))
-});
-
-Analytics.get("/presenceCheck", async (req: Request, res: Response) => {
-
-    const presenceC = await presenceCheck()
-
-    console.log(presenceC);
-    res.send(JSON.stringify(presenceC, null, 2))
 });
 
 Analytics.post("/track-clicks", async (req: Request, res: Response): Promise<any> => {

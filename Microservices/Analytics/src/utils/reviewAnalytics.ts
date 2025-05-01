@@ -11,43 +11,6 @@ const analyticsSupabase = createClient(
     process.env.PUBLIC_SUPABASE_ANON_KEY as string
 );
 
-// Returns product with the most reviews
-export async function mostReviewedProduct(){
-    const { data, error } = await catalogSupabase
-        .from("reviews")
-        .select("id, item:items!id (id, name)");
-
-    if (error){
-        console.error("Error fetching items:", error);
-        return 0;
-    }
-
-    let total = 0;
-    const reviewCount: Record<number, number> = {};
-    data.forEach((item) => {
-        console.log(item.item);
-        // Checks if item.item (price) is an array or object and acts accordingly
-        const id = Array.isArray(item.item)
-            ? (item.item as { id: number }[])[0]?.id
-            : (item.item as { id: number }).id;
-        const name = Array.isArray(item.item)
-            ? (item.item as { name: string }[])[0]?.name
-            : (item.item as { name: string }).name;
-        if (id){
-            reviewCount[id] = (reviewCount[id] || 0) + 1
-        }
-    })
-    let mostReviewedItem: string | null = null;
-    let maxCount = 0;
-    for (const category in reviewCount) {
-        if (reviewCount[category] > maxCount) {
-            mostReviewedItem = category;
-            maxCount = reviewCount[category];
-        }
-    }
-    return mostReviewedItem ? { id : mostReviewedItem, count: maxCount } : null;
-}
-
 // List of products ranked from the highest average review to the lowest average review
 export async function productsByReviewValue(){
     const {data, error} = await catalogSupabase
@@ -171,6 +134,7 @@ export async function dateWithMostReviews(){
     return mostFrequentDate ? {date: mostFrequentDate, count: maxCount} : null;
 }
 
+// WILL REFACTOR FOR ADMIN
 // Returns a list of days and how many reviews were done on the day
 export async function oldListOfReviewsPerDay(){
     const {data, error} = await catalogSupabase
@@ -241,8 +205,6 @@ export async function ratingDistribution(){
     }
 
     const ratingDistributionTable: Record<string, number> = {};
-
-    let dateList = "This is a list of dates"
 
     data.forEach((item) => {
         const rating = item.rating;
