@@ -1,9 +1,10 @@
 import Image from "next/image";
 import PageClickViewer from "@/app/components/displays/PageClickViewer";
 import AdminAnalytics from "@/app/components/admin/Analytics";
-import OrgsAverageRating from  "@/app/components/admin/orgAverageRatingGraph";
-import OrgTotalRevenues from "@/app/components/admin/orgTotalRevenuesGraph";
-
+import OrgsAverageRating from "@/app/components/admin/orgsAverageRatingGraph";
+import OrgTotalRevenues from "@/app/components/admin/orgsTotalRevenuesGraph";
+import OrgsAvgCategoryItmPrice from "@/app/components/admin/orgsAvgCategoryItemPrice";
+import OrgsCategoryNumItemsListed from "@/app/components/admin/orgsCategoryNumItemsListed";
 
 export default function Analytics() {
     return (
@@ -25,6 +26,16 @@ export default function Analytics() {
                 <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
                     <h2 className="text-base font-light p-2">Average rating for all organisations</h2>
                     <OrgsAverageRating/>
+
+                </div>
+                <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                    <h2 className="text-base font-light p-2">Average item price per category</h2>
+                    <OrgsAvgCategoryItmPrice/>
+
+                </div>
+                <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                    <h2 className="text-base font-light p-2">Number of items per category</h2>
+                    <OrgsCategoryNumItemsListed/>
 
                 </div>
             </div>
