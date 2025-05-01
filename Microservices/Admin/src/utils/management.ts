@@ -33,16 +33,29 @@ export async function orgDetails(id: string): Promise<{data: any, error: string 
     return { data, error: null };
       }
 
-export async function updateOrganisationByID(id: string, updateData: {email: string, name: string, description: string, telephone: string, website: string, address: string }): Promise<{ data: any, error: string | null }> {
+export async function updateOrganisationByID(id: string, updateData: {email: string, name: string,
+     description: string,
+     telephone: string,
+     website: string,
+     address: string ,
+     product_type: string, 
+     shipping_type: string,
+     active: boolean,
+     is_verified: boolean
+    }): Promise<{ data: any, error: string | null }> {
     try {
-        const { email, name, description, telephone, website, address } = updateData;
+        const { email, name, description, telephone, website, address, product_type, shipping_type, active, is_verified } = updateData;
         const { data, error } = await org_supabase.from("orgs").update({
             email,
             name,
             description,
             telephone,
-            // website,
-            address
+            website,
+            address,
+            product_type,
+            shipping_type,
+            active, 
+            is_verified
         }).eq("id", id);
     
         if (error) {

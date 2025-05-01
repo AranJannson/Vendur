@@ -52,8 +52,8 @@ Admin.post('/admin/orgDetails', async (req: Request, res: Response): Promise<any
 
 Admin.put('/admin/editOrgDetails', async (req, res): Promise<any> => {
     try {
-      const { id, email, name, description, telephone, website, address } = req.body;
-      const updateData = { name, description, email, telephone, website, address }
+      const { id, email, name, description, telephone, website, address, product_type, shipping_type, active, is_verified } = req.body;
+      const updateData = { name, description, email, telephone, website, address, product_type, shipping_type, active, is_verified }
       const { data, error } = await updateOrganisationByID(id, updateData);
 
       return res.status(200).json({ message: "Organisation updated successfully", data });
