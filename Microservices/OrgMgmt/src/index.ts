@@ -213,36 +213,3 @@ OrgMgmt.post("/fetch-org-status", async (req: Request, res: Response): Promise<a
 
     }
 })
-
-// Ban Org
-OrgMgmt.post('/banOrg', async (req: Request, res: Response): Promise<any> => {
-    const { id } = req.body;
-    try {
-      await banOrg(id);
-      return res.status(200).json({ message: 'Organisation banned successfully' });
-    } catch (error: any) {
-      return res.status(500).json({ message: error.message || 'Failed to ban organisation' });
-    }
-  });
-
-// Unban Org
-OrgMgmt.post('/unbanOrg', async (req: Request, res: Response): Promise<any> => {
-    const { id } = req.body;
-    try {
-      await unbanOrg(id);
-      return res.status(200).json({ message: 'Organisation unbanned successfully' });
-    } catch (error: any) {
-      return res.status(500).json({ message: error.message || 'Failed to unban organisation' });
-    }
-  });
-
-// Unverify Org
-OrgMgmt.post('/unverifyOrg', async (req: Request, res: Response): Promise<any> => {
-    const { id } = req.body;
-    try {
-      await unverifyOrg(id);
-      return res.status(200).json({ message: 'Organisation unverified successfully' });
-    } catch (error: any) {
-      return res.status(500).json({ message: error.message || 'Failed to unverify organisation' });
-    }
-  });
