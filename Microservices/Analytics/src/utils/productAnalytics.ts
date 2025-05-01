@@ -41,8 +41,8 @@ export async function mostPopularCategoryByItemsListed(org_id: string) {
 
 }
 
-//NEED TO ADJUST WITH PAYMENT TABLE
 // Returns a list of all categories in descending order of number of sales
+// WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
 export async function mostPopularCategoryBySalesList() {
     const { data, error } = await catalogSupabase.from("orders").select("price, item:items!id (name, category)");
 
@@ -67,8 +67,8 @@ export async function mostPopularCategoryBySalesList() {
         .sort((a, b) => b[1] - a[1]);
 }
 
-//NEED TO ADJUST WITH PAYMENT TABLE
 // Returns a list of products in descending order of number of sales
+// WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
 export async function itemSalesList() {
     const { data, error } = await catalogSupabase.from("orders").select("item_id, item:items!id(name)");
 
