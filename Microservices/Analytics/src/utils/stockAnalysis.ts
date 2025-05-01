@@ -90,42 +90,6 @@ export async function outOfStock(){
     return outOfStock;
 }
 
-// Returns the item that has the highest stock-price value (stock X price)
-export async function mostValuableStockItem(){
-    const { data, error } = await catalogSupabase
-        .from("stock")
-        .select("quantity, item:items!id (id, name, price)");
-    if (error){
-        console.error("Error fetching items:", error);
-        return 0;
-    }
-    let mostValuableItem = null;
-    let highestValue = 0;
-    data.forEach((item) => {
-        console.log(item.item);
-        const quantity = item.quantity;
-        // Checks if item.item is an array or object and acts accordingly 
-        const price = Array.isArray(item.item)
-        ? (item.item as { price: number }[])[0]?.price 
-        : (item.item as { price: number }).price;
-        const name = Array.isArray(item.item)
-        ? (item.item as { name: string }[])[0]?.name 
-        : (item.item as { name: string }).name;
-        let itemTotal = quantity * price
-        if (itemTotal > highestValue){
-            highestValue = itemTotal;
-            mostValuableItem = {
-                name,
-                quantity,
-                price,
-                itemTotal
-            }
-        }
-    })
-
-    return mostValuableItem;
-}
-
 // Returns a list of items and their respective price-stock value (Price X Stock)
 export async function listOfItemStockValue(){
     const { data, error } = await catalogSupabase
