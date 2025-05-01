@@ -16,6 +16,17 @@ export const getOrgInfo = async (id: any) => {
     return data;
 }
 
+export async function getOrgByName(name: string) {
+    const { data, error } = await org_supabase
+        .from("orgs")
+        .select("*")
+        .eq("name", name).single();
+    if (error) {
+        throw new Error(`Error fetching org details: ${error.message}`);
+    }
+    return data;
+}
+
 // CRUD Operations for products
 export const getProducts = async (org_id: any) => {
     const { data, error } = await cat_supabase

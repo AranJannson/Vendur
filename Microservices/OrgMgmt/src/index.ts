@@ -9,6 +9,7 @@ import {
     getProducts,
     updateProduct,
     getProductByID,
+    getOrgByName,
 } from "./utils/productManagement";
 import {requestVerification} from "./utils/verification";
 import {getOrderById} from "./utils/orderManagment";
@@ -36,6 +37,20 @@ OrgMgmt.post("/organisation", async (req: Request, res: Response) => {
         console.error("Error fetching products:", error);
         res.status(500).send({ error: "Failed to fetch products" });
     }
+})
+
+
+OrgMgmt.post("/getOrgByName", async (req: Request, res: Response) => {
+
+    try {
+        const { name } = req.body;
+        const data = await getOrgByName(name);
+        res.status(200).send(JSON.stringify(data));
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).send({ error: "Failed to fetch products" });
+    }
+
 })
 
 // CRUD Operations for products
