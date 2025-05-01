@@ -10,12 +10,10 @@ import {
     categoriesByAverageItemPrice
 } from "./utils/productAnalytics"
 import { inventoryValue, lowerStock, outOfStock, listOfItemStockValue } from "./utils/stockAnalysis";
-import {highestReviewedProduct,
-    productsByReviewValue,
-    dateWithMostReviews,
-    oldListOfReviewsPerDay,
+import {
     listOfReviewsPerDay,
-    ratingDistribution} from "./utils/reviewAnalytics";
+    orgListOfReviewsPerDay,
+    } from "./utils/reviewAnalytics";
 import {listOfAllOrgInvValue,
     averageOrganisationProductRating,
     orgNumberOfSales,
@@ -68,39 +66,6 @@ Analytics.get("/outOfStock", async (req: Request, res: Response) => {
     res.send(JSON.stringify(outOfStockList, null, 2))
 });
 
-Analytics.get("/productReviewList", async (req: Request, res: Response) => {
-
-    const mostReviewedItem = await productsByReviewValue()
-
-    console.log("List of products by reviews", mostReviewedItem);
-    res.send(JSON.stringify(mostReviewedItem, null, 2))
-});
-
-Analytics.get("/highRatedProduct", async (req: Request, res: Response) => {
-
-    const mostReviewedItem = await highestReviewedProduct()
-
-    console.log("This is the product with the highest rating", mostReviewedItem);
-    res.send(JSON.stringify(mostReviewedItem, null, 2))
-});
-
-Analytics.get("/dateWithMostReviews", async (req: Request, res: Response) => {
-
-    const mostReviewedItem = await dateWithMostReviews()
-
-    console.log(mostReviewedItem);
-    res.send(JSON.stringify(mostReviewedItem, null, 2))
-});
-
-Analytics.get("/listOfReviewsPerDay", async (req: Request, res: Response) => {
-
-    const mostReviewedItem = await oldListOfReviewsPerDay()
-
-    console.log(mostReviewedItem);
-    res.send(JSON.stringify(mostReviewedItem, null, 2))
-});
-
-
 Analytics.get("/orgInvList", async (req: Request, res: Response) => {
 
     const mostReviewedItem = await listOfAllOrgInvValue()
@@ -115,14 +80,6 @@ Analytics.get("/listItemStockValue", async (req: Request, res: Response) => {
 
     console.log(itemStockValueList);
     res.send(JSON.stringify(itemStockValueList, null, 2))
-});
-
-Analytics.get("/ratingDistribution", async (req: Request, res: Response) => {
-
-    const ratingDistributionResult = await ratingDistribution()
-
-    console.log(ratingDistributionResult);
-    res.send(JSON.stringify(ratingDistributionResult, null, 2))
 });
 
 Analytics.get("/avgOrgProd", async (req: Request, res: Response) => {
@@ -282,7 +239,7 @@ Analytics.post("/orgRatingList", async (req: Request, res: Response) => {
 
 Analytics.post("/reviewsPerDay", async (req: Request, res: Response) => {
     const { org_id } = req.body;
-    const dailyReviews = await listOfReviewsPerDay(org_id)
+    const dailyReviews = await orgListOfReviewsPerDay(org_id)
 
     console.log(dailyReviews);
     res.send(JSON.stringify(dailyReviews, null, 2))
@@ -299,6 +256,14 @@ Analytics.get("/categoriesItemListed", async (req: Request, res: Response) => {
 Analytics.get("/categoriesAverageItemPrice", async (req: Request, res: Response) => {
 
     const total = await categoriesByAverageItemPrice()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/dailyReviewsSitewide", async (req: Request, res: Response) => {
+
+    const total = await listOfReviewsPerDay()
 
     console.log(total);
     res.send(JSON.stringify(total, null, 2))
