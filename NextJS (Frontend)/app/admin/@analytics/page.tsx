@@ -1,6 +1,9 @@
 import Image from "next/image";
 import PageClickViewer from "@/app/components/displays/PageClickViewer";
 import AdminAnalytics from "@/app/components/admin/Analytics";
+import OrgsAverageRating from  "@/app/components/admin/orgAverageRatingGraph";
+import OrgTotalRevenues from "@/app/components/admin/orgTotalRevenuesGraph";
+
 
 export default function Analytics() {
     return (
@@ -13,9 +16,17 @@ export default function Analytics() {
                 <PageClickViewer/>
 
             </div>
+            <div className="w-full h-fit bg-primary-200 rounded-lg shadow-xl col-span-3 grid grid-cols-3 mt-8">
+                <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                    <h2 className="text-base font-light p-2">Total Inventory Value of all organisations</h2>
+                    <OrgTotalRevenues/>
 
-            <div className="p-4">
-                {/* <AdminAnalytics/> */}
+                </div>
+                <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                    <h2 className="text-base font-light p-2">Average rating for all organisations</h2>
+                    <OrgsAverageRating/>
+
+                </div>
             </div>
 
 
