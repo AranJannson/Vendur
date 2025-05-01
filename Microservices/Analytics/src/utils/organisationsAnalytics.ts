@@ -10,52 +10,7 @@ const analyticsSupabase = createClient(
     process.env.PUBLIC_SUPABASE_ANON_KEY as string
 );
 
-// FOR ADMIN
-// Returns a list of organisations and their respective amount for inventory value
-export async function listOfAllOrgInvValue() {
-    const orgQuery = await catalogSupabase
-        .from("items")
-        .select("id,price, org:organisations!org_id (name)");
-
-    if (orgQuery.error) {
-        console.error("Error fetching organisations:", orgQuery.error);
-        return 0;
-    }
-
-    const stockQuery = await catalogSupabase
-        .from("stock")
-        .select("item_id, quantity");
-
-    if (stockQuery.error) {
-        console.error("Error fetching stock:", stockQuery.error);
-        return 0;
-    }
-
-    const orgData = orgQuery.data;
-    const stockData = stockQuery.data;
-
-    const stockMap: Record<string, number>={}
-    stockData.forEach((item) => {
-        const itemId = item.item_id;
-        stockMap[itemId] = item.quantity;
-    })
-
-    const orgInventoryMap: Record<string, number>={};
-
-    orgData.forEach((item) => {
-        const quantity = stockMap[item.id]
-        const price = item.price
-        const orgName = Array.isArray(item.org)
-            ? (item.org as { name: string }[])[0]?.name
-            : (item.org as { name: string }).name;
-        const itemInvValue = quantity * price;
-        orgInventoryMap[orgName] = (orgInventoryMap[orgName] || 0) + itemInvValue;
-    })
-
-    return orgInventoryMap;
-}
-
-// Returns a list of all organisation items and their stock value (item price x stock)
+// Returns list of items from an org and their item stock value (item price x stock)
 export async function orgInvValue(org_id: string) {
     const orgQuery = await catalogSupabase
         .from("items")
@@ -99,7 +54,7 @@ export async function orgInvValue(org_id: string) {
             } else {
                 completePrice = price;
             }
-                orgInventoryMap[itemId] = (orgInventoryMap[itemId] || 0) + completePrice;
+            orgInventoryMap[itemId] = (orgInventoryMap[itemId] || 0) + completePrice;
         })
         const finalNameStockMap: Record<string, number> = {};
         stockData.forEach((item) => {
@@ -117,9 +72,127 @@ export async function orgInvValue(org_id: string) {
     }
 }
 
-// ADMIN
-// Returns a list of organisations and the average review for each organisation
-export async function averageOrganisationProductRating() {
+// Returns list of items from an org and their average rating
+export async function orgProductRatingList(org_id: string) {
+    const itemQuery = await catalogSupabase
+        .from("items")
+        .select("id, name, org_id").eq("org_id", org_id);
+
+    if (itemQuery.error) {
+        console.error("Error fetching organisations:", itemQuery.error);
+        return 0;
+    }
+
+    const reviewQuery = await catalogSupabase
+        .from("reviews")
+        .select("item_id, rating");
+
+    if (reviewQuery.error) {
+        console.error("Error fetching stock:", reviewQuery.error);
+        return 0;
+    }
+
+    if (itemQuery.data.length<2){
+        return itemQuery.data
+    } else {
+        const itemData = itemQuery.data;
+        const idToItemName: Record<string, string>={};
+        itemData.forEach((item) => {
+            idToItemName[item.id] = item.name;
+        })
+        const reviewData = reviewQuery.data;
+        const reviewList: { itemName: string; rating: number }[] = [];
+        reviewData.forEach((review) => {
+            const reviewItemId = review.item_id;
+            const rating = review.rating;
+
+            if (reviewItemId in idToItemName) {
+                const name = idToItemName[reviewItemId];
+                reviewList.push({ itemName: name, rating: rating });
+            }
+        })
+        const reviewSum: Record<string, number> = {};   // To track total sum
+        const reviewCount: Record<string, number> = {}; // To track number of ratings
+        for (const review of reviewList) {
+            const itemName = review.itemName
+            const rating = review.rating
+            if (!reviewSum[itemName]){
+                reviewSum[itemName] = 0;
+                reviewCount[itemName] = 0;
+            }
+            reviewSum[itemName] += rating;
+            reviewCount[itemName] +=1
+        }
+        const reviewAverage: Record<string, number> = {};
+        for (const itemName in reviewSum){
+            reviewAverage[itemName] = reviewSum[itemName]/reviewCount[itemName];
+        }
+        return reviewAverage
+    }
+}
+
+// Returns a list of items from one org and how many sales each item has been a part of
+export async function oneOrgItemSalesAnalytics(){
+
+}
+
+// Returns a list of items from one org and how many sales each item has been a part of
+export async function oneOrgItemRevenueAnalytics(){
+
+}
+
+// !!!!!!!!!!!!!!!!!!!! Admin Analytics !!!!!!!!!!!!!!!!!!!!!
+
+// Returns a list of organisations and their respective amount for inventory value
+export async function listOfAllOrgInvValue() {
+    const orgQuery = await catalogSupabase
+        .from("items")
+        .select("id,price, org_id");
+
+    if (orgQuery.error) {
+        console.error("Error fetching organisations:", orgQuery.error);
+        return 0;
+    }
+
+    const stockQuery = await catalogSupabase
+        .from("stock")
+        .select("item_id, quantity");
+
+    if (stockQuery.error) {
+        console.error("Error fetching stock:", stockQuery.error);
+        return 0;
+    }
+
+    const orgData = orgQuery.data;
+    const stockData = stockQuery.data;
+
+    const stockMap: Record<string, number>={}
+    stockData.forEach((item) => {
+        const itemId = item.item_id;
+        stockMap[itemId] = item.quantity;
+    })
+
+    const orgInventoryMap: Record<string, number>={};
+
+    orgData.forEach((item) => {
+        const quantity = stockMap[item.id]
+        const price = item.price
+        const orgName = item.org_id
+
+        if (quantity == undefined){
+            console.warn("Item doesn't exist", item);
+            return;
+        }
+
+        const itemInvValue = quantity * price;
+        orgInventoryMap[orgName] = (orgInventoryMap[orgName] || 0) + itemInvValue;
+    })
+
+    return orgInventoryMap;
+}
+
+// Returns a list of organisations and their respective average rating across their products
+export async function oldAverageOrganisationProductRating() {
     const itemOrgQuery = await catalogSupabase
       .from("items")
       .select("id, org:organisations!org_id (id)");
@@ -184,67 +257,76 @@ export async function averageOrganisationProductRating() {
     return orgAverages;
   }
 
-export async function orgProductRatingList(org_id: string) {
-    const itemQuery = await catalogSupabase
+// Returns a list of organisations and their respective average rating across their products
+export async function averageOrganisationProductRating() {
+    const itemOrgQuery = await catalogSupabase
         .from("items")
-        .select("id, name, org_id").eq("org_id", org_id);
+        .select("id, org_id");
 
-    if (itemQuery.error) {
-        console.error("Error fetching organisations:", itemQuery.error);
+    if (itemOrgQuery.error) {
+        console.error("Error fetching organisations:", itemOrgQuery.error);
         return 0;
     }
 
     const reviewQuery = await catalogSupabase
         .from("reviews")
-        .select("item_id, rating");
+        .select("id, item_id, rating");
 
     if (reviewQuery.error) {
         console.error("Error fetching stock:", reviewQuery.error);
         return 0;
     }
 
-    if (itemQuery.data.length<2){
-        return itemQuery.data
-    } else {
-        const itemData = itemQuery.data;
-        const idToItemName: Record<string, string>={};
-        itemData.forEach((item) => {
-            idToItemName[item.id] = item.name;
-        })
-        const reviewData = reviewQuery.data;
-        const reviewList: { itemName: string; rating: number }[] = [];
-        reviewData.forEach((review) => {
-            const reviewItemId = review.item_id;
-            const rating = review.rating;
+    const reviewData = reviewQuery.data;
+    const itemOrgData = itemOrgQuery.data;
 
-            if (reviewItemId in idToItemName) {
-                const name = idToItemName[reviewItemId];
-                reviewList.push({ itemName: name, rating: rating });
-            }
-        })
-        const reviewSum: Record<string, number> = {};   // To track total sum
-        const reviewCount: Record<string, number> = {}; // To track number of ratings
-        for (const review of reviewList) {
-            const itemName = review.itemName
-            const rating = review.rating
-            if (!reviewSum[itemName]){
-                reviewSum[itemName] = 0;
-                reviewCount[itemName] = 0;
-            }
-            reviewSum[itemName] += rating;
-            reviewCount[itemName] +=1
+    //Maps item id to organisation id
+    const itemOrgTable: Record<number, number> = {};
+    itemOrgData.forEach((item) => {
+        const itemId = item.id
+        const orgId = item.org_id
+        if (itemId) {
+            itemOrgTable[itemId] = orgId;
         }
-        const reviewAverage: Record<string, number> = {};
-        for (const itemName in reviewSum){
-            reviewAverage[itemName] = reviewSum[itemName]/reviewCount[itemName];
+    });
+
+    //Links organisation ids to review data via item id
+    const combinedResults = reviewData.map((review) => {
+        const reviewItemId = review.item_id;
+        const rating = review.rating;
+        const orgId = itemOrgTable[reviewItemId];
+        return { itemId: reviewItemId, orgId, rating };
+    });
+
+    //Adds total ratings and number of reviews (count) per organisation
+    const orgAggregates: Record<number, { total: number; count: number }> = {};
+    for (const result of combinedResults) {
+        const { orgId, rating } = result;
+        if (orgId !== undefined) {
+            if (!orgAggregates[orgId]) {
+                orgAggregates[orgId] = { total: 0, count: 0 };
+            }
+            orgAggregates[orgId].total += rating;
+            orgAggregates[orgId].count++;
         }
-        return reviewAverage
     }
+
+    // Calculates average rating per organisation
+    const orgAverages: Record<string, number> = {};
+    for (const orgId in orgAggregates) {
+        const { total, count } = orgAggregates[orgId];
+        orgAverages[orgId] = total / count;
+    }
+
+    return orgAverages;
 }
 
-// ADMIN
+export async function orgsTotalInventory(){
+
+}
+
+
 //Returns a list of organisations and the number of sales each respective organisation has had in descending order
-// WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
 export async function orgNumberOfSales(){
     const orderQuery = await catalogSupabase
         .from("orders")
@@ -273,7 +355,6 @@ export async function orgNumberOfSales(){
 }
 
 // Returns a list of each organisation and how much total revenue they have made
-// WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
 export async function orgTotalRevenueList(){
     const orderQuery = await catalogSupabase
         .from("orders")
@@ -346,5 +427,7 @@ export async function orgAverageOrderValue(){
     return Object.entries(orgOrderAvgList)
         .sort((a, b) => b[1] - a[1]);
 }
+
+
   
 
