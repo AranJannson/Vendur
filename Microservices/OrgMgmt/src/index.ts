@@ -13,7 +13,6 @@ import {
 } from "./utils/productManagement";
 import {requestVerification} from "./utils/verification";
 import {getOrderById} from "./utils/orderManagment";
-import {banOrg, unbanOrg, unverifyOrg} from "./utils/orgManagement";
 
 dotenv.config();
 

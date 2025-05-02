@@ -16,7 +16,6 @@ export default function OrgTotalRevenues() {
 
     useEffect(() => {
         async function fetchData() {
-            if (!orgID) return;
 
             try {
                 const response = await fetch('http://localhost:8001/orgInvList');
@@ -34,7 +33,7 @@ export default function OrgTotalRevenues() {
                     labels: items,
                     datasets: [
                         {
-                            label: 'Item Stock Value',
+                            label: 'Organisation Inventory Value',
                             data: rating,
                             backgroundColor: [
                                 'rgb(3,75,252)',
@@ -69,17 +68,15 @@ export default function OrgTotalRevenues() {
     }
 
     return (
-        <div className="">
+        <div style={{ width: "300px", height: "200px" }}>
             <Bar
                 data={chartData}
-                width = {400}
-                height= {300}
                 options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
-                        y: {
-                            // beginAtZero: true,
-                        }
-                    }
+                        y: { beginAtZero: true },
+                    },
                 }}
             />
         </div>

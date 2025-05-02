@@ -8,6 +8,7 @@ import { Chart as ChartJS, Tooltip, Legend, CategoryScale, LinearScale, BarEleme
 ChartJS.register(Tooltip, Legend, CategoryScale, LinearScale, BarElement, ArcElement);
 
 export default function ReviewsPerDay() {
+    console.log("Reviews per day function")
     const user = useUser();
     const allTeams = user!.useTeams();
     const orgID: string = allTeams[0]?.id;
@@ -16,10 +17,11 @@ export default function ReviewsPerDay() {
 
     useEffect(() => {
         async function fetchData() {
-            if (!orgID) return;
 
             try {
+                console.log("Fetching from ")
                 const response = await fetch('http://localhost:8001/dailyReviewsSitewide');
+                console.log("Fetch response", response)
 
                 const data = await response.json();
 
@@ -34,7 +36,7 @@ export default function ReviewsPerDay() {
                     labels: items,
                     datasets: [
                         {
-                            label: 'Item Stock Value',
+                            label: 'Number of reviews',
                             data: rating,
                             backgroundColor: [
                                 'rgb(3,75,252)',
@@ -69,17 +71,15 @@ export default function ReviewsPerDay() {
     }
 
     return (
-        <div className="">
+        <div style={{ width: "300px", height: "200px" }}>
             <Bar
                 data={chartData}
-                width = {400}
-                height= {300}
                 options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
-                        y: {
-                            // beginAtZero: true,
-                        }
-                    }
+                        y: { beginAtZero: true },
+                    },
                 }}
             />
         </div>

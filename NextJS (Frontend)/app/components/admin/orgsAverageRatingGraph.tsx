@@ -16,7 +16,6 @@ export default function OrgsAverageRating() {
 
     useEffect(() => {
         async function fetchData() {
-            if (!orgID) return;
 
             try {
                 const response = await fetch('http://localhost:8001/avgOrgProd');
@@ -69,17 +68,17 @@ export default function OrgsAverageRating() {
     }
 
     return (
-        <div className="">
+        <div style={{ width: "400px", height: "300px" }}>
             <Bar
                 data={chartData}
                 width = {400}
                 height= {300}
                 options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
-                        y: {
-                            // beginAtZero: true,
-                        }
-                    }
+                        y: { beginAtZero: true },
+                    },
                 }}
             />
         </div>

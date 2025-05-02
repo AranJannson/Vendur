@@ -16,7 +16,6 @@ export default function OrgsCategoryNumItemsListed() {
 
     useEffect(() => {
         async function fetchData() {
-            if (!orgID) return;
 
             try {
                 const response = await fetch('http://localhost:8001/categoriesItemListed');
@@ -34,7 +33,7 @@ export default function OrgsCategoryNumItemsListed() {
                     labels: items,
                     datasets: [
                         {
-                            label: 'Average Rating across all products',
+                            label: 'Items per category',
                             data: rating,
                             backgroundColor: [
                                 'rgb(3,75,252)',
@@ -69,17 +68,15 @@ export default function OrgsCategoryNumItemsListed() {
     }
 
     return (
-        <div className="">
+        <div style={{ width: "400px", height: "400px" }}>
             <Bar
                 data={chartData}
-                width = {400}
-                height= {300}
                 options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
-                        y: {
-                            // beginAtZero: true,
-                        }
-                    }
+                        y: { beginAtZero: true },
+                    },
                 }}
             />
         </div>
