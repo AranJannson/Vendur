@@ -25,7 +25,6 @@ import {listOfAllOrgInvValue,
 } from "./utils/organisationsAnalytics"
 import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder } from "./utils/orderAnalytics";
 import trackClicks, {returnAllClickCountPages} from "./utils/track-clicks";
-import {orderData} from "./utils/testPayment"
 
 
 dotenv.config();
@@ -269,14 +268,6 @@ Analytics.get("/dailyReviewsSitewide", async (req: Request, res: Response) => {
 
     console.log(total);
     res.send(JSON.stringify(total, null, 2))
-});
-
-Analytics.get("/paymentTest", async (req: Request, res: Response) => {
-
-    const data = await orderData()
-
-    console.log(data);
-    res.send(JSON.stringify(data, null, 2))
 });
 
 Analytics.get("/AllOrgsTest", async (req: Request, res: Response) => {
