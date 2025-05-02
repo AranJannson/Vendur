@@ -5,15 +5,29 @@ type Item = {
     quantity: number;
 };
 
-export default async function orderProcessing(basket: Item[], user_id: string) {
+export default async function orderProcessing(basket: Item[], user_id: string, delivery_address: string, full_name: string, total_cost: number) {
+    const supabase = createClient(
+        process.env.PUBLIC_SUPABASE_URL as string,
+        process.env.PUBLIC_SUPABASE_ANON_KEY as string
+    );
 
-    const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process.env.PUBLIC_SUPABASE_ANON_KEY as string);
+    const { data: group, error: groupError } = await supabase
+        .from("order_groups")
+        .insert({ user_id, delivery_address, full_name })
+        .select("id")
+        .single();
 
-    const groupId = supabase.from("group_orders").insert(user_id).select("id").single();
-
+    if (groupError || !group) {
+        console.error("Error inserting group order:", groupError);
+        return 0;
+    }
 
     for (const item of basket) {
-        const { data, error } = await supabase.from("orders").insert([item.id, item.quantity, groupId, "pending"]);
+        const { error } = await supabase.from("orders").insert([{
+            item_id: item.id,
+            quantity: item.quantity,
+            group_id: group.id,
+        }]);
 
         if (error) {
             console.error("Error inserting order:", error);
@@ -22,8 +36,8 @@ export default async function orderProcessing(basket: Item[], user_id: string) {
     }
 
     return 1;
-
 }
+
 
 export async function getOrderDetails(order_group_id: string) {
     const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process.env.PUBLIC_SUPABASE_ANON_KEY as string);

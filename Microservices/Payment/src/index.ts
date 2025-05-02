@@ -94,10 +94,13 @@ Payment.post("/updateOrderStatusIndividualItem", async (req: Request, res: Respo
 
 Payment.post("/orderProcessing", async (req: Request, res: Response) => {
 
-    const { basket, user_id } = req.body;
+    const { basket, user_id, total_cost, delivery_address, full_name } = req.body;
+
+    console.log("//orderProcessing user_id: ", user_id)
+    console.log("//orderProcessing total_cost: ", total_cost)
 
     try{
-        await orderProcessing(basket, user_id);
+        await orderProcessing(basket, user_id, delivery_address, full_name, total_cost);
 
         res.status(200).json({event: "Order Processed Successfully"});
     }catch (error){
