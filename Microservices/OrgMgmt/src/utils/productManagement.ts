@@ -4,12 +4,23 @@ import { connect } from "./dbConnect";
 const cat_supabase = connectCatalogue();
 const org_supabase = connect();
 
-export const getOrgInfo = async (org_id: any) => {
+export const getOrgInfo = async (id: any) => {
     const { data, error } = await org_supabase
         .from("orgs")
         .select()
-        .eq("id", org_id)
+        .eq("id", id)
 
+    if (error) {
+        throw new Error(`Error fetching org details: ${error.message}`);
+    }
+    return data;
+}
+
+export async function getOrgByName(name: string) {
+    const { data, error } = await org_supabase
+        .from("orgs")
+        .select("*")
+        .eq("name", name).single();
     if (error) {
         throw new Error(`Error fetching org details: ${error.message}`);
     }
@@ -56,13 +67,18 @@ export const deleteProduct = async (productId: any) => {
     const { data, error } = await cat_supabase
         .from("items")
         .delete()
-        .eq("id", productId)
+        .eq("id", productId);
 
     if (error) {
         throw new Error(`Error deleting product: ${error.message}`);
     }
+
+    if (!data || (data as any[]).length === 0) {
+        throw new Error("No product found to delete.");
+    }
+
     return data;
-}
+};
 
 // Applying Discounts to Products
 // If want to remove discount, pass null as discount value
@@ -79,6 +95,18 @@ export const applyDiscount = async (productId: any, discount: any) => {
 
     if (error) {
         throw new Error(`Error applying discount: ${error.message}`);
+    }
+    return data;
+}
+
+export const getProductByID = async (id: any) => {
+    const { data, error } = await cat_supabase
+        .from("items")
+        .select()
+        .eq("id", id)
+
+    if (error) {
+        throw new Error(`Error fetching product: ${error.message}`);
     }
     return data;
 }

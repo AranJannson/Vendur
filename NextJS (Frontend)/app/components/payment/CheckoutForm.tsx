@@ -27,7 +27,7 @@ export const CheckoutForm = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:3000/payment/checkout/success",
+        return_url: "http://localhost:3000/basket/checkout/success",
       },
       redirect: "if_required",
     });
@@ -44,7 +44,7 @@ export const CheckoutForm = () => {
         credentials: "include",
       });
 
-      window.location.href = "http://localhost:3000/payment/checkout/success";
+      window.location.href = "http://localhost:3000/basket/checkout/success";
     }
   };
 

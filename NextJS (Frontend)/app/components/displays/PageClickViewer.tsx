@@ -36,16 +36,22 @@ export default function PageClickViewer() {
     }, []);
 
 
+
+
     return (
         <div className="p-4 bg-primary-200 rounded-md shadow">
             <h2 className="text-lg font-semibold mb-2">Top 5 Most Interacted Pages</h2>
             <ul className="text-sm">
-                {data.slice(0, 5).map(({ page, count }) => (
+            {Array.isArray(data) ? (
+                data.slice(0, 1).map(({ page, count }) => (
                     <li key={page} className="flex justify-between bg-background-400 rounded-xl p-2 mb-2 border border-primary-600">
                         <span>{page}</span>
-                        <span className="">{count}</span>
+                        <span>{count}</span>
                     </li>
-                ))}
+                ))
+            ) : (
+                <li className="text-red-500">No valid data available</li>
+            )}
             </ul>
         </div>
     );

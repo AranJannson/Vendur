@@ -94,10 +94,13 @@ Payment.post("/updateOrderStatusIndividualItem", async (req: Request, res: Respo
 
 Payment.post("/orderProcessing", async (req: Request, res: Response) => {
 
-    const { basket, user_id } = req.body;
+    const { basket, user_id, total_cost, delivery_address, full_name } = req.body;
+
+    console.log("//orderProcessing user_id: ", user_id)
+    console.log("//orderProcessing total_cost: ", total_cost)
 
     try{
-        await orderProcessing(basket, user_id);
+        await orderProcessing(basket, user_id, delivery_address, full_name, total_cost);
 
         res.status(200).json({event: "Order Processed Successfully"});
     }catch (error){
@@ -126,12 +129,13 @@ Payment.post("/getOrderDetails", async (req: Request, res: Response) => {
 });
 
 Payment.post("/setcookie", (req: Request, res: Response) => {
-    console.log("Cookie Setting...")
-    const { name, value } = req.body;
-    
-    console.log(name)
-    console.log(value)
-    
+    console.log("Cookie Setting...");
+    const { name, value, action } = req.body;
+
+    console.log(name);
+    console.log(value);
+    console.log("action: ", action);
+
     if (!name || !value) {
         return;
     }
@@ -145,25 +149,47 @@ Payment.post("/setcookie", (req: Request, res: Response) => {
         }
     }
 
-    console.log(typeof(value));
-
-    const existingItemIndex = basket.findIndex((item: { id: string; size?: string | null }) => 
-        item.id === value.id && item.size === value.size
+    const existingItemIndex = basket.findIndex(
+        (item: { id: string; size?: string | null }) =>
+            item.id === value.id && item.size === value.size
     );
 
-    if (existingItemIndex === -1) {
-        basket.push(value);
+    if (action === "changeQuantity") {
+        if (existingItemIndex !== -1) {
+            basket[existingItemIndex].quantity += value.quantity;
+            if (basket[existingItemIndex].quantity <= 0) {
+                basket.splice(existingItemIndex, 1);
+            }
+        } else if (value.quantity > 0) {
+            basket.push(value); // Optionally add if doesn't exist and quantity > 0
+        }
+    } else if (action === "changeSize") {
+        console.log("//setcookie Changing size to ", value.newSize)
+        if (existingItemIndex !== -1) {
+            basket[existingItemIndex].size = value.newSize;
+        } 
     } else {
-        basket[existingItemIndex].quantity += value.quantity;
+        if (existingItemIndex === -1) {
+            basket.push(value);
+        } else {
+            basket[existingItemIndex].quantity += value.quantity;
+        }
     }
-    
-    res.cookie(basketCookieName, JSON.stringify(basket), {maxAge: duration, httpOnly: true, sameSite: "lax"});
-    
-    const expiryTime = Date.now()
-    res.cookie(expiryCookieName, expiryTime, {maxAge: duration, httpOnly: true, sameSite: "lax"});
+
+    res.cookie(basketCookieName, JSON.stringify(basket), {
+        maxAge: duration,
+        httpOnly: true,
+        sameSite: "lax",
+    });
+
+    const expiryTime = Date.now();
+    res.cookie(expiryCookieName, expiryTime, {
+        maxAge: duration,
+        httpOnly: true,
+        sameSite: "lax",
+    });
 
     res.json({ message: "Cookie set", basket });
-
 });
 
 // @ts-ignore

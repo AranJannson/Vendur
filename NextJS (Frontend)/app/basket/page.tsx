@@ -10,11 +10,11 @@ export default function Payment() {
     <div>
       {user ? (
         <div>
-          Welcome to checkout, you are signed in
+          {/*Welcome to checkout, you are signed in*/}
           <GetBasket />
         </div>
       ) : (
-        <div>Welcome to checkout, you need to sign in to see your basket</div>
+        <div><p>Welcome to your basket, you need to sign in to add items and view them here!</p></div>
       )}
     </div>
   );

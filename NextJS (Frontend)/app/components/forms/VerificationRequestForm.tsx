@@ -74,7 +74,6 @@ export default function VerificationRequestForm({ id }: VerificationRequestFormP
         });
 
         if (response.ok) {
-            alert('Verification form sent successfully');
             window.location.reload();
         } else {
             alert('Failed to send request: Server Error:');

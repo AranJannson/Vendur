@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { getAllOrgs, deleteProductById, orgDetails, updateOrganisationByID } from "./utils/management";
+import { getAllOrgs, deleteProductById, orgDetails, updateOrganisationByID, getVerificationRequests, getVerificationRequest, denyVerificationRequest, acceptVerificationRequest, getVerificationRequestStatus} from "./utils/management";
 
 dotenv.config();
 
@@ -37,15 +37,12 @@ Admin.get('/admin/getAllOrgs', async (req: Request, res: Response): Promise<any>
     if (!orgs) {
         return res.status(500).json({ error: "Failed to fetch organisations" });
       }
-    
       res.json(orgs);
 });
 
 Admin.post('/admin/orgDetails', async (req: Request, res: Response): Promise<any> => {
-    const { vendur_id } = req.body;
-    console.log(vendur_id);
-    const org = await orgDetails(vendur_id);
-    console.log(org);
+    const { id } = req.body;
+    const org = await orgDetails(id);
     if (!org) {
         return res.status(500).json({ error: "Failed to fetch organisation" });
       }
@@ -55,8 +52,8 @@ Admin.post('/admin/orgDetails', async (req: Request, res: Response): Promise<any
 
 Admin.put('/admin/editOrgDetails', async (req, res): Promise<any> => {
     try {
-      const { id, email, name, description, telephone, website, address } = req.body;
-      const updateData = { name, description, email, telephone, website, address }
+      const { id, email, name, description, telephone, website, address, product_type, shipping_type, active, is_verified } = req.body;
+      const updateData = { name, description, email, telephone, website, address, product_type, shipping_type, active, is_verified }
       const { data, error } = await updateOrganisationByID(id, updateData);
 
       return res.status(200).json({ message: "Organisation updated successfully", data });
@@ -66,8 +63,55 @@ Admin.put('/admin/editOrgDetails', async (req, res): Promise<any> => {
       return res.status(500).json({ message: "Failed to update organisation" });
     }
 }
-  );
+);
 
+Admin.get('/admin/getVerificationRequests', async (req: Request, res: Response): Promise<any> => {
+  const orgs = await getVerificationRequests();
+  if (!orgs) {
+      return res.status(500).json({ error: "Failed to fetch" });
+    }
+    res.json(orgs);
+});
+
+Admin.post('/admin/getVerificationRequest', async (req: Request, res: Response): Promise<any> => {
+  const { id } = req.body;
+  const org = await getVerificationRequest(id);
+  if (!org) {
+      return res.status(500).json({ error: "Failed to fetch" });
+    }
+  
+    res.json(org.data);
+});
+
+Admin.delete('/admin/denyVerificationRequest', async (req: Request, res: Response): Promise<any> => {
+  const { id } = req.body;
+  const orgs = await denyVerificationRequest(id);
+  if (!orgs) {
+    return res.status(500).json({ error: "Failed to fetch or delete the request" });
+  }
+  res.json({ message: "Request denied successfully", data: orgs });
+});
+
+Admin.post('/admin/acceptVerificationRequest', async (req: Request, res: Response): Promise<any> => {
+  const { id, org_id, shippingMethod, productInfo } = req.body;
+  const org = await acceptVerificationRequest(id, org_id, shippingMethod, productInfo);
+  if (!org) {
+      return res.status(500).json({ error: "Failed to fetch" });
+    }
+  
+    res.json(org.data);
+});
+
+Admin.post('/admin/check-request-status', async (req: Request, res: Response): Promise<any> => {
+  const { org_id } = req.body;
+  try {
+    const status = await getVerificationRequestStatus(org_id);
+    return res.status(200).json(status); // true or false
+  } catch (error) {
+    console.error("Internal server error:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 
 
@@ -128,4 +172,3 @@ Admin.put('/admin/editOrgDetails', async (req, res): Promise<any> => {
 //     res.send("Admin is running");
     
 // });
-

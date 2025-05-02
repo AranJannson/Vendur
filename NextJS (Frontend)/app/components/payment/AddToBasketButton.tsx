@@ -22,8 +22,7 @@ export default function AddToBasketButton( { item, formId, originalStock }: { it
         const sizeInput = form?.querySelector("select[name='size']") as HTMLInputElement;
         const size = sizeInput ? String(sizeInput.value) : null;
 
-        const[itemResponse, stockResponse] = await Promise.all([postItem(item, selectedQuantity, size), modifyStock(item, -selectedQuantity)]);
-        
+        const[itemResponse, stockResponse] = await Promise.all([postItem(item, selectedQuantity, size, size, ""), modifyStock(item, -selectedQuantity)]);        
     } catch (error) {
         console.error("Failed to add item: ", error);
     } finally {

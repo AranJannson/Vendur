@@ -34,7 +34,7 @@ export default function Header() {
                         </li>
 
                         <li className="text-2xl rounded-full bg-primary-400 text-black p-2 hover:bg-primary-500 transition-colors hover:cursor-pointer">
-                            <Link href="/payment">
+                            <Link href="/basket">
                                 <RiShoppingBasket2Line />
                             </Link>
                         </li>

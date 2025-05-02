@@ -7,10 +7,13 @@ import {
     deleteProduct,
     getOrgInfo,
     getProducts,
-    updateProduct
+    updateProduct,
+    getProductByID,
+    getOrgByName,
 } from "./utils/productManagement";
 import {requestVerification} from "./utils/verification";
 import {getOrderById} from "./utils/orderManagment";
+import {banOrg, unbanOrg, unverifyOrg} from "./utils/orgManagement";
 
 dotenv.config();
 
@@ -27,8 +30,8 @@ OrgMgmt.listen(portNumber, () => {
 });
 OrgMgmt.post("/organisation", async (req: Request, res: Response) => {
     try {
-        const { org_id } = req.body;
-        const data = await getOrgInfo(org_id);
+        const { id } = req.body;
+        const data = await getOrgInfo(id);
         res.status(200).send(JSON.stringify(data));
     } catch (error) {
         console.error("Error fetching products:", error);
@@ -36,12 +39,26 @@ OrgMgmt.post("/organisation", async (req: Request, res: Response) => {
     }
 })
 
+
+OrgMgmt.post("/getOrgByName", async (req: Request, res: Response) => {
+
+    try {
+        const { name } = req.body;
+        const data = await getOrgByName(name);
+        res.status(200).send(JSON.stringify(data));
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).send({ error: "Failed to fetch products" });
+    }
+
+})
+
 // CRUD Operations for products
 // Fetch all products from an organisation
 OrgMgmt.get("/products", async (req: Request, res: Response) => {
     try {
-        const { org_id } = req.body;
-        const data = await getProducts(org_id)
+        const { id } = req.body;
+        const data = await getProducts(id)
         res.status(200).send(JSON.stringify(data));
     } catch (error) {
         console.error("Error fetching products:", error);
@@ -125,8 +142,8 @@ OrgMgmt.post("/request-verification", async (req: Request, res: Response): Promi
 // Verification Status
 OrgMgmt.post("/verification-status", async (req: Request, res: Response): Promise<any> => {
     try {
-        const { org_id } = req.body;
-        const org_info = await getOrgInfo(org_id);
+        const { id } = req.body;
+        const org_info = await getOrgInfo(id);
 
         if (!org_info) {
             return res.status(404).send({ error: "Organisation not found" });
@@ -155,5 +172,59 @@ OrgMgmt.get("/order", async (req: Request, res: Response) => {
         res.status(200).send(JSON.stringify(data));
     } catch (error) {
         console.error("Error fetching order:", error);
+    }
+})
+
+
+//Delete Item by ID
+OrgMgmt.post('/deleteProduct', async (req: Request, res: Response): Promise<any> => {
+    const { id } = req.body;
+    const { error } = await deleteProduct(id);
+    
+    if (error) {
+      return res.status(500).json({ message: error });
+    }
+  
+    return res.status(200).json({ message: 'Product deleted successfully' });
+  });
+
+//Get Item by ID
+  OrgMgmt.get("/getProductByID", async (req, res): Promise<any> => {
+    try {
+        const { id } = req.query;
+        if (!id) {
+            return res.status(400).send({ error: "Product ID is required" });
+        }
+
+        const data = await getProductByID(id);
+        
+        res.status(200).json(data);
+    } catch (error) {
+        console.error("Error fetching product:", error);
+        res.status(500).send({ error: "Failed to fetch product" });
+    }
+});
+
+// Ban Organisation
+OrgMgmt.post("/fetch-org-status", async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { id } = req.body;
+        const org_info = await getOrgInfo(id);
+
+        if (!org_info) {
+            return res.status(404).send({ error: "Organisation not found" });
+        }
+        const active = org_info[0].active;
+        if (active) {
+            return res.status(200).send({ active: true });
+        } else if (!active) {
+            return res.status(200).send({ active: false });
+        } else {
+            return res.status(400).send({ error: "Status unknown" });
+        }
+    } catch (error) {
+        console.error("Error fetching:", error);
+        res.status(500).send({ error: "Failed to fetch" });
+
     }
 })
