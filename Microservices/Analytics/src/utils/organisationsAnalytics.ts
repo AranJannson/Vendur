@@ -10,6 +10,11 @@ const analyticsSupabase = createClient(
     process.env.PUBLIC_SUPABASE_ANON_KEY as string
 );
 
+const paymentSupabase = createClient(
+    process.env.PAYMENT_SUPABASE_URL as string,
+    process.env.PAYMENT_SUPABASE_ANON_KEY as string
+);
+
 // Returns list of items from an org and their item stock value (item price x stock)
 export async function orgInvValue(org_id: string) {
     const orgQuery = await catalogSupabase
@@ -352,6 +357,72 @@ export async function orgNumberOfSales(){
 
     return Object.entries(orgSalesCount)
         .sort((a, b) => b[1] - a[1]);
+}
+
+export async function allOrgsNumSales(){
+    const itemQuery = await catalogSupabase
+        .from("items")
+        .select("id, org_id")
+
+    if (itemQuery.error) {
+        console.error("Error fetching item:", itemQuery.error);
+    }
+
+    const orderQuery = await paymentSupabase
+    .from("orders").select("id, item_id")
+
+    if (orderQuery.error) {
+        console.error("Error fetching data:", orderQuery.error);
+    }
+
+    type OrgItem = {
+        itemId: number;
+        orgId: string;
+    }
+
+    const orgSalesArray: OrgItem[] = [];
+    const orgNumSalesArray: Record<string, number> = {};
+
+    const itemData = itemQuery.data
+    const orderData = orderQuery.data
+
+    if (itemData && orderData){
+        itemData.forEach((item) => {
+            const id = item.id
+            const orgId = item.org_id
+            if (orgId){
+                orgSalesArray.push({ itemId: id, orgId: orgId});
+            }
+        })
+
+        orderData.forEach((item) => {
+            const orderId = item.id
+            const itemId = item.item_id
+            for (const item in orgSalesArray){
+
+            }
+        })
+
+
+
+
+    }
+
+    for (const orgItem of orgSalesArray) {
+        if (orgItem.orgId==""){
+
+        }
+    }
+
+
+
+
+
+
+
+
+    return orgSalesArray;
+
 }
 
 // Returns a list of each organisation and how much total revenue they have made
