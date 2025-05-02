@@ -80,7 +80,7 @@ function Checkout() {
       <p>Total: £{amount.toFixed(2)}</p>
       {clientSecret && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <CheckoutForm />
+          <CheckoutForm basket={basket} amount={amount}/>
         </Elements>
       )}
     </div>

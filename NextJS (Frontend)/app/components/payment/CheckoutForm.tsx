@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@stackframe/stack";
 import {
   useStripe,
   useElements,
@@ -8,7 +9,19 @@ import {
 } from "@stripe/react-stripe-js";
 import { FormEvent, useState } from "react";
 
-export const CheckoutForm = () => {
+interface Item {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  size: (string & { length: 1 }) | null;
+  image: string;
+}
+
+export const CheckoutForm = ({basket, amount}: {basket: Item[], amount: number}) => {
+  
+  const user = useUser();
+
   const stripe = useStripe();
   const elements = useElements();
   const [detailsLoading, setDetailsLoading] = useState(true);
@@ -21,8 +34,8 @@ export const CheckoutForm = () => {
       return;
     }
 
-    const address = elements.getElement(AddressElement);
-    const addressDetails = await address?.getValue();
+    const addressElement = elements.getElement(AddressElement);
+    const addressDetails = await addressElement?.getValue();
 
     const { error } = await stripe.confirmPayment({
       elements,
@@ -42,6 +55,24 @@ export const CheckoutForm = () => {
           "Content-Type": "application/json",
         },
         credentials: "include",
+      });
+
+      const deliveryAddress = addressDetails?.value.address;
+      const fullName = addressDetails?.value.name;
+
+      await fetch("http://localhost:8002/orderProcessing", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          basket: basket,
+          user_id: user?.id,
+          total_cost: amount,
+          delivery_address: deliveryAddress,
+          full_name: fullName,
+        })
       });
 
       window.location.href = "http://localhost:3000/basket/checkout/success";
