@@ -7,7 +7,7 @@ import {
     mostPopularCategoryBySalesList,
     avgItemPricePerCategory,
     categoriesByItemsListed,
-    categoriesByAverageItemPrice
+    categoriesByAverageItemPrice, get_category_sales_summary, top5ProductsBySales
 } from "./utils/productAnalytics"
 import { inventoryValue, lowerStock, outOfStock, listOfItemStockValue } from "./utils/stockAnalysis";
 import {
@@ -220,6 +220,19 @@ Analytics.post("/popularCategory", async (req: Request, res: Response) => {
 
     console.log("The most popular category is:", productList);
     res.send(JSON.stringify(productList, null, 2))
+});
+
+Analytics.get("/category-sales-summary", async (req: Request, res: Response) => {
+    const { org_id } = req.body;
+    const categorySalesSummary = await get_category_sales_summary();
+
+    res.status(200).json(categorySalesSummary);
+
+});
+
+Analytics.get("/top-5-products-by-sales", async (req: Request, res: Response) => {
+    const top5Products = await top5ProductsBySales();
+    res.status(200).json(top5Products);
 });
 
 Analytics.post("/revampedOrgInvList", async (req: Request, res: Response) => {

@@ -223,3 +223,14 @@ export async function top5ProductsBySales() {
     }
     return data;
 }
+
+export async function get_category_sales_summary() {
+    const { data, error } = await paymentSupabase
+        .rpc('get_category_sales_summary')
+
+    if (error) {
+        console.error("Error fetching category sales summary:", error);
+        return null;
+    }
+    return data;
+}
