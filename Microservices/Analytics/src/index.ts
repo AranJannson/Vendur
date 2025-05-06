@@ -26,7 +26,7 @@ import {listOfAllOrgInvValue,
 } from "./utils/organisationsAnalytics"
 import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder } from "./utils/orderAnalytics";
 import trackClicks, {returnAllClickCountPages} from "./utils/track-clicks";
-
+import {recordView, getRecentViews} from "./utils/historyAnalytics";
 
 dotenv.config();
 
@@ -287,3 +287,44 @@ Analytics.get("/oneOrgSalesCountTest", async (req: Request, res: Response) => {
     res.send(JSON.stringify(total, null, 2))
 });
 
+// Browsing History Analytics
+Analytics.post("/record-view", async (req: Request, res: Response) => {
+    try {
+        // Check if there is a viewed at property in the request body
+        if (!req.body.viewed_at) {
+            const { session_id, category, item_id } = req.body;
+            const event = {
+                session_id,
+                category,
+                item_id,
+            };
+            const data = await recordView(event);
+            res.status(200).json(data);
+        } else {
+            const { session_id, category, item_id, viewed_at } = req.body;
+            const event = {
+                session_id,
+                category,
+                item_id,
+                viewed_at,
+            };
+            const data = await recordView(event);
+            res.status(200).json(data);
+        }
+    } catch (error) {
+        console.error("Error recording view:", error);
+        res.status(500).json({ error: "Error recording view" });
+    }
+})
+
+Analytics.get("/recent-views", async (req: Request, res: Response) => {
+    try {
+        const { session_id, limit } = req.body;
+        const data = await getRecentViews(session_id, limit);
+
+        res.status(200).json(data);
+    } catch (error) {
+        console.error("Error fetching recent views:", error);
+        res.status(500).json({ error: "Error fetching recent views" });
+    }
+});
