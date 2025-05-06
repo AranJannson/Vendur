@@ -1,6 +1,4 @@
-import NavBar from "@/app/components/home/NavBar";
 import Featured from "@/app/components/home/Featured";
-import FourByFour from "@/app/components/ui/productDisplays/4x4";
 import OneByFour from "@/app/components/ui/productDisplays/1x4";
 import OneByFourCat from "@/app/components/ui/productDisplays/1x4_category";
 import CarouselClient from "./components/animation/CarouselClient";
@@ -13,6 +11,7 @@ export const metadata = {
     description: "",
 };
 
+export const dynamic = 'force-dynamic';
 
 export default function Home() {
 
