@@ -120,9 +120,9 @@ Payment.post("/getOrderDetails", async (req: Request, res: Response) => {
         console.log("//getorderDetails orderDetails: ", orderDetails);
         
         if (orderDetails){
-            res.json(200).json({event: "Order Details Retrieved Successfully", orderDetails});
+            res.json({orderDetails});
         }else{
-            res.status(500).json({error: "Order Details Were Not Retrieved Successfully"});
+            res.json({error: "Order Details Were Not Retrieved Successfully"});
         }
     }catch (error){
         res.status(500).json({error: "Order Details Were Not Retrieved Successfully"});
