@@ -27,15 +27,16 @@ export default async function orderProcessing(basket: Item[], user_id: string, d
             item_id: item.id,
             quantity: item.quantity,
             group_id: group.id,
+            total_cost: total_cost,
         }]);
 
         if (error) {
             console.error("Error inserting order:", error);
-            return 0;
+            return null;
         }
     }
 
-    return 1;
+    return group.id;
 }
 
 

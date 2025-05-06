@@ -100,9 +100,9 @@ Payment.post("/orderProcessing", async (req: Request, res: Response) => {
     console.log("//orderProcessing total_cost: ", total_cost)
 
     try{
-        await orderProcessing(basket, user_id, delivery_address, full_name, total_cost);
+        const order_group_id = await orderProcessing(basket, user_id, delivery_address, full_name, total_cost);
 
-        res.status(200).json({event: "Order Processed Successfully"});
+        res.status(200).json({event: "Order Processed Successfully", order_group_id });
     }catch (error){
         res.status(500).json({error: "Order Was Not Processed Successfully"});
     }
