@@ -13,7 +13,7 @@ export default async function orderProcessing(basket: Item[], user_id: string, d
 
     const { data: group, error: groupError } = await supabase
         .from("order_groups")
-        .insert({ user_id, delivery_address, full_name })
+        .insert({ user_id, delivery_address, full_name, total_cost })
         .select("id")
         .single();
 
@@ -27,7 +27,6 @@ export default async function orderProcessing(basket: Item[], user_id: string, d
             item_id: item.id,
             quantity: item.quantity,
             group_id: group.id,
-            total_cost: total_cost,
         }]);
 
         if (error) {
@@ -44,7 +43,7 @@ export async function getOrderDetails(order_group_id: string) {
     const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process.env.PUBLIC_SUPABASE_ANON_KEY as string);
 
     try {
-        const { data, error } = await supabase.from("orders").select("*").eq("order_group_id", order_group_id);
+        const { data, error } = await supabase.from("order_groups").select("*").eq("id", order_group_id);
 
         if (error) {
             console.error("Error fetching order details:", error);
@@ -113,5 +112,3 @@ export async function cancelOrder(order_group_id: string){
     }
 
 }
-
-
