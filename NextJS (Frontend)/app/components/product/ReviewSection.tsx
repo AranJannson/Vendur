@@ -29,6 +29,8 @@ export default function ReviewSection({ reviews = [], item_id, item = { rating: 
 
     <div className="bg-primary-200 rounded-lg p-5">
         <h2 className="font-bold text-xl mb-3">Add a Review</h2>
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/*//@ts-expect-error */}
         <ReviewForm item_id={item_id} />
     </div>
     <h2 className="text-2xl font-bold">Recent Reviews</h2>

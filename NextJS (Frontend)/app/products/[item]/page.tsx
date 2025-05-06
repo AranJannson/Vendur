@@ -14,9 +14,8 @@ interface Item {
     price: number;
 }
 
-//@ts-ignore
-export async function generateMetadata({ params }: { params: { item: string } }) {
-    const item = await params.item;
+export async function generateMetadata({params,}: {params: Promise<{ item: string }>; }){
+    const { item } = await params;
     const decodedItemName = decodeURIComponent(item);
 
     return {
@@ -26,9 +25,11 @@ export async function generateMetadata({ params }: { params: { item: string } })
 }
 
 
-export default async function ItemPage({ params }: { params: { item: string } }) {
-    const itemName = params.item;
+
+export default async function ItemPage({params,}: { params: Promise<{ item: string }>; }){
+    const { item: itemName } = await params;
     const decodedItemName = decodeURIComponent(itemName);
+
     const item_response = await fetch('http://localhost:3000/api/getItems', {
         method: 'GET',
     });
