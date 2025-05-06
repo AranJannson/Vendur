@@ -60,7 +60,7 @@ export const CheckoutForm = ({basket, amount}: {basket: Item[], amount: number})
       const deliveryAddress = addressDetails?.value.address;
       const fullName = addressDetails?.value.name;
 
-      await fetch("http://localhost:8002/orderProcessing", {
+      const response = await fetch("http://localhost:8002/orderProcessing", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +75,9 @@ export const CheckoutForm = ({basket, amount}: {basket: Item[], amount: number})
         })
       });
 
-      window.location.href = "http://localhost:3000/basket/checkout/success";
+      const order_group_id = (await response.json()).order_group_id
+
+      window.location.href = `http://localhost:3000/basket/checkout/success?order_id=${order_group_id}`;
     }
   };
 
