@@ -43,7 +43,7 @@ export async function getOrderDetails(order_group_id: string) {
     const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process.env.PUBLIC_SUPABASE_ANON_KEY as string);
 
     try {
-        const { data, error } = await supabase.from("order_groups").select("*").eq("id", order_group_id);
+        const { data, error } = await supabase.from("order_groups").select("*").eq("id", order_group_id).single();
 
         if (error) {
             console.error("Error fetching order details:", error);
