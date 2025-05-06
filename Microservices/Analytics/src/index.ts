@@ -21,7 +21,8 @@ import {listOfAllOrgInvValue,
     orgAverageOrderValue,
     orgInvValue,
     orgProductRatingList,
-    allOrgsNumSales
+    allOrgsNumSales,
+    oneOrgItemSalesAnalytics
 } from "./utils/organisationsAnalytics"
 import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder } from "./utils/orderAnalytics";
 import trackClicks, {returnAllClickCountPages} from "./utils/track-clicks";
@@ -276,5 +277,13 @@ Analytics.get("/AllOrgsTest", async (req: Request, res: Response) => {
 
     console.log(data);
     res.send(JSON.stringify(data, null, 2))
+});
+
+Analytics.get("/oneOrgSalesCountTest", async (req: Request, res: Response) => {
+
+    const total = await oneOrgItemSalesAnalytics()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
 });
 
