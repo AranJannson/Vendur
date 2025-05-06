@@ -12,6 +12,11 @@ const analyticsSupabase = createClient(
     process.env.PUBLIC_SUPABASE_URL as string,
     process.env.PUBLIC_SUPABASE_ANON_KEY as string
 );
+const paymentSupabase = createClient(
+    process.env.PAYMENT_SUPABASE_URL as string,
+    process.env.PAYMENT_SUPABASE_ANON_KEY as string
+)
+
 // !!!!!!!!!!! Organisation Management !!!!!!!!!!!!!!!!!
 // Returns list of org categories by number of items listed with category
 export async function mostPopularCategoryByItemsListed(org_id: string) {
@@ -208,6 +213,13 @@ export async function itemSalesList() {
         .sort((a, b) => b[1] - a[1]);
 }
 
+export async function top5ProductsBySales() {
+    const { data, error } = await paymentSupabase
+        .rpc('get_top_5_products_by_sales')
 
-
-
+    if (error) {
+        console.error("Error fetching top 5 products by sales:", error);
+        return null;
+    }
+    return data;
+}
