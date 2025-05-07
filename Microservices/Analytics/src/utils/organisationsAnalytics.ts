@@ -180,16 +180,99 @@ export async function oneOrgItemSalesAnalytics() {
     itemData.forEach((item) => {
         const itemId = item.id;
         const org_id = item.org_id;
-        orgItems[itemId] = (orgItems[itemId] || 0) + org_id;
+        if (org_id=="4c6f7bcc-4f50-48d1-b301-b6aea467b066"){
+            orgItems[itemId] = (orgItems[itemId] || 0) + org_id;
+        }
     })
 
 
-    return itemData
+    const orgSalesMap: Record<number, number> = {}
+
+    for (const item in itemOrderFrequencyMap){
+        for (const orgItem in orgItems){
+            if (orgItem == item){
+                orgSalesMap[item] = (orgSalesMap[item] || 0) + itemOrderFrequencyMap[item];
+            }
+        }
+    }
+
+
+    return orgSalesMap
 }
 
 // Returns a list of items from one org and how many sales each item has been a part of
 export async function oneOrgItemRevenueAnalytics(){
+    const paymentQuery = await paymentSupabase
+        .from("orders")
+        .select("item_id, quantity")
 
+    if (paymentQuery.error){
+        console.error("Error fetching order data:", paymentQuery.error);
+        return 0;
+    }
+
+    const paymentData = paymentQuery.data;
+    const itemOrderQuantityList: {itemId: number, quantity: number}[] = [];
+
+
+    paymentData.forEach((item) => {
+        const itemId = item.item_id;
+        const quantity = item.quantity
+        itemOrderQuantityList.push({
+            itemId: itemId,
+            quantity: quantity
+        })
+
+    })
+
+    const itemQuery = await catalogSupabase
+        .from("items")
+        .select("id, price, org_id")
+        // .eq("org_id", org_id)
+
+    if (itemQuery.error){
+        console.error("Error fetching item data:", itemQuery.error);
+        return 0;
+    }
+
+    const itemData = itemQuery.data;
+
+    const itemOrgDataMap: Record<number, {org_id: string, price:number}[]> = {};
+
+
+    itemData.forEach((item) => {
+        const itemId = item.id;
+        const price = item.price;
+        const orgId = item.org_id
+
+        if (!itemOrgDataMap[itemId]){
+            itemOrgDataMap[itemId] = [];
+        }
+
+        itemOrgDataMap[itemId].push({org_id: orgId, price: price});
+    })
+
+    const itemRevenueMap: Record<number, number> = {}
+
+    let orderValue = 0;
+    let totalItemRevenue = 0;
+
+    for (const entry of itemOrderQuantityList){
+
+            const itemId = entry.itemId
+            const quantity = entry.quantity
+            if (itemOrgDataMap[itemId]){
+                const price = itemOrgDataMap[itemId][0].price;
+                const orderValue = price * quantity
+                totalItemRevenue += orderValue;
+
+                itemRevenueMap[itemId] = (itemRevenueMap[itemId] || 0) + orderValue;
+            }
+
+
+    }
+
+    return itemRevenueMap
 }
 
 // !!!!!!!!!!!!!!!!!!!! Admin Analytics !!!!!!!!!!!!!!!!!!!!!

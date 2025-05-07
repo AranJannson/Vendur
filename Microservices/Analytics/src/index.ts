@@ -22,7 +22,8 @@ import {listOfAllOrgInvValue,
     orgInvValue,
     orgProductRatingList,
     allOrgsNumSales,
-    oneOrgItemSalesAnalytics
+    oneOrgItemSalesAnalytics,
+    oneOrgItemRevenueAnalytics
 } from "./utils/organisationsAnalytics"
 import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder } from "./utils/orderAnalytics";
 import trackClicks, {returnAllClickCountPages} from "./utils/track-clicks";
@@ -340,4 +341,12 @@ Analytics.get("/recent-views", async (req: Request, res: Response) => {
         console.error("Error fetching recent views:", error);
         res.status(500).json({ error: "Error fetching recent views" });
     }
+});
+
+Analytics.get("/oneOrgRevTest", async (req: Request, res: Response) => {
+
+    const total = await oneOrgItemRevenueAnalytics()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
 });
