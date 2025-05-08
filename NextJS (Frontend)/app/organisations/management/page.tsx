@@ -10,6 +10,8 @@ import OrgItemCategoryListedGraph from "@/app/components/org/orgItemsListedCateg
 import OrgStockValue from "@/app/components/org/orgStockValue";
 import OrgAvgRatingGraph from "@/app/components/org/orgAvgReviewGraph";
 import OrgDailyReviewsGraph from "@/app/components/org/orgDailyReviewsGraph";
+import OrgItemSalesGraph from "@/app/components/org/orgItemSalesGraph";
+import OrgItemRevenueGraph from "@/app/components/org/orgItemRevenueGraph";
 
 export const metadata = {
     title: "Org Management | Vendur",
@@ -92,6 +94,14 @@ export default async function OrganisationsManagement() {
                     <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
                         <h2 className="text-2xl font-light p-2">Number of Reviews Per Day</h2>
                         <OrgDailyReviewsGraph/>
+                    </div>
+                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                        <h2 className="text-2xl font-light p-2">Number of Sales Per Item</h2>
+                        <OrgItemSalesGraph/>
+                    </div>
+                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                        <h2 className="text-2xl font-light p-2">Item Revenue</h2>
+                        <OrgItemRevenueGraph/>
                     </div>
 
                 </div>
