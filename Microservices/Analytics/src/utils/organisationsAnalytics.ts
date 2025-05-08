@@ -10,6 +10,11 @@ const analyticsSupabase = createClient(
     process.env.PUBLIC_SUPABASE_ANON_KEY as string
 );
 
+const paymentSupabase = createClient(
+    process.env.PAYMENT_SUPABASE_URL as string,
+    process.env.PAYMENT_SUPABASE_ANON_KEY as string
+);
+
 // Returns list of items from an org and their item stock value (item price x stock)
 export async function orgInvValue(org_id: string) {
     const orgQuery = await catalogSupabase
@@ -132,13 +137,127 @@ export async function orgProductRatingList(org_id: string) {
 }
 
 // Returns a list of items from one org and how many sales each item has been a part of
-export async function oneOrgItemSalesAnalytics(){
+export async function oneOrgItemSalesAnalytics(org_id: string) {
+    const paymentQuery = await paymentSupabase
+        .from("orders")
+        .select("item_id, group_id")
 
+
+    if (paymentQuery.error){
+        console.error("Error fetching order:", paymentQuery.error);
+        return 0;
+    }
+
+    const paymentData = paymentQuery.data;
+    const itemOrderFrequencyMap: Record<number, number> = {}
+
+    paymentData.forEach((item) => {
+        const itemId = item.item_id;
+        if (!itemId){
+            return
+        }
+
+        if(itemOrderFrequencyMap[itemId]){
+            itemOrderFrequencyMap[itemId]++;
+        } else {
+            itemOrderFrequencyMap[itemId] = 1;
+        }
+    })
+
+    const itemQuery = await catalogSupabase
+    .from("items")
+    .select("id, org_id")
+        .eq("org_id", org_id);
+
+    if (itemQuery.error){
+        console.error("Error fetching items:", itemQuery.error);
+        return 0;
+    }
+
+    const orgItems: Record<number, string> = {};
+    const itemData = itemQuery.data;
+
+    itemData.forEach((item) => {
+        const itemId = item.id;
+        const org_id = item.org_id;
+        orgItems[itemId] = (orgItems[itemId] || 0) + org_id;
+
+    })
+
+
+    const orgSalesMap: Record<number, number> = {}
+
+    for (const item in itemOrderFrequencyMap){
+        for (const orgItem in orgItems){
+            if (orgItem == item){
+                orgSalesMap[item] = (orgSalesMap[item] || 0) + itemOrderFrequencyMap[item];
+            }
+        }
+    }
+
+
+    return orgSalesMap
 }
 
 // Returns a list of items from one org and how many sales each item has been a part of
-export async function oneOrgItemRevenueAnalytics(){
+export async function oneOrgItemRevenueAnalytics(org_id: string){
+    const paymentQuery = await paymentSupabase
+        .from("orders")
+        .select("item_id, quantity")
 
+    if (paymentQuery.error){
+        console.error("Error fetching order data:", paymentQuery.error);
+        return 0;
+    }
+
+    const paymentData = paymentQuery.data;
+    const itemOrderQuantityList: {itemId: number, quantity: number}[] = [];
+
+    paymentData.forEach((item) => {
+        const itemId = item.item_id;
+        const quantity = item.quantity
+        itemOrderQuantityList.push({
+            itemId: itemId,
+            quantity: quantity
+        })
+
+    })
+
+    const itemQuery = await catalogSupabase
+        .from("items")
+        .select("id, price, org_id")
+        .eq("org_id", org_id)
+
+    if (itemQuery.error){
+        console.error("Error fetching item data:", itemQuery.error);
+        return 0;
+    }
+
+    const itemData = itemQuery.data;
+
+    const itemDataMap: Record<number, number> = {};
+
+    itemData.forEach((item) => {
+        const itemId = item.id;
+        const price = item.price;
+        itemDataMap[itemId] = (itemDataMap[itemId] || 0) + price;
+    })
+    const itemRevenueMap: Record<number, number> = {}
+    let orderValue = 0;
+    let totalItemRevenue = 0;
+    for (const entry of itemOrderQuantityList){
+            const itemId = entry.itemId
+            const quantity = entry.quantity
+            if (itemDataMap[itemId]){
+                const newPrice = itemDataMap[itemId];
+                const orderValue = newPrice * quantity
+                totalItemRevenue += orderValue;
+
+                itemRevenueMap[itemId] = (itemRevenueMap[itemId] || 0) + orderValue;
+            }
+    }
+
+    return itemRevenueMap
 }
 
 // !!!!!!!!!!!!!!!!!!!! Admin Analytics !!!!!!!!!!!!!!!!!!!!!
@@ -259,78 +378,26 @@ export async function oldAverageOrganisationProductRating() {
 
 // Returns a list of organisations and their respective average rating across their products
 export async function averageOrganisationProductRating() {
-    const itemOrgQuery = await catalogSupabase
-        .from("items")
-        .select("id, org_id");
+    const { data, error } = await catalogSupabase
+        .rpc('average_org_product_ratings')
 
-    if (itemOrgQuery.error) {
-        console.error("Error fetching organisations:", itemOrgQuery.error);
-        return 0;
+    if (error) {
+        console.error('RPC Error', error)
+        return []
     }
 
-    const reviewQuery = await catalogSupabase
-        .from("reviews")
-        .select("id, item_id, rating");
-
-    if (reviewQuery.error) {
-        console.error("Error fetching stock:", reviewQuery.error);
-        return 0;
-    }
-
-    const reviewData = reviewQuery.data;
-    const itemOrgData = itemOrgQuery.data;
-
-    //Maps item id to organisation id
-    const itemOrgTable: Record<number, number> = {};
-    itemOrgData.forEach((item) => {
-        const itemId = item.id
-        const orgId = item.org_id
-        if (itemId) {
-            itemOrgTable[itemId] = orgId;
-        }
-    });
-
-    //Links organisation ids to review data via item id
-    const combinedResults = reviewData.map((review) => {
-        const reviewItemId = review.item_id;
-        const rating = review.rating;
-        const orgId = itemOrgTable[reviewItemId];
-        return { itemId: reviewItemId, orgId, rating };
-    });
-
-    //Adds total ratings and number of reviews (count) per organisation
-    const orgAggregates: Record<number, { total: number; count: number }> = {};
-    for (const result of combinedResults) {
-        const { orgId, rating } = result;
-        if (orgId !== undefined) {
-            if (!orgAggregates[orgId]) {
-                orgAggregates[orgId] = { total: 0, count: 0 };
-            }
-            orgAggregates[orgId].total += rating;
-            orgAggregates[orgId].count++;
-        }
-    }
-
-    // Calculates average rating per organisation
-    const orgAverages: Record<string, number> = {};
-    for (const orgId in orgAggregates) {
-        const { total, count } = orgAggregates[orgId];
-        orgAverages[orgId] = total / count;
-    }
-
-    return orgAverages;
+    return data
 }
 
 export async function orgsTotalInventory(){
 
 }
 
-
-//Returns a list of organisations and the number of sales each respective organisation has had in descending order
-export async function orgNumberOfSales(){
-    const orderQuery = await catalogSupabase
+//Returns a list of organisations and the number of sales each respective organisation has had
+export async function orgNumberOfSales() {
+    const orderQuery = await paymentSupabase
         .from("orders")
-        .select("id, item:items!id(org_id)")
+        .select("item_id");
 
     if (orderQuery.error) {
         console.error("Error fetching order:", orderQuery.error);
@@ -339,23 +406,35 @@ export async function orgNumberOfSales(){
 
     const orderData = orderQuery.data;
 
+    const itemQuery = await catalogSupabase
+        .from("items")
+        .select("id, org_id");
+
+    if (itemQuery.error) {
+        console.error("Error fetching item:", itemQuery.error);
+        return 0;
+    }
+
+    const itemData = itemQuery.data;
+
+    const orgItems: Record<number, string> = {};
+    itemData.forEach((item) => {
+        orgItems[item.id] = item.org_id;
+    });
+
     const orgSalesCount: Record<string, number> = {};
-
-    orderData.forEach((item) => {
-        const org_id = Array.isArray(item.item)
-            ? (item.item as { org_id: number }[])[0]?.org_id
-            : (item.item as { org_id: number }).org_id;
-        if (org_id){
-            orgSalesCount[org_id] = (orgSalesCount[org_id] || 0) + 1;
+    orderData.forEach((order) => {
+        const orgId = orgItems[order.item_id];
+        if (orgId) {
+            orgSalesCount[orgId] = (orgSalesCount[orgId] || 0) + 1;
         }
-    })
+    });
 
-    return Object.entries(orgSalesCount)
-        .sort((a, b) => b[1] - a[1]);
+    return orgSalesCount;
 }
 
 // Returns a list of each organisation and how much total revenue they have made
-export async function orgTotalRevenueList(){
+export async function oldOrgTotalRevenueList(){
     const orderQuery = await catalogSupabase
         .from("orders")
         .select("price, item:items!id(org_id)")
@@ -382,12 +461,79 @@ export async function orgTotalRevenueList(){
         .sort((a, b) => b[1] - a[1]);
 }
 
-// Returns a list of organisations and how the average order value for each
-// WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
-export async function orgAverageOrderValue(){
-    const orderQuery = await catalogSupabase
+// Returns a list of each organisation and how much total revenue they have made
+export async function orgTotalRevenueList(){
+    const orderQuery = await paymentSupabase
         .from("orders")
-        .select("price, item:items!id(org_id)")
+        .select("item_id, quantity")
+
+    if (orderQuery.error) {
+        console.error("Error fetching order:", orderQuery.error);
+        return 0;
+    }
+
+    const itemOrderQuantityList: {itemId: number, quantity: number}[] = [];
+
+    const orderData = orderQuery.data;
+    orderData.forEach((item) => {
+        const itemId = item.item_id
+        const quantity = item.quantity
+        itemOrderQuantityList.push({itemId: itemId, quantity: quantity});
+    })
+
+    const itemQuery = await catalogSupabase
+        .from("items")
+        .select("id, price, discount, org_id")
+
+    if (itemQuery.error){
+        console.error("Error fetching item:", itemQuery.error);
+        return 0;
+    }
+
+    const itemData = itemQuery.data
+    const orgItems: Record<number, {price: number; orgId: string}> = {};
+    let finalPrice = 0
+    itemData.forEach((item) => {
+        const itemId = item.id
+        const price = item.price
+        const discount = item.discount
+        const orgId = item.org_id
+        if (discount!=null){
+            finalPrice=price*(1-(discount/100))
+        } else {
+            finalPrice=price
+        }
+        orgItems[itemId] = {
+            price: finalPrice,
+            orgId: orgId
+        }
+    })
+
+    let orderPrice = 0;
+    const allOrgRevenue: Record<string, number> = {};
+    for (const order of itemOrderQuantityList){
+        const orderItemId = order.itemId
+        const quantity = order.quantity;
+        for (const [key, data] of Object.entries(orgItems)) {
+            const itemId = Number(key)
+            const price = data.price
+            const orgId = data.orgId
+            orderPrice = price * quantity
+            if (orderItemId==itemId){
+                allOrgRevenue[orgId] = (allOrgRevenue[orgId] || 0) + orderPrice;
+            }
+        }
+    }
+
+    return allOrgRevenue;
+
+}
+
+// Returns a list of organisations and how the average order value for each
+export async function orgsAverageOrderValue() {
+    const orderQuery = await paymentSupabase
+        .from("orders")
+        .select("item_id, group_id");
 
     if (orderQuery.error) {
         console.error("Error fetching order:", orderQuery.error);
@@ -395,37 +541,77 @@ export async function orgAverageOrderValue(){
     }
 
     const orderData = orderQuery.data;
-
-    const orgPriceOrderCountTable: Record<number, { total: number; count: number }> = {};
-
+    const itemGroupMap: { itemId: number, groupId: number }[] = [];
     orderData.forEach((item) => {
-        const price = item.price;
-        const org_id = Array.isArray(item.item)
-            ? (item.item as { org_id: number }[])[0]?.org_id
-            : (item.item as { org_id: number }).org_id;
-        if (org_id !== undefined) {
-            if (!orgPriceOrderCountTable[org_id]) {
-                orgPriceOrderCountTable[org_id] = { total: 0, count: 0 };
-            }
-            orgPriceOrderCountTable[org_id].total += price;
-            orgPriceOrderCountTable[org_id].count++;
+        const itemId = item.item_id;
+        const groupId = item.group_id;
+        itemGroupMap.push({ itemId, groupId });
+    });
+
+    const groupIdMap: Record<number, { itemId: number }[]> = {};
+    itemGroupMap.forEach((item) => {
+        const groupId = item.groupId;
+        const itemId = item.itemId;
+        if (!groupIdMap[groupId]) {
+            groupIdMap[groupId] = [];
         }
-    })
+        groupIdMap[groupId].push({ itemId });
+    });
 
-    let avgOrderValue = 0;
-    const orgOrderAvgList: Record<number, number> = {};
-    const orderAverage  =[];
+    const itemQuery = await catalogSupabase
+        .from("items")
+        .select("id, price, discount, org_id");
 
-    for (const orgId in orgPriceOrderCountTable){
-        const { total, count } = orgPriceOrderCountTable[orgId];
-        avgOrderValue = total / count;
-        orderAverage.push(avgOrderValue);
-        orgOrderAvgList[orgId] = (orgOrderAvgList[orgId] || 0) + avgOrderValue;
+    if (itemQuery.error) {
+        console.error("Error fetching item:", itemQuery.error);
+        return 0;
     }
 
+    const itemData = itemQuery.data;
 
-    return Object.entries(orgOrderAvgList)
-        .sort((a, b) => b[1] - a[1]);
+    // Map each itemId to its price, discount, and org
+    const itemDetailsMap: Record<number, { price: number, discount: number, orgId: string }> = {};
+    itemData.forEach((item) => {
+        itemDetailsMap[item.id] = {
+            price: item.price,
+            discount: item.discount,
+            orgId: item.org_id
+        };
+    });
+
+    // Map to hold total value and order count per org
+    const orgOrderTotals: Record<string, { totalValue: number, orderCount: number }> = {};
+
+    for (const groupId in groupIdMap) {
+        let groupTotal = 0;
+        let orgId: string | null = null;
+
+        for (const { itemId } of groupIdMap[Number(groupId)]) {
+            const itemDetails = itemDetailsMap[itemId];
+            if (!itemDetails) continue;
+
+            const { price, discount, orgId: itemOrgId } = itemDetails;
+            groupTotal += price * (1 - discount);
+            orgId = itemOrgId; // assume all items in the group belong to the same org
+        }
+
+        if (orgId) {
+            if (!orgOrderTotals[orgId]) {
+                orgOrderTotals[orgId] = { totalValue: 0, orderCount: 0 };
+            }
+            orgOrderTotals[orgId].totalValue += groupTotal;
+            orgOrderTotals[orgId].orderCount += 1;
+        }
+    }
+
+    // Calculate average order value per org
+    const orgAvgOrderValues: Record<string, number> = {};
+    for (const orgId in orgOrderTotals) {
+        const { totalValue, orderCount } = orgOrderTotals[orgId];
+        orgAvgOrderValues[orgId] = totalValue / orderCount;
+    }
+
+    return orgAvgOrderValues;
 }
 
 
