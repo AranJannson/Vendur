@@ -1,4 +1,3 @@
-import StarRating from "@/app/components/product/StarRating";
 import ProductList from "@/app//products/productList";
 
 export const metadata = {
@@ -17,11 +16,13 @@ interface Item {
     discount: number;
     org_id: number;
 }
+export const dynamic = 'force-dynamic';
 
 export default async function Products() {
 
     const response = await fetch('http://localhost:3000/api/getItems', {
         method: 'GET',
+        cache: 'no-store',
     });
 
     const items = await response.json();

@@ -13,7 +13,8 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ status: response.status });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-        return NextResponse.json({ status: 500, error: error.message });
+        return NextResponse.json({ status: 500, error: "Failed to create review" });
     }
 }

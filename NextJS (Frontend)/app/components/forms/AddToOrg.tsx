@@ -23,8 +23,6 @@ export default function AddToOrg() {
         }
 
         try {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-expect-error
             await team.inviteUser({ email: email.toString() });
             setMessage('Invitation sent successfully!');
         } catch (error) {

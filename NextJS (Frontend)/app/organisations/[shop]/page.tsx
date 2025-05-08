@@ -1,14 +1,14 @@
 import Link from "next/link";
-
-export default async function ShopPage({ params }: { params: { shop: string } }) {
-    const shop = decodeURIComponent(params.shop);
+export default async function ShopPage({params}: { params: Promise<{ shop: string }>; }){
+    const { shop } = await params;
+    const decodedShop = decodeURIComponent(shop);
 
     const orgDet = await fetch('http://localhost:8003/getOrgByName', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: shop }),
+        body: JSON.stringify({ name: decodedShop }),
     });
 
     const data = await orgDet.json();
