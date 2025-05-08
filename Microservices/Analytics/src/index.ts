@@ -277,9 +277,9 @@ Analytics.get("/dailyReviewsSitewide", async (req: Request, res: Response) => {
     res.send(JSON.stringify(total, null, 2))
 });
 
-Analytics.get("/oneOrgSalesCountTest", async (req: Request, res: Response) => {
-
-    const total = await oneOrgItemSalesAnalytics()
+Analytics.post("/oneOrgSalesCountTest", async (req: Request, res: Response) => {
+    const { org_id } = req.body;
+    const total = await oneOrgItemSalesAnalytics(org_id)
 
     console.log(total);
     res.send(JSON.stringify(total, null, 2))
@@ -327,9 +327,9 @@ Analytics.get("/recent-views", async (req: Request, res: Response) => {
     }
 });
 
-Analytics.get("/oneOrgRevTest", async (req: Request, res: Response) => {
-
-    const total = await oneOrgItemRevenueAnalytics()
+Analytics.post("/oneOrgRevTest", async (req: Request, res: Response) => {
+    const { org_id } = req.body;
+    const total = await oneOrgItemRevenueAnalytics(org_id)
 
     console.log(total);
     res.send(JSON.stringify(total, null, 2))
