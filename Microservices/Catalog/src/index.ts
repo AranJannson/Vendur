@@ -39,7 +39,7 @@ Catalog.get("/getItems", async (req: Request, res: Response) => {
 
 });
 
-Catalog.get("/getItemByID", async (req: Request, res: Response) => {
+Catalog.post("/getItemByID", async (req: Request, res: Response) => {
     const { id } = req.body;
 
     const item = await fetchItemsByID(id);
