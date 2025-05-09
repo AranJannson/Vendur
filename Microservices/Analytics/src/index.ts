@@ -313,7 +313,7 @@ Analytics.post("/record-view", async (req: Request, res: Response) => {
     }
 })
 
-Analytics.get("/recent-views", async (req: Request, res: Response) => {
+Analytics.post("/recent-views", async (req: Request, res: Response) => {
     try {
         const { session_id, limit } = req.body;
         const data = await getRecentViews(session_id, limit);

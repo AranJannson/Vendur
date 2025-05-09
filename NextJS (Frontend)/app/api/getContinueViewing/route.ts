@@ -1,20 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
     try {
+        const {session_id} = await req.json();
+        console.log("session_id in API ROUTE: ", session_id)
         const response = await fetch("http://localhost:8001/recent-views", {
-            method: "GET",
+            method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json"
             },
+            body: JSON.stringify({
+                session_id: session_id
+            })
         });
 
         if (!response.ok) {
             throw new Error();
         }
 
-        const text = await response.text();
-        const data = JSON.parse(text);
+        const data = await response.json();
 
         return NextResponse.json(data)
     } catch (error) {
