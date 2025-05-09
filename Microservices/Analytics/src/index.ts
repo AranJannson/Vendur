@@ -290,19 +290,17 @@ Analytics.post("/record-view", async (req: Request, res: Response) => {
     try {
         // Check if there is a viewed at property in the request body
         if (!req.body.viewed_at) {
-            const { session_id, category, item_id } = req.body;
+            const { session_id, item_id } = req.body;
             const event = {
                 session_id,
-                category,
                 item_id,
             };
             const data = await recordView(event);
             res.status(200).json(data);
         } else {
-            const { session_id, category, item_id, viewed_at } = req.body;
+            const { session_id, item_id, viewed_at } = req.body;
             const event = {
                 session_id,
-                category,
                 item_id,
                 viewed_at,
             };
