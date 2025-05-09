@@ -33,8 +33,37 @@ export default async function ContinueBrowsing() {
   // }
 
   const item_ids = await res.json();
+  console.log(`Item IDs in 1x4_history: ${item_ids}`);
 
+  const response = await fetch(`http://localhost:3000/api/getItemByID`, {
+    method: "POST",
+    cache: "no-store",
+    body: JSON.stringify({
+      id: 8
+    })
+  });
 
+  const item_data = await response.json();
+    console.log(`Item data in 1x4_history: ${JSON.stringify(item_data)}`);
+
+  // const items = item_ids.map((item_id: number) => {
+  //   const res = fetch(`http://localhost:3000/api/getItemByID`, {
+  //     method: "POST",
+  //     cache: "no-store",
+  //     body: JSON.stringify({
+  //       id: item_id
+  //     })
+  //   });
+  //
+  //   if (!res.ok) {
+  //     console.error("Failed to fetch item");
+  //     return null;
+  //   }
+  //
+  //   return res.json();
+  // });
+  //
+  //   console.log(`Items in 1x4_history: ${items}`);
   // if (!items || items.length === 0) return null;
 
   return (
@@ -66,5 +95,5 @@ export default async function ContinueBrowsing() {
       {/*  </Link>*/}
       {/*</div>*/}
     </div>
-  );
+    );
 }
