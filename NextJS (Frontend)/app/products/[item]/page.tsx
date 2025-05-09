@@ -87,7 +87,6 @@ export default async function ItemPage({params,}: { params: Promise<{ item: stri
     const percentage_discount = `${item.discount}%`;
     return (
         <>
-            // TODO: Fix error where the view is tracked twice
             <TrackView item_id={item.id}/>
             <div className="md:w-[70%] mx-auto">
                 <div className="grid md:grid-cols-2 grid-cols-1">
