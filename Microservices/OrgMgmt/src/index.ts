@@ -12,7 +12,7 @@ import {
     getOrgByName,
 } from "./utils/productManagement";
 import {requestVerification} from "./utils/verification";
-import {getOrderById} from "./utils/orderManagment";
+import {getOrderById, getAllOrders, deleteOrder, updateOrderStatus} from "./utils/orderManagment";
 import {banOrg, unbanOrg, unverifyOrg} from "./utils/orgManagement";
 
 dotenv.config();
@@ -226,5 +226,41 @@ OrgMgmt.post("/fetch-org-status", async (req: Request, res: Response): Promise<a
         console.error("Error fetching:", error);
         res.status(500).send({ error: "Failed to fetch" });
 
+    }
+})
+
+// Order Management
+OrgMgmt.post("/orders", async (req: Request, res: Response) => {
+    try {
+        const { org_id } = req.body;
+        const data = await getAllOrders(org_id)
+        res.status(200).send(JSON.stringify(data));
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+        res.status(500).send({ error: "Failed to fetch orders" });
+    }
+})
+
+// Update order status
+OrgMgmt.put("/update-order-status", async (req: Request, res: Response) => {
+    try {
+        const { order_id, status } = req.body;
+        const data = await updateOrderStatus(order_id, status);
+        res.status(200).send(JSON.stringify(data));
+    } catch (error) {
+        console.error("Error updating order status:", error);
+        res.status(500).send({ error: "Failed to update order status" });
+    }
+})
+
+// Delete order
+OrgMgmt.delete("/delete-order", async (req: Request, res: Response) => {
+    try {
+        const { order_id } = req.body;
+        const data = await deleteOrder(order_id);
+        res.status(200).send(JSON.stringify(data));
+    } catch (error) {
+        console.error("Error deleting order:", error);
+        res.status(500).send({ error: "Failed to delete order" });
     }
 })
