@@ -58,7 +58,7 @@ export default async function OrganisationsManagement() {
 
                 <div className="col-span-2 relative">
 
-                    <div className="w-full h-[82vh] bg-primary-200 rounded-lg shadow-xl p-4 grid grid-cols-2 gap-4">
+                    <div className="w-full h-full bg-primary-200 rounded-lg shadow-xl p-4 grid grid-cols-2 gap-4">
 
                         <div className="flex flex-col gap-3">
 
