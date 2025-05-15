@@ -12,6 +12,7 @@ import OrgAvgRatingGraph from "@/app/components/org/orgAvgReviewGraph";
 import OrgDailyReviewsGraph from "@/app/components/org/orgDailyReviewsGraph";
 import OrgItemSalesGraph from "@/app/components/org/orgItemSalesGraph";
 import OrgItemRevenueGraph from "@/app/components/org/orgItemRevenueGraph";
+import OrderProcessing from "@/app/components/org/OrderProccessing";
 
 export const metadata = {
     title: "Org Management | Vendur",
@@ -55,13 +56,16 @@ export default async function OrganisationsManagement() {
 
                 </div>
 
-                <div className="col-span-2">
+                <div className="col-span-2 relative">
 
                     <div className="w-full h-[82vh] bg-primary-200 rounded-lg shadow-xl p-4 grid grid-cols-2 gap-4">
 
                         <div className="flex flex-col gap-3">
 
                             <VerificationStatus id={id}/>
+
+
+                            <OrderProcessing/>
                             
 
 
