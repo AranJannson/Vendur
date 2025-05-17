@@ -70,7 +70,6 @@ const handleSubmitAccept = async () => {
     
 
     if (res.ok) {
-      console.log("viewrequest.tsx", requestData.image_document);
       window.location.reload();
     } else {
       console.error("Failed to accept the request", res.statusText);

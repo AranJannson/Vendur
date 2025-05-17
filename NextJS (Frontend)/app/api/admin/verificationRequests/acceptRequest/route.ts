@@ -8,7 +8,6 @@ export async function POST(req: NextRequest) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, org_id, shippingMethod, productInfo, image_document, image_thumbnail }),
     });
-    console.log("route.ts", image_document);
     const data = await backendResponse.json();
     return NextResponse.json(data);
   } catch (error) {

@@ -95,7 +95,6 @@ Admin.delete('/admin/denyVerificationRequest', async (req: Request, res: Respons
 Admin.post('/admin/acceptVerificationRequest', async (req: Request, res: Response): Promise<any> => {
   const { id, org_id, shippingMethod, productInfo, image_document, image_thumbnail } = req.body;
   const org = await acceptVerificationRequest(id, org_id, shippingMethod, productInfo, image_document, image_thumbnail);
-  console.log("index.ts", image_document);
   if (!org) {
       return res.status(500).json({ error: "Failed to fetch" });
     }
