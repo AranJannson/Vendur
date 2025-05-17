@@ -13,6 +13,7 @@ import {
 } from "./utils/productManagement";
 import {getAllVerifiedOrgs, requestVerification} from "./utils/verification";
 import {getOrderById, getAllOrders, deleteOrder, updateOrderStatus} from "./utils/orderManagment";
+import {getAllOrgs} from "./utils/orgDetails";
 
 dotenv.config();
 
@@ -275,3 +276,11 @@ OrgMgmt.delete("/delete-order", async (req: Request, res: Response) => {
         res.status(500).send({ error: "Failed to delete order" });
     }
 })
+
+OrgMgmt.get('/getAllOrgs', async (req: Request, res: Response): Promise<any> => {
+    const orgs = await getAllOrgs();
+    if (!orgs) {
+        return res.status(500).json({ error: "Failed to fetch organisations" });
+      }
+      res.json(orgs);
+});
