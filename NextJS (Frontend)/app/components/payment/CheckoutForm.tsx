@@ -82,14 +82,14 @@ export const CheckoutForm = ({basket, amount}: {basket: Item[], amount: number})
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="bg-secondary-300 p-4 rounded-lg">
       {detailsLoading && <p>Loading Details...</p>}
       <div className={detailsLoading ? "invisible": "visible"}>
         <PaymentElement onReady={() => setDetailsLoading(false)}/>
         <AddressElement options={{mode: 'shipping'}}/>
         <button
           disabled={!stripe || !elements}
-          className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4"
+          className="bg-secondary-200 p-4 rounded-lg transition-colors hover:bg-primary-100 px-8 mt-4 font-semibold"
         >
           Pay
         </button>

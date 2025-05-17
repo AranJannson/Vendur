@@ -55,11 +55,11 @@ function Checkout() {
   if (basketLoading) return <p>Loading items...</p>;
 
   return (
-    <div>
-      <h2>Items:</h2>
-      <ul className="flex gap-8 overflow-x-auto p-4">
+    <div className="bg-secondary-400 m-4 p-4 rounded-lg shadow-lg">
+      <h2 className="text-3xl font-bold mb-2">Your Basket</h2>
+      <ul className="flex gap-8 p-4 overflow-x-scroll bg-secondary-300 rounded-lg">
         {basket.map((item, index) => (
-          <li key={index} className="mb-4">
+          <li key={index} className="mb-4 bg-background-200 p-4 rounded-lg shadow-md flex flex-col items-center">
             <h2 className="text-xl font-bold">{item.name}</h2>
             <div className="bg-secondary-100 max-w-[10rem] max-h-[10rem] p-4 m-4 rounded-lg flex justify-center">
               <img
@@ -70,14 +70,15 @@ function Checkout() {
                 className="object-contain"
               />
             </div>
-            <p>Id: {item.id}</p>
-            <p>Price: £{item.price.toFixed(2)}</p>
+            <p>Price: <b>£{item.price.toFixed(2)}</b></p>
             <p>{item.size && `Size: ${item.size}`}</p>
-            <p>Quantity: {item.quantity}</p>
+            <p>Quantity: <b>{item.quantity}</b></p>
           </li>
         ))}
       </ul>
-      <p>Total: £{amount.toFixed(2)}</p>
+      <div className="bg-secondary-300 p-4 rounded-lg shadow-md my-4">
+        <h2 className="text-2xl">Total Cost: <b>£{amount.toFixed(2)}</b></h2>
+      </div>
       {clientSecret && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <CheckoutForm basket={basket} amount={amount}/>

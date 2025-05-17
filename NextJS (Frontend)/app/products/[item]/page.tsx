@@ -13,6 +13,7 @@ interface Item {
     discount: number;
     rating: number;
     price: number;
+    org_id: string;
 }
 
 export async function generateMetadata({params,}: {params: Promise<{ item: string }>; }){
@@ -31,14 +32,24 @@ export default async function ItemPage({params,}: { params: Promise<{ item: stri
     const { item: itemName } = await params;
     const decodedItemName = decodeURIComponent(itemName);
 
-
     const item_response = await fetch('http://localhost:3000/api/getItems', {
         method: 'GET',
     });
 
     const items: Item[] = await item_response.json()
     
-    const item = items.find((i: any) => i.name === decodedItemName);
+    const item = items.find((i: Item) => i.name === decodedItemName);
+
+    const responseOrg = await fetch('http://localhost:3000/api/admin/orgDetails', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: item?.org_id }),
+    })
+
+    const orgDetails = await responseOrg.json();
+
 
     if (!item) {
         return <div>Error loading item: Item not found</div>;
@@ -87,7 +98,7 @@ export default async function ItemPage({params,}: { params: Promise<{ item: stri
     const percentage_discount = `${item.discount}%`;
     return (
         <>
-            <TrackView item_id={item.id}/>
+            <TrackView item_id={item.id as unknown as string}/>
             <div className="md:w-[70%] mx-auto">
                 <div className="grid md:grid-cols-2 grid-cols-1">
                     <div>
@@ -184,11 +195,10 @@ export default async function ItemPage({params,}: { params: Promise<{ item: stri
                 </div>
                 <div className="bg-background-50 shadow-2xl m-4 rounded-lg p-5">
                     <h2 className="text-2xl font-bold mb-3">Description</h2>
-                    <p>Sold by: <Link href="#" className="text-text font-bold underline text-text mt-2">Vendur</Link>
+                    <p>Sold by: <Link href={`/organisations/${orgDetails?.name ?? ""}`} className="text-text font-bold underline text-text mt-2">{orgDetails?.name ?? "Unknown seller"}</Link>
                     </p>
                     <p>{item.description}</p>
                 </div>
-                {/* Review section */}
                 <ReviewSection reviews={reviews} item_id={item.id}/>
             </div>
         </>

@@ -5,7 +5,22 @@ import VendurLogo from "../ui/VendurLogo";
 import SearchBar from "@/app/components/global/SearchBar";
 import { RiShoppingBasket2Line } from "react-icons/ri";
 
+import { fetchBasket } from "@/utils/payment/utils";
+import {useEffect, useState} from "react";
+
 export default function Header() {
+
+    const [basketLength, setBasketLength] = useState(0);
+
+    useEffect(() => {
+        const getBasketLength = async () => {
+            const items = await fetchBasket();
+            setBasketLength(items.length);
+        };
+
+        getBasketLength();
+    }, []);
+
 
     return (
         <header className="text-center bg-background-100 border-b-2 border-background-400 ">
@@ -33,11 +48,18 @@ export default function Header() {
                             </Link>
                         </li>
 
-                        <li className="text-2xl rounded-full bg-primary-400 text-black p-2 hover:bg-primary-500 transition-colors hover:cursor-pointer">
-                            <Link href="/basket">
-                                <RiShoppingBasket2Line />
+                        <li className="rounded-full bg-primary-400 text-black p-2 hover:bg-primary-500 transition-colors hover:cursor-pointer">
+                            <Link href="/basket" className="relative inline-block">
+                                <RiShoppingBasket2Line className="text-3xl" />
+                                {basketLength > 0 && (
+                                    <p className="absolute bottom-0 right-0 bg-primary-800 text-white text-[10px] w-6 h-6 flex items-center justify-center rounded-full translate-x-1/2 translate-y-1/2 leading-none font-bold">
+                                        {basketLength}
+                                    </p>
+                                )}
                             </Link>
                         </li>
+
+
 
                         <li>
                             <UserButton/>

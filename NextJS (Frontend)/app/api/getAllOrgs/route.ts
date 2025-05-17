@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function GET(){
 
     try{
-        const response = await fetch('http://localhost:5078/admin/getAllOrgs', {
+        const response = await fetch('http://localhost:8003/getAllOrgs', {
             method: 'GET',
             cache: 'no-store',
         });

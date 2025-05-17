@@ -1,6 +1,7 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 async function getOrderDetails (order_id: string) {
   
@@ -51,18 +52,30 @@ export default function Success() {
   }, [])
 
   return (
-    <div>
-      <p>Transaction successful!</p>
-      <p>Your order id: {order_id}</p>
-      <p>Delivery address: </p>
-      {address?.map((line, i) => (
-        <p key={i}>{line}</p> 
-      ))}
-      <a href="/payment">
-        <button className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4">
-          Back to basket
-        </button>
-      </ a>
+    <div className="bg-secondary-400 p-4 m-4 rounded-xl shadow-xl">
+      <div className="bg-secondary-300 p-4 rounded-lg font-bold text-3xl">
+        <p>Transaction successful!</p>
+      </div>
+
+      <div className="flex flex-col items-center justify-center bg-secondary-300 p-4 rounded-lg mt-4">
+        <p className="font-bold text-2xl">Your Order Number Is: </p>
+        <p className="font-mono text-2xl">{order_id}</p>
+      </div>
+
+      <div className="bg-secondary-300 p-4 rounded-lg mt-4">
+        <p className="font-bold">Delivery address: </p>
+        {address?.map((line, i) => (
+            <p key={i}>{line}</p>
+        ))}
+      </div>
+
+
+      <div className="my-8">
+        <Link href="/" className="bg-primary-200 p-4 rounded-lg transition-colors hover:bg-primary-100 px-8 mt-4">
+          Back
+        </Link>
+      </div>
+
 
       {detailsLoading && (<p>Loading details...</p>)}
     </div>

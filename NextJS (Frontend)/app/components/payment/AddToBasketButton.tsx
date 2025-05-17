@@ -1,11 +1,23 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import { modifyStock, setOriginalStock } from "@/utils/catalogue/utils";
 import { postItem } from "@/utils/payment/utils";
+import Modal from "@/app/components/admin/VerificationFormModal";
 
 export default function AddToBasketButton( { item, formId, originalStock }: { item: any, formId: string, originalStock: number }) {
-    
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        window.location.reload();
+    };
+
     useEffect(() => {
         const key = `hasSetStock-${item.id}`;
         if (!sessionStorage.getItem(key)) {
@@ -26,7 +38,7 @@ export default function AddToBasketButton( { item, formId, originalStock }: { it
     } catch (error) {
         console.error("Failed to add item: ", error);
     } finally {
-        window.location.reload();
+        openModal();
     }
 };
 
@@ -37,5 +49,11 @@ export default function AddToBasketButton( { item, formId, originalStock }: { it
             >
                     Add to Basket
         </button>
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+            <div className="flex flex-col items-center justify-center gap-4">
+                <h2 className="text-lg font-semibold">Item Added to Basket</h2>
+                <p className="text-gray-600">You have successfully added <b>{item.name}</b> to your basket.</p>
+            </div>
+        </Modal>
     </div>;
 }
