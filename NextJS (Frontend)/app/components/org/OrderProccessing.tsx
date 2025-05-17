@@ -87,7 +87,7 @@ export default async function OrderProcessing(){
     // ];
 
     const orderGroupsMap = new Map<number, ItemsGroup>();
-
+if (Array.isArray(items) && items.length > 0) {
     items.forEach((entry: Entry) => {
     const { item, order, order_groups } = entry;
     const group = order_groups[0];
@@ -117,7 +117,7 @@ export default async function OrderProcessing(){
         });
     }
     });
-
+}
     // Final array:
     const OrderGroups: ItemsGroup[] = Array.from(orderGroupsMap.values());
 
