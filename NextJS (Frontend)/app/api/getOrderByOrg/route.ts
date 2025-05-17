@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
     try {
         const { org_id } = await req.json();
-        const response = await fetch("http://localhost:8003/orders", {
+        const response = await fetch("http://localhost:8003/getOrderGroups", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
