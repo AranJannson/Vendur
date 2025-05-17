@@ -35,7 +35,7 @@ export default async function ContinueBrowsing() {
   item_ids = item_ids.map((item: { item_id: number }) => item.item_id);
 
   const itemFetches = await Promise.all(
-    item_ids.map(async (item_id) => {
+    item_ids.map(async (item_id: number) => {
       const res = await fetch("http://localhost:3000/api/getItemByID", {
         method: "POST",
         cache: "no-store",
@@ -71,7 +71,7 @@ export default async function ContinueBrowsing() {
                 key={index}
                 className="relative group aspect-square rounded-xl bg-secondary-100 p-2 flex justify-center items-center"
               >
-                <Link href={`/product/${item.id}`}>
+                <Link href={`/products/${item.name}`}>
                   <img
                     src={item.image}
                     alt={item.name}

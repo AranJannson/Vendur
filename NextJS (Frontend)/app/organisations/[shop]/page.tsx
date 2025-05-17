@@ -51,31 +51,38 @@ export default async function ShopPage({params}: { params: Promise<{ shop: strin
                         <h2 className="text-4xl font-bold">Products</h2>
                     </div>
                          <ul className="mt-4 flex md:flex-row flex-col items-center justify-center gap-4 w-full overflow-x-scroll pb-4">
-                             {items.map((item: { name: string; id: string, image: string, price: number }) => (
-                                <div key={item.id} className="bg-primary-300 min-h-96 max-h-96 rounded-xl shadow-xl size-64 p-4 grid grid-cols-1 gap-2">
-                                    <div className="bg-primary-200 rounded-lg m-2">
-                                        <img src={item.image}
-                                             alt={item.name}
-                                             width={400}
-                                             height={400}
-                                             className="aspect-square object-contain"
-                                        />
-                                    </div>
+                             {items.length === 0 ? (
+                                 <div className="text-center text-lg font-semibold flex flex-col items-center justify-center">
 
-                                    <div>
-                                        <h2 className="text-xl font-semibold">{item.name}</h2>
-                                        <p>Price £{item.price}</p>
-
-                                    </div>
-                                    <div>
-                                        <Link  href={`/products/${encodeURIComponent(item.name)}`} className="bg-secondary-400 h-fit text-center p-3 font-semibold rounded-xl transition-colors hover:bg-secondary-500">
-                                            Purchase
+                                        <p>No items available for this shop.</p>
+                                        <Link href="/products" className="mt-4 bg-secondary-400 text-center p-3 font-semibold rounded-xl transition-colors hover:bg-secondary-500">
+                                            Explore Products From All Vendurs!
                                         </Link>
+
+                                 </div>
+                            ) : (items.map((item: { name: string; id: string, image: string, price: number }) => (
+                                    <div key={item.id} className="bg-primary-300 min-h-96 max-h-96 rounded-xl shadow-xl size-64 p-4 grid grid-cols-1 gap-2">
+                                        <div className="bg-primary-200 rounded-lg m-2">
+                                            <img src={item.image}
+                                                 alt={item.name}
+                                                 width={400}
+                                                 height={400}
+                                                 className="aspect-square object-contain"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <h2 className="text-xl font-semibold">{item.name}</h2>
+                                            <p>Price £{item.price}</p>
+                                        </div>
+                                        <div>
+                                            <Link href={`/products/${encodeURIComponent(item.name)}`} className="bg-secondary-400 h-fit text-center p-3 font-semibold rounded-xl transition-colors hover:bg-secondary-500">
+                                                Purchase
+                                            </Link>
+                                        </div>
                                     </div>
-
-
-                                </div>
-                            ))}
+                                ))
+                            )}
                         </ul>
 
 
@@ -101,11 +108,5 @@ export default async function ShopPage({params}: { params: Promise<{ shop: strin
 
             </div>
         </>
-        // <div className="p-4">
-        //     <h1 className="text-lg font-bold">{shop}</h1>
-        //     <p>Welcome to: {shop}</p>
-        //
-
-        // </div>
     );
 }
