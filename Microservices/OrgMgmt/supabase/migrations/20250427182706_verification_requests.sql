@@ -4,6 +4,8 @@ create table public.verification_requests (
   org_id text not null,
   name text null,
   email text null,
+  image_document text null,
+  image_thumbnail text null,
   description text null,
   "productInfo" text null,
   "shippingMethod" text null,

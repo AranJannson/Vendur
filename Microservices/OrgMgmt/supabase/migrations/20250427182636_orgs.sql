@@ -6,6 +6,8 @@ create table public.orgs (
   email text not null,
   telephone text not null,
   website text,
+  image_document text,
+  image_thumbnail text,
   address text not null,
   product_type text null,
   shipping_type text null,
