@@ -16,20 +16,34 @@ export async function getAllOrders(org_id: string) {
 }
 
 // TODO: Get Order Group by ID
-export async function getOrderById(orderId: string) {
+export async function getOrdersByItemId(item_id: number) {
   const supabase = connectPayment();
   const { data, error } = await supabase
     .from("orders")
     .select("*")
-    .eq("id", orderId)
-    .single();
+    .eq("item_id", item_id)
 
   if (error) {
-    throw new Error(`Error fetching order: ${error.message}`);
+    throw new Error(`Error fetching order [getOrderByItemId]: ${error.message}`);
   }
 
   return data;
 }
+
+export async function getOrderGroupById(id: number) {
+  const supabase = connectPayment();
+  const { data, error } = await supabase
+    .from("order_groups")
+    .select("*")
+    .eq("id", id)
+
+  if (error) {
+    throw new Error(`Error fetching order [getOrderGroupById]: ${error.message}`);
+  }
+
+  return data;
+}
+
 // TODO: Change status of order e.g. "pending" to "completed"
 export async function updateOrderStatus(orderId: string, status: string) {
     const supabase = connectPayment();

@@ -12,7 +12,7 @@ import {
     getOrgByName,
 } from "./utils/productManagement";
 import {getAllVerifiedOrgs, requestVerification} from "./utils/verification";
-import {getOrderById, getAllOrders, deleteOrder, updateOrderStatus} from "./utils/orderManagment";
+import {getOrdersByItemId, getAllOrders, deleteOrder, updateOrderStatus, getOrderGroupById} from "./utils/orderManagment";
 import {getAllOrgs} from "./utils/orgDetails";
 
 dotenv.config();
@@ -176,17 +176,28 @@ OrgMgmt.post("/verification-status", async (req: Request, res: Response): Promis
 })
 
 // Order operations
-// Get order by id
-OrgMgmt.get("/order", async (req: Request, res: Response) => {
+// Get all order groups for an org
+OrgMgmt.post("/getOrderGroups", async (req: Request, res: Response) => {
     try {
-        const { order_id } = req.body;
-        const data = await getOrderById(order_id)
-        res.status(200).send(JSON.stringify(data));
+        const { org_id } = req.body;
+        const allItems = await getProducts(org_id)
+        const matchedItems = [];
+        console.log(org_id);
+        for (const item of allItems) {
+            console.log(item.id);
+            const orders = await getOrdersByItemId(item.id);
+            for (const order of orders) {
+                const order_groups = await getOrderGroupById(order.group_id);  // assuming this returns array or single
+                matchedItems.push({ item, order, order_groups });
+            }
+        }
+
+        res.status(200).json(matchedItems);
     } catch (error) {
-        console.error("Error fetching order:", error);
+        console.error("Error fetching order [getOrderGroups]:", error);
+        res.status(500).send("Internal Server Error");
     }
 })
-
 
 //Delete Item by ID
 OrgMgmt.post('/deleteProduct', async (req: Request, res: Response): Promise<any> => {
