@@ -13,11 +13,14 @@ interface RequestData {
   created_at: string;
   productInfo: string;
   shippingMethod: string;
+  image_document: string;
+  image_thumbnail: string;
 }
 
 export default function ViewVerificationRequest({ id }: RequestProps) {
   const [loading, setLoading] = useState(true);
   const [requestData, setRequestData] = useState<RequestData | null>(null);
+  const [imageSize, setImageSize] = useState<{ width: number; height: number } | null>(null);
 
   useEffect(() => {
     const fetchRequest = async () => {
@@ -60,10 +63,14 @@ const handleSubmitAccept = async () => {
         org_id: requestData.org_id,
         shippingMethod: requestData.shippingMethod,
         productInfo: requestData.productInfo,
+        image_document: requestData.image_document,
+        image_thumbnail: requestData.image_thumbnail
       }),
     });
+    
 
     if (res.ok) {
+      console.log("viewrequest.tsx", requestData.image_document);
       window.location.reload();
     } else {
       console.error("Failed to accept the request", res.statusText);
@@ -126,6 +133,40 @@ const handleSubmitDeny = async () => {
         <div className="p-4 border rounded-lg bg-white">
           {new Date(requestData.created_at).toLocaleString()}
         </div>
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-gray-600 mb-2">Uploaded Document</label>
+          <img
+          src={requestData.image_document}
+          alt="Document"
+          width={1000}
+          height={1000}
+          className="object-cover border rounded-lg"
+          ></img>
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-gray-600 mb-2">Uploaded Shop Thumbnail</label>
+        <div className="flex justify-center">
+          <img
+          src={requestData.image_thumbnail}
+          alt="Shop Thumbnail"
+          width={400}
+          height={600}
+
+          onLoad={(e) => {
+            const img = e.currentTarget;
+            setImageSize({ width: img.naturalWidth, height: img.naturalHeight });
+          }}
+          className="object-cover border rounded-lg "
+          ></img>
+        </div>
+          {imageSize && (
+            <span className="text-sm text-gray-500 mt-2">
+              Uploaded Image size: {imageSize.width} × {imageSize.height}
+            </span>
+          )}
       </div>
 
       <button

@@ -48,23 +48,6 @@ export default function Analytics() {
                 </div>
             </div>
 
-
-            <div className="flex flex-row gap-6 overflow-x-scroll">
-
-
-                <Image src={"https://dummyimage.com/200x200/fff/000000"} alt={"Temp"} width={200} height={200} className="rounded-lg"/>
-
-                <Image src={"https://dummyimage.com/200x200/fff/000000"} alt={"Temp"} width={200} height={200} className="rounded-lg"/>
-
-                <Image src={"https://dummyimage.com/200x200/fff/000000"} alt={"Temp"} width={200} height={200} className="rounded-lg"/>
-
-                <Image src={"https://dummyimage.com/200x200/fff/000000"} alt={"Temp"} width={200} height={200} className="rounded-lg"/>
-
-                <Image src={"https://dummyimage.com/200x200/fff/000000"} alt={"Temp"} width={200} height={200} className="rounded-lg"/>
-
-                <Image src={"https://dummyimage.com/200x200/fff/000000"} alt={"Temp"} width={200} height={200} className="rounded-lg"/>
-
-            </div>
         </div>
 
     )
