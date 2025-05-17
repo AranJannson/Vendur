@@ -56,11 +56,11 @@ export default async function OrganisationsManagement() {
 
                 </div>
 
-                <div className="col-span-2 relative">
+                <div className="col-span-2 relative max-h-[85vh]">
 
                     <div className="w-full h-full bg-primary-200 rounded-lg shadow-xl p-4 grid grid-cols-2 gap-4">
 
-                        <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-3 max-h-[85vh] overflow-y-scroll">
 
                             <VerificationStatus id={id}/>
 

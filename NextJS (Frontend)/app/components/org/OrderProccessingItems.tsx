@@ -10,11 +10,20 @@ interface Items {
     status: string;
 }
 
+interface DeliveryAddress {
+    line1: string;
+    line2: string;
+    city: string;
+    state: string;
+    country: string;
+    postal_code: string;
+}
+
 interface ItemsGroup {
     id: string;
     full_name: string;
     total_cost: number;
-    delivery_address: string;
+    delivery_address: DeliveryAddress;
     items: Items[];
     status: string;
 }
@@ -62,15 +71,20 @@ export default function OrderProcessingItems({ order_group }: { order_group: Ite
                                     <h2 className="font-bold">Customer:</h2>
                                     <p className="text-gray-700">{group.full_name}</p>
                                 </div>
-                                <div>
+                                <div className="text-sm overflow-x-auto">
                                     <h2 className="font-bold">Delivery Address:</h2>
-                                    <p className="text-gray-700">{group.delivery_address}</p>
+                                    <p className="text-gray-700">{group.delivery_address.line1}</p>
+                                    <p className="text-gray-700">{group.delivery_address.line2}</p>
+                                    <p className="text-gray-700">{group.delivery_address.city}</p>
+                                    <p className="text-gray-700">{group.delivery_address.state}</p>
+                                    <p className="text-gray-700">{group.delivery_address.country}</p>
+                                    <p className="text-gray-700">{group.delivery_address.postal_code}</p>
                                 </div>
 
                             </div>
 
                             {group.items.map((item) => (
-                                <div key={item.id} className="bg-primary-100 p-4 rounded-lg max-h-80">
+                                <div key={item.id} className="bg-primary-100 p-4 rounded-lg">
 
                                     <span className="flex flex-row gap-3">
                                         <h2 className="font-bold">Item Order ID:</h2>

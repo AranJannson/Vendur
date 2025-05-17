@@ -23,8 +23,8 @@ export default function ReviewSection({ reviews = [], item_id, item = { rating: 
         <h2 className = "text-2xl font-bold" > Reviews </h2>
 
     <div className="grid grid-cols-2 bg-primary-200 rounded-lg p-4">
-        <h3 className="text-sm font-semibold">Average Rating: item.rating</h3>
-        <h3 className="text-sm font-semibold">Total Reviews: item.reviewsCount</h3>
+        <h3 className="text-sm font-semibold">Average Rating: null</h3>
+        <h3 className="text-sm font-semibold">Total Reviews: {reviews?.length}</h3>
     </div>
 
     <div className="bg-primary-200 rounded-lg p-5">
