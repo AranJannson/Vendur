@@ -54,7 +54,55 @@ export default function VerificationRequestForm({ id }: VerificationRequestFormP
         const description = formData.get('description');
         const productInfo = formData.get('productInfo');
         const shippingMethod = formData.get('shippingMethod');
-        const documents = formData.get('documents');
+        const image_document_file = formData.get('documents') as File;
+        const image_thumbnail_file = formData.get('thumbnail') as File;
+
+        if (!image_document_file || image_document_file.size === 0) {
+            alert("Please upload a document image.");
+            return;
+        }
+
+        if (!image_thumbnail_file || image_thumbnail_file.size === 0) {
+            alert("Please upload a thumbnail image.");
+            return;
+        }
+
+        //Image Uploads
+        const imageData_document = new FormData();
+        const imageData_thumbnail = new FormData();
+        imageData_document.append('file', image_document_file);
+        imageData_thumbnail.append('file', image_thumbnail_file);
+        imageData_document.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
+
+        // https://cloudinary.com/documentation/image_upload_api_reference
+        const res_doc = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`, {
+            method: 'POST',
+            body: imageData_document,
+        });
+
+        const data_doc = await res_doc.json();
+        const document_imageUrl = data_doc.secure_url;
+
+        if (!document_imageUrl) {
+            alert("Failed to upload image (Documentation)");
+            return;
+        }
+
+        imageData_thumbnail.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
+
+        const res_thu = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`, {
+            method: 'POST',
+            body: imageData_thumbnail,
+        });
+
+        const data = await res_thu.json();
+        const thumbnail_imageUrl = data.secure_url;
+
+        if (!document_imageUrl) {
+            alert("Failed to upload image (Thumbnail)");
+            return;
+        }
+
         const payload = {
             product : {
                 org_id: id,
@@ -63,7 +111,8 @@ export default function VerificationRequestForm({ id }: VerificationRequestFormP
                 email,
                 productInfo,
                 shippingMethod,
-                //documents
+                image_document: document_imageUrl,
+                image_thumbnail: thumbnail_imageUrl,
             }
         };
         //to do: change to api
@@ -81,38 +130,39 @@ export default function VerificationRequestForm({ id }: VerificationRequestFormP
     };
 
     if (!orgData) {
-        return <p>No organisation data available</p>;
-      }
+        return <p>Failed loading organisation data. Refresh and try again.</p>;
+    }
 
     return (
-        <form onSubmit={onSubmit} className="flex flex-col gap-4 p-4 bg-primary-100 rounded-lg shadow-md">
+        <form onSubmit={onSubmit} className="flex flex-col gap-3 p-4 bg-primary-100 rounded-lg shadow-md">
             <h1 className="text-xl font-bold">Organisation Verification</h1>
 
             <div className="flex flex-col gap-2 bg-background-200 p-2 rounded-lg">
-                <span className="flex flex-col gap-2">
+                <span className="flex flex-col gap-1">
                     <label>Organisation Name</label>
-                    <input type="text" name="name" placeholder="Org Name" required className="p-2 rounded-lg bg-background-100"/>
+                    <input type="text" name="name" placeholder="Org Name" required readOnly value={orgData.name} className="p-2 rounded-lg bg-background-100"/>
                 </span>
 
-                <span className="flex flex-col gap-2">
+                <span className="flex flex-col gap-1">
                     <label>Org Description</label>
-                    <textarea name="description" placeholder="Org Description" required className="p-2 rounded-lg bg-background-100"/>
+                    <textarea name="description" placeholder="Org Description" required readOnly value={orgData.description} className="p-2 rounded-lg bg-background-100"/>
                 </span>
 
-                <span className="flex flex-col gap-2">
+                <span className="flex flex-col gap-1">
                     <label htmlFor="organisation-email">Organisation Email</label>
                     <input
                         type="email"
                         name="organisationEmail"
                         placeholder="Org Email"
                         required
+                        readOnly value={orgData.email}
                         className="p-2 rounded-lg bg-background-100"
                     />
                   </span>
             </div>
 
-            <div className="flex flex-col gap-2 bg-background-200 p-2 rounded-lg bg-background-50">
-                  <span className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1 bg-background-200 p-2 rounded-lg bg-background-50">
+                  <span className="flex flex-col gap-1">
                     <label htmlFor="documents">Documents (Upload Section)</label>
                     <input
                         type="file"
@@ -127,7 +177,21 @@ export default function VerificationRequestForm({ id }: VerificationRequestFormP
                   </span>
             </div>
 
-
+            <div className="flex flex-col gap-1 bg-background-200 p-2 rounded-lg bg-background-50">
+                  <span className="flex flex-col gap-1">
+                    <label htmlFor="documents">Shop Thumbnail (Upload Section)</label>
+                    <input
+                        type="file"
+                        name="thumbnail"
+                        required
+                        className="p-2 rounded-lg bg-white"
+                        accept=".jpg,.jpeg,.png"
+                    />
+                    <small className="text-sm text-gray-500">
+                      Upload PNG/JPG (Suggested Size: 900x600).
+                    </small>
+                  </span>
+            </div>
             
 
             <div className="flex flex-col gap-2 bg-background-200 p-2 rounded-lg">
@@ -181,6 +245,7 @@ export default function VerificationRequestForm({ id }: VerificationRequestFormP
 
 
             <button type="submit" className="bg-secondary-300 p-3 font-semibold rounded-xl transition-colors hover:bg-secondary-400">Request Verification</button>
+        
         </form>
     );
 }

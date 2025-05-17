@@ -131,7 +131,7 @@ OrgMgmt.put("/apply-discount", async (req: Request, res: Response) => {
 
 OrgMgmt.post("/request-verification", async (req: Request, res: Response): Promise<any> => {
     try {
-        const { org_id, name, email, description, productInfo, shippingMethod } = req.body.product;
+        const { org_id, name, email, description, productInfo, shippingMethod, image_document, image_thumbnail } = req.body.product;
         console.log('Received org_id:', org_id);
         console.log("Received request body:", req.body);
         let org_info = await getOrgInfo(org_id);
@@ -141,7 +141,7 @@ OrgMgmt.post("/request-verification", async (req: Request, res: Response): Promi
         if (org_info[0].is_verified) {
             return res.status(400).send({ error: "Organisation already verified" });
         } else {
-            await requestVerification(org_id, name, email, description, productInfo, shippingMethod);
+            await requestVerification(org_id, name, email, description, productInfo, shippingMethod, image_document, image_thumbnail);
             return res.status(200).send({ message: "Verification requested successfully" });
         }
     } catch (error) {
