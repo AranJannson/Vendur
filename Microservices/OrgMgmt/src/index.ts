@@ -11,9 +11,8 @@ import {
     getProductByID,
     getOrgByName,
 } from "./utils/productManagement";
-import {requestVerification} from "./utils/verification";
+import {getAllVerifiedOrgs, requestVerification} from "./utils/verification";
 import {getOrderById, getAllOrders, deleteOrder, updateOrderStatus} from "./utils/orderManagment";
-import {banOrg, unbanOrg, unverifyOrg} from "./utils/orgManagement";
 
 dotenv.config();
 
@@ -39,6 +38,18 @@ OrgMgmt.post("/organisation", async (req: Request, res: Response) => {
     }
 })
 
+OrgMgmt.get("/getVerifiedOrgs", async (req: Request, res: Response) => {
+
+    try {
+        const data = await getAllVerifiedOrgs();
+
+        res.status(200).send(JSON.stringify(data));
+    }catch (error) {
+        console.error("Error fetching verified orgs:", error);
+        res.status(500).send({ error: "Failed to fetch verified orgs" });
+    }
+
+})
 
 OrgMgmt.post("/getOrgByName", async (req: Request, res: Response) => {
 

@@ -21,3 +21,10 @@ export const requestVerification = async (org_id: string, name: string, email: s
     }
     return data;
 }
+
+export async function getAllVerifiedOrgs() {
+    return await supabase
+        .from("orgs")
+        .select("*")
+        .eq("is_verified", true);
+}
