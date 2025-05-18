@@ -13,10 +13,19 @@ interface ItemsGroup {
     id: string;
     full_name: string;
     total_cost: number;
-    delivery_address: string;
+    delivery_address: DeliveryAddress;
     items: Items[];
     status: string;
 
+}
+
+interface DeliveryAddress {
+    line1: string;
+    line2: string;
+    city: string;
+    state: string;
+    country: string;
+    postal_code: string;
 }
 
 type Entry = {
@@ -33,7 +42,7 @@ type Entry = {
     id: number;
     full_name: string;
     total_cost: number;
-    delivery_address: string;
+    delivery_address: DeliveryAddress;
   }[];
 };
 
