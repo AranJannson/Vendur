@@ -37,10 +37,10 @@ export default async function Organisations() {
             {orgs.map((org: Org , index: number) => (
                 <span key={index} className="rounded-xl shadow-xl bg-secondary-200 p-2">
 
-                    <div className="flex flex-col gap-4">
-                        <img src={org.image_thumbnail || "https://dummyimage.com/900x600/fff/000.png"} alt="org_img" width={300} height={200} className="rounded-lg" />
+                    <div className="grid grid-cols-2 gap-2">
+                        <img src={org.image_thumbnail || "https://dummyimage.com/600x900/fff/000.png"} alt="org_img" width={200} height={400} className="rounded-lg" />
 
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 justify-center items-center content-center p-3">
                              <h1 className="text-3xl font-bold">{org.name}</h1>
 
                             <p className="text-gray-600">{org.description}</p>
