@@ -52,7 +52,7 @@ export default function AddProducts() {
             }
         };
 
-        const response = await fetch('http://localhost:3000/api/getCreateProduct', {
+        const response = await fetch('/api/getCreateProduct', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
