@@ -7,7 +7,6 @@ const org_supabase = connectOrgMgmt();
 export async function deleteProductById(id: string): Promise<{ error: string | null }> {
   
     const { error } = await cat_supabase.from('items').delete().eq('id', id);
-    console.log('(MANAGEMENT) Deleting product with id:', id);
     if (error) {
       return { error: error.message };
     }
@@ -85,11 +84,10 @@ export async function getVerificationRequest(id: number): Promise<{data: any, er
     return { data, error: null };
     }
 
-export async function acceptVerificationRequest(id: number, org_id: string, shippingMethod: string, productInfo: string): Promise<{ data: any, error: string | null }> {
+export async function acceptVerificationRequest(id: number, org_id: string, shippingMethod: string, productInfo: string, image_document: string, image_thumbnail: string): Promise<{ data: any, error: string | null }> {
     try {
-        const { data: orgData, error: orgError } = await org_supabase.from("orgs").update({ is_verified: true, shipping_type: shippingMethod, product_type: productInfo }).eq("id", org_id).maybeSingle();
+        const { data: orgData, error: orgError } = await org_supabase.from("orgs").update({ is_verified: true, shipping_type: shippingMethod, product_type: productInfo, image_document: image_document, image_thumbnail: image_thumbnail }).eq("id", org_id).maybeSingle();
         if (orgError) return { data: null, error: orgError.message };
-    
         const { data: verificationData, error: verificationError } = await org_supabase.from("verification_requests").delete().eq("id", id).maybeSingle();
         if (verificationError) return { data: null, error: verificationError.message };
     

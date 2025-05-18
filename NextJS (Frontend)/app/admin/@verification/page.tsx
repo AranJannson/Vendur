@@ -37,10 +37,12 @@ export default function Verification() {
 
     const openModal = () => {
         setIsModalOpen(true);
+        document.body.style.overflow = "hidden";
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
+        document.body.style.overflow = "auto";
     };
 
     return (
@@ -54,7 +56,7 @@ export default function Verification() {
                                 <h3 className="text-lg font-semibold">Request: {org.id} | {org.name}</h3>
                             </div>
                             <div className="flex justify-end">
-                                <button onClick={openModal} className="bg-secondary-300 p-3 font-semibold rounded-xl transition-colors hover:bg-secondary-400">View Request</button>
+                                <button onClick={openModal} className="bg-secondary-300 p-3 font-semibold rounded-xl transition-colors hover:bg-secondary-400">View Details</button>
                             <div>
                 
                             <Modal isOpen={isModalOpen} onClose={closeModal}>
