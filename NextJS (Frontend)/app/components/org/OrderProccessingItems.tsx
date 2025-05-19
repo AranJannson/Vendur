@@ -50,6 +50,8 @@ async function fetchOrderStatus(orderID: number): Promise<string | null> {
 export default function OrderProcessingItems({ order_group }: { order_group: ItemsGroup[] }) {
     const [openGroup, setOpenGroup] = useState<string | null>(null);
     const [statuses, setStatuses] = useState<{ [orderId: number]: string | null }>({});
+    const [groupStatuses, setGroupStatuses] = useState<{ [groupId: string]: string }>({});
+    const [loadingItems, setLoadingItems] = useState<{ [orderId: number]: boolean }>({});
 
    useEffect(() => {
     async function fetchStatuses() {
@@ -73,6 +75,46 @@ export default function OrderProcessingItems({ order_group }: { order_group: Ite
     }, [order_group]);
     
 
+    const handleStatusChange = async (orderID: number, newStatus: string) => {
+          setLoadingItems((prev) => ({ ...prev, [orderID]: true }));
+    try {
+      const response = await fetch("/api/updateOrderStatus", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: orderID, status: newStatus }),
+      });
+
+      if (!response.ok) throw new Error("Failed to update status");
+
+      const data = await response.json();
+
+      setStatuses((prev) => ({ ...prev, [orderID]: newStatus }));
+
+      const group = order_group.find((g) =>
+            g.items.some((item) => item.orderID === orderID)
+        );
+
+        if (group) {
+            const res = await fetch("/api/getGroupOrderStatus", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: group.id }),
+            });
+            const updatedGroupStatus = await res.json();
+            setGroupStatuses((prev) => ({
+                ...prev,
+                [group.id]: updatedGroupStatus.status,
+            }));
+        }
+
+      console.log(`Status updated for order ${orderID}:`, data);
+    } catch (error) {
+      console.error("Error updating status:", error);
+    } finally {
+      setLoadingItems(prev => ({ ...prev, [orderID]: false }));
+  }
+  };
+
 
     const toggleDetails = (groupId: string) => {
         setOpenGroup((prev) => (prev === groupId ? null : groupId));
@@ -90,6 +132,19 @@ export default function OrderProcessingItems({ order_group }: { order_group: Ite
         );
     }
 
+    const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+        case "completed":
+        return "text-green-600";
+        case "processing":
+        return "text-orange-500";
+        case "cancelled":
+        return "text-red-600";
+        default:
+        return "text-gray-700";
+        }
+    };
+
     return (
         <div className="flex flex-col gap-3">
             {order_group.map((group) => (
@@ -99,7 +154,9 @@ export default function OrderProcessingItems({ order_group }: { order_group: Ite
 
                         <div>
                             <h2 className="font-bold">Status:</h2>
-                            <p className="text-green-500">{group.status}</p>
+                            <p className={getStatusColor(groupStatuses[group.id] ?? group.status)}>
+                                {groupStatuses[group.id] ?? group.status}
+                            </p>                        
                         </div>
                         <button onClick={() => toggleDetails(group.id)} className="flex justify-end text-2xl">
                             <FaAngleDown className={`transition-all duration-300 w-fit h-fit hover:bg-primary-400 hover:cursor-pointer p-2 rounded-full ${openGroup === group.id ? 'rotate-180' : ''}`} />
@@ -140,16 +197,14 @@ export default function OrderProcessingItems({ order_group }: { order_group: Ite
                                     </p>
 
                                     {statuses[item.orderID] === undefined ? (
-                                        <p className="text-sm text-gray-500">Loading status...</p>
+                                    <p className="text-sm text-gray-500">Loading status...</p>
                                     ) : (
+                                    <div className="flex items-center gap-2">
                                         <select
                                         value={statuses[item.orderID] ?? "No Status"}
                                         className="rounded-lg p-2"
-                                        onChange={(e) => {
-                                            const updatedStatus = e.target.value;
-                                            console.log(`Update status of ${item.orderID} to ${updatedStatus}`);
-                                            // TODO: send update API call here
-                                        }}
+                                        onChange={(e) => handleStatusChange(item.orderID, e.target.value)}
+                                        disabled={loadingItems[item.orderID]}
                                         >
                                         <option value="Awaiting Confirmation">Awaiting Confirmation</option>
                                         <option value="Confirmed">Confirmed</option>
@@ -157,6 +212,11 @@ export default function OrderProcessingItems({ order_group }: { order_group: Ite
                                         <option value="Shipping">Shipping</option>
                                         <option className="bg-red-500" value="Cancelled">Cancelled</option>
                                         </select>
+
+                                        {loadingItems[item.orderID] && (
+                                        <span className="ml-2 animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-gray-500" />
+                                        )}
+                                    </div>
                                     )}
                                     </div>
                                 </div>
