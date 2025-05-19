@@ -26,7 +26,7 @@ import {listOfAllOrgInvValue,
 } from "./utils/organisationsAnalytics"
 import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder } from "./utils/orderAnalytics";
 import trackClicks, {returnAllClickCountPages} from "./utils/track-clicks";
-import {recordView, getRecentViews} from "./utils/historyAnalytics";
+import {recordView, getRecentViews, updateRecommendedProducts} from "./utils/historyAnalytics";
 
 dotenv.config();
 
