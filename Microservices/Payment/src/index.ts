@@ -3,7 +3,12 @@ import dotenv from "dotenv";
 import cors from "cors";
 // @ts-ignore
 import cookieParser from "cookie-parser";
-import orderProcessing, {changeStatus, changeStatusIndividual, getOrderDetails} from "./utils/orders/orderProccessing";
+import orderProcessing, {
+    changeStatus,
+    changeStatusIndividual,
+    getAllUserOrders,
+    getOrderDetails
+} from "./utils/orders/orderProccessing";
 import Stripe from "stripe";
 
 dotenv.config();
@@ -23,7 +28,30 @@ Payment.use(
 );
 Payment.use(cookieParser());
 
+
 const portNumber = 8002;
+
+
+Payment.post('/getUserOrders', async (req: Request, res: Response) => {
+
+    const { user_id } = req.body;
+
+    console.log("//getUserOrders user_id: ", user_id)
+
+    try {
+        const orderDetails = await getAllUserOrders(user_id);
+
+        if (orderDetails) {
+            res.status(200).json({event: "Order Details Retrieved Successfully", orderDetails});
+        } else {
+            res.status(500).json({error: "Order Details Were Not Retrieved Successfully"});
+        }
+    }catch (error){
+        res.status(500).json({error: "Order Details Were Not Retrieved Successfully"});
+    }
+})
+
+
  
 // @ts-ignore
 Payment.post('/createPaymentIntent', async (req, res) => {
