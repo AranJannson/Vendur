@@ -12,7 +12,16 @@ import {
     getOrgByName,
 } from "./utils/productManagement";
 import {getAllVerifiedOrgs, requestVerification} from "./utils/verification";
-import {getOrdersByItemId, getAllOrders, deleteOrder, updateOrderStatus, getOrderGroupById} from "./utils/orderManagment";
+import {getOrdersByItemId, 
+        getAllOrders, 
+        deleteOrder, 
+        updateOrderStatus, 
+        getOrderGroupById, 
+        getOrderStatusByOrderId, 
+        updateOrderStatusByOrderId,
+        updateOrderGroupStatus,
+        getGroupOrderStatusByOrderId
+        } from "./utils/orderManagment";
 import {getAllOrgs} from "./utils/orgDetails";
 
 dotenv.config();
@@ -295,3 +304,57 @@ OrgMgmt.get('/getAllOrgs', async (req: Request, res: Response): Promise<any> => 
       }
       res.json(orgs);
 });
+
+// Get Order Status
+OrgMgmt.post("/getOrderStatus", async (req: Request, res: Response) => {
+    try {
+        const { id } = req.body;
+        const data = await getOrderStatusByOrderId(id);
+        res.status(200).send(JSON.stringify(data));
+    } catch (error) {
+        console.error("Error retrieving data", error);
+        res.status(500).send({ error: "Failed to get status" });
+    }
+})
+
+// Update Order Status
+// Express example for /updateOrderStatus
+
+OrgMgmt.post("/updateOrderStatus", async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { id, status } = req.body;
+
+        // Update single order item
+        const updatedItem = await updateOrderStatusByOrderId(id, status);
+
+        if (!updatedItem) {
+            return res.status(404).send({ error: "Order item not found" });
+        }
+
+        const orderGroupId = updatedItem.group_id;
+
+        if (!orderGroupId) {
+            return res.status(400).send({ error: "Order group ID missing" });
+        }
+
+        // Update order group status based on item statuses
+        const updatedGroup = await updateOrderGroupStatus(orderGroupId);
+
+        return res.status(200).json({ updatedItem, updatedGroup });
+    } catch (error) {
+        console.error("Error handling update:", error);
+        res.status(500).send({ error: "Failed to process status update" });
+    }
+});
+
+// Get Group Order Status
+OrgMgmt.post("/getGroupOrderStatus", async (req: Request, res: Response) => {
+    try {
+        const { id } = req.body;
+        const data = await getGroupOrderStatusByOrderId(id);
+        res.status(200).send(JSON.stringify(data));
+    } catch (error) {
+        console.error("Error retrieving data", error);
+        res.status(500).send({ error: "Failed to get status" });
+    }
+})
