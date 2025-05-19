@@ -16,7 +16,7 @@ export default function VendurSpotlight() {
     useEffect(() => {
         const fetchOrgs = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/getAllVerifiedOrgs', {
+                const response = await fetch('/api/getAllVerifiedOrgs', {
                     method: 'GET',
                     cache: 'no-store',
                 });
