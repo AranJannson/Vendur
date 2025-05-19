@@ -44,7 +44,7 @@ export async function deleteItem (item: any) {
 
 export const fetchBasket = async (): Promise<Item[]> => {
   try {
-    const response = await fetch("http://localhost:3000/api/getBasket", {
+    const response = await fetch("/api/getBasket", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
