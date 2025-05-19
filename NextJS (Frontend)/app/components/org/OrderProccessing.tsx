@@ -61,7 +61,7 @@ export default async function OrderProcessing(){
     });
 
     const json = await response.json();
-    console.log("Full response [OrderProcessing]:", json);
+    //console.log("Full response [OrderProcessing]:", json);
 
     const items = json;
 
@@ -82,7 +82,7 @@ export default async function OrderProcessing(){
         orderID: order.id,
         name: item.name,
         quantity: order.quantity,
-        status: "Awaiting Confirmation",
+        status: "Awaiting",
     };
 
     if (existingGroup) {

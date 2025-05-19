@@ -73,3 +73,19 @@ export async function deleteOrder(orderId: string) {
 
     return data;
 }
+
+//Get Order Status
+export async function getOrderStatusByOrderId(id: number) {
+  const supabase = connectPayment();
+  const { data, error } = await supabase
+    .from("orders")
+    .select("status")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Error fetching order status [getOrderStatusByItemId]: ${error.message}`);
+  }
+  //console.log("Response:", data);
+  return data;
+}

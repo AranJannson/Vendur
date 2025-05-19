@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import { FaAngleDown } from "react-icons/fa";
 
 interface Items {
@@ -28,8 +29,50 @@ interface ItemsGroup {
     status: string;
 }
 
+async function fetchOrderStatus(orderID: number): Promise<string | null> {
+    try {
+        const response = await fetch("/api/getOrderStatus", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: orderID }),
+        });
+
+        const data = await response.json();
+        return data?.status ?? null;
+    } catch (error) {
+        console.error("Failed to fetch status:", error);
+        return null;
+    }
+}
+
 export default function OrderProcessingItems({ order_group }: { order_group: ItemsGroup[] }) {
     const [openGroup, setOpenGroup] = useState<string | null>(null);
+    const [statuses, setStatuses] = useState<{ [orderId: number]: string | null }>({});
+
+   useEffect(() => {
+    async function fetchStatuses() {
+        const newStatuses: { [orderId: number]: string | null } = {};
+
+        await Promise.all(
+            order_group.flatMap((group) =>
+                group.items.map(async (item) => {
+                    const status = await fetchOrderStatus(item.orderID);
+                    newStatuses[item.orderID] = status;
+                })
+            )
+        );
+
+        setStatuses(newStatuses);
+        console.log(newStatuses);
+        
+    }
+
+        fetchStatuses();
+    }, [order_group]);
+    
+
 
     const toggleDetails = (groupId: string) => {
         setOpenGroup((prev) => (prev === groupId ? null : groupId));
@@ -85,28 +128,39 @@ export default function OrderProcessingItems({ order_group }: { order_group: Ite
 
                             {group.items.map((item) => (
                                 <div key={item.id} className="bg-primary-100 p-4 rounded-lg">
-
                                     <span className="flex flex-row gap-3">
-                                        <h2 className="font-bold">Item Order ID:</h2>
-                                        <p>{item.orderID}</p>
+                                    <h2 className="font-bold">Item Order ID:</h2>
+                                    <p>{item.orderID}</p>
                                     </span>
 
                                     <div className="flex items-center gap-2 w-full">
-                                        <h2 className="font-bold">Item:</h2>
-                                        <p className="text-gray-700 flex-1">{item.name} (<b>Qty:</b> {item.quantity})</p>
-                                        <form>
-                                            <select defaultValue={item.status} className="rounded-lg p-2">
-                                                <option value="Awaiting Confirmation">Awaiting Confirmation</option>
-                                                <option value="Confirmed">Confirmed</option>
-                                                <option value="Processing">Processing</option>
-                                                <option value="Shipped">Shipped</option>
-                                                <option className="bg-red-500" value="Canceled">Canceled</option>
-                                            </select>
-                                        </form>
+                                    <h2 className="font-bold">Item:</h2>
+                                    <p className="text-gray-700 flex-1">
+                                        {item.name} (<b>Qty:</b> {item.quantity})
+                                    </p>
+
+                                    {statuses[item.orderID] === undefined ? (
+                                        <p className="text-sm text-gray-500">Loading status...</p>
+                                    ) : (
+                                        <select
+                                        value={statuses[item.orderID] ?? "No Status"}
+                                        className="rounded-lg p-2"
+                                        onChange={(e) => {
+                                            const updatedStatus = e.target.value;
+                                            console.log(`Update status of ${item.orderID} to ${updatedStatus}`);
+                                            // TODO: send update API call here
+                                        }}
+                                        >
+                                        <option value="Awaiting Confirmation">Awaiting Confirmation</option>
+                                        <option value="Confirmed">Confirmed</option>
+                                        <option value="Processing">Processing</option>
+                                        <option value="Shipping">Shipping</option>
+                                        <option className="bg-red-500" value="Cancelled">Cancelled</option>
+                                        </select>
+                                    )}
                                     </div>
                                 </div>
-
-                            ))}
+                                ))}
                         </div>
                     )}
                 </div>

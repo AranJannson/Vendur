@@ -12,7 +12,7 @@ import {
     getOrgByName,
 } from "./utils/productManagement";
 import {getAllVerifiedOrgs, requestVerification} from "./utils/verification";
-import {getOrdersByItemId, getAllOrders, deleteOrder, updateOrderStatus, getOrderGroupById} from "./utils/orderManagment";
+import {getOrdersByItemId, getAllOrders, deleteOrder, updateOrderStatus, getOrderGroupById, getOrderStatusByOrderId} from "./utils/orderManagment";
 import {getAllOrgs} from "./utils/orgDetails";
 
 dotenv.config();
@@ -295,3 +295,15 @@ OrgMgmt.get('/getAllOrgs', async (req: Request, res: Response): Promise<any> => 
       }
       res.json(orgs);
 });
+
+// Get Order Status
+OrgMgmt.post("/getOrderStatus", async (req: Request, res: Response) => {
+    try {
+        const { id } = req.body;
+        const data = await getOrderStatusByOrderId(id);
+        res.status(200).send(JSON.stringify(data));
+    } catch (error) {
+        console.error("Error retrieving data", error);
+        res.status(500).send({ error: "Failed to get status" });
+    }
+})
