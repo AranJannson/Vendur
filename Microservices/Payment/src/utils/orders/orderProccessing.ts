@@ -39,6 +39,29 @@ export default async function orderProcessing(basket: Item[], user_id: string, d
 }
 
 
+export async function getAllUserOrders(user_id: string) {
+
+    const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process.env.PUBLIC_SUPABASE_ANON_KEY as string);
+
+    try {
+        const { data, error } = await supabase
+            .from("order_groups")
+            .select(`*,orders (*)`)
+            .eq("user_id", user_id);
+
+        if (error) {
+            console.error("Error fetching orders:", error);
+            return null;
+        }
+
+        return data;
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+        return null;
+    }
+}
+
+
 export async function getOrderDetails(order_group_id: string) {
     const supabase = createClient(process.env.PUBLIC_SUPABASE_URL as string, process.env.PUBLIC_SUPABASE_ANON_KEY as string);
 
