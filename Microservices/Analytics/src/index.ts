@@ -325,6 +325,32 @@ Analytics.get("/recent-views", async (req: Request, res: Response) => {
     }
 });
 
+Analytics.post("/update-recommended-products", async (req: Request, res: Response) => {
+    const { user_id } = req.body;
+
+    try {
+        const data = await updateRecommendedProducts(user_id);
+        res.status(200).json(data);
+    } catch (error) {
+        console.error("Error updating recommended products:", error);
+        res.status(500).json({ error: "Error updating recommended products" });
+    }
+})
+
+Analytics.post("/get-recommended-products", async (req: Request, res: Response) => {
+    const { user_id } = req.body;
+
+    try {
+        const data = await getRecommendedProducts(user_id);
+        res.status(200).json(data);
+    } catch (error) {
+        console.error("Error fetching recommended products:", error);
+        res.status(500).json({ error: "Error fetching recommended products" });
+    }
+})
+
+// Single Org Analytics
+
 Analytics.post("/oneOrgRevTest", async (req: Request, res: Response) => {
     const { org_id } = req.body;
     const total = await oneOrgItemRevenueAnalytics(org_id)

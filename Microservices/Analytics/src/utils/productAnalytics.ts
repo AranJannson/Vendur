@@ -234,3 +234,7 @@ export async function get_category_sales_summary() {
     }
     return data;
 }
+
+export async function recommendedProducts(user_id: string) {
+    // Get the list of items purchased by the user
+}
