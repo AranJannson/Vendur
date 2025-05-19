@@ -10,7 +10,7 @@ const Admin = express();
 Admin.use(express.json());
 
 Admin.use(cors({
-    origin: "http://localhost:3000",
+    origin: "*",
     credentials: true
 }));
 
