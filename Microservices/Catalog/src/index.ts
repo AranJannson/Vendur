@@ -15,8 +15,7 @@ const Catalog = express();
 Catalog.use(express.json());
 
 Catalog.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true
+    origin: '*',
 }));
 
 const portNumber = 8000;
