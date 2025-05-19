@@ -19,7 +19,7 @@ export default function ReviewForm({ item_id }: { item_id: number }) {
             rating: rating
         }
         // TODO: Popup to show success or error
-        const response = await fetch('http://localhost:3000/api/review/make-review', {
+        const response = await fetch('/api/review/make-review', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -46,13 +46,19 @@ type Entry = {
   }[];
 };
 
+const URL =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : 'https://vendur.shop';
+
 export default async function OrderProcessing(){
     const user = await stackServerApp.getUser({ or: 'redirect' });
     const allTeams = await user.listTeams();
 
     const orgID: string = allTeams[0]?.id;
 
-    const response = await fetch('http://localhost:3000/api/getOrderByOrg', {
+    const response = await fetch(`${URL}/api/getOrderByOrg`, {
+
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
