@@ -22,7 +22,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 Payment.use(express.json());
 Payment.use(
     cors({
-        origin: "http://localhost:3000",
+        origin: "*",
         credentials: true,
     })
 );
