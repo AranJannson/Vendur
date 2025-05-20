@@ -8,6 +8,7 @@ export default function Payment() {
 
   return (
     <div>
+      <title>Basket | Vendur</title>
       {user ? (
         <div>
           {/*Welcome to checkout, you are signed in*/}

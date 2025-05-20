@@ -1,6 +1,7 @@
 "use client";
 import { useUser } from "@stackframe/stack"
 import {useEffect, useState} from "react";
+import Link from "next/link";
 
 interface Order {
     id: number;
@@ -43,6 +44,7 @@ interface OrderGroup {
     full_name: string;
     total_cost: number;
     orders: Order[];
+    status: string;
 }
 
 export default function UserOrdersPage(){
@@ -113,44 +115,74 @@ export default function UserOrdersPage(){
             <h1 className="text-3xl font-bold mb-4">My Orders</h1>
 
             {orderGroups?.map((group) => (
-                <div key={group.id} className="border p-4 m-4 rounded-lg bg-primary-300">
-                    <h2 className="text-xl font-semibold text-left pl-4">Order Number: {group.id}</h2>
-                    <ul className="ml-4 mt-2 flex flex-row gap-4 bg-background-200 p-4 rounded-lg overflow-x-scroll">
+                <div key={group.id} className="border p-2 m-4 rounded-lg bg-primary-300">
+                    <div className="bg-background-100 m-4 p-2 rounded-lg flex flex-row gap-5">
+                        <div className="flex flex-col gap-3">
+                            <div>
+                                <h2 className="text-xl font-semibold text-left pl-4">Order Number: {group.id}</h2>
+                                <h2 className="text-lg font-semibold text-left pl-4">Ordered At: {new Date(group.ordered_at).toLocaleString()}</h2>
+                            </div>
+                            <div className="flex flex-row gap-2 pl-4">
+                                <h2 className="font-bold">Order Status:</h2>
+                                <h2>{group.status}</h2>
+                            </div>
+                            <div className="flex flex-row gap-2 pl-4">
+                                <h2 className="font-bold">Total Cost:</h2>
+                                <h2>£{group.total_cost}</h2>
+                            </div>
+                        </div>
+
+                        <div className="pl-4 text-left">
+                            <h2 className="text-lg font-semibold mb-2">Delivery Address:</h2>
+                            <p className="text-base font-medium mt-2">
+                                {group.full_name}
+                            </p>
+                            <p className="text-base">{group.delivery_address.line1}</p>
+                            {group.delivery_address.line2 && (
+                                <p className="text-base">{group.delivery_address.line2}</p>
+                            )}
+                            <p className="text-base">
+                                {group.delivery_address.city}, {group.delivery_address.state}
+                            </p>
+                            <p className="text-base">
+                                {group.delivery_address.country} - {group.delivery_address.postal_code}
+                            </p>
+                        </div>
+
+
+                    </div>
+
+                    <ul className="mt-2 flex flex-row gap-4 bg-background-200 p-4 rounded-lg overflow-x-auto w-full">
                         {group.orders?.map((order) => (
-                            <li key={order.id}>
+                            <li key={order.id} className="min-w-[250px] scale-90">
+                                <div className="grid grid-cols-1 bg-background-100 rounded-lg p-4 gap-4 justify-center items-center">
 
-                                <div className="grid grid-cols-1 bg-background-100 rounded-lg p-4 gap-4">
-                                    <div className="bg-primary-300 w-fit h-fit rounded-lg aspect-square flex items-center justify-center">
-                                        <img src={order.item?.image} width={200} height={200}/>
+                                    <Link href={`/products/${encodeURIComponent(order.item!.name)}`} className="bg-primary-300 w-[150px] h-[150px] rounded-lg flex items-center justify-center overflow-hidden mx-auto">
+                                        <img src={order.item?.image} alt="Order Item" className="object-contain w-full h-full" />
+                                    </Link>
+
+                                    <div className="space-y-2 text-sm">
+                                        <div className="flex flex-row gap-2">
+                                            <h2 className="font-bold">Item Order Number:</h2>
+                                            <h2>{order.id}</h2>
+                                        </div>
+
+                                        <div className="flex flex-row gap-2">
+                                            <h2 className="font-bold">Order Item:</h2>
+                                            <h2>{order.item?.name}</h2>
+                                        </div>
+
+                                        <div className="flex flex-row gap-2">
+                                            <h2 className="font-bold">Order Status:</h2>
+                                            <h2>{order.status}</h2>
+                                        </div>
                                     </div>
 
-                                    <div>
-                                        <div className="flex flex-row gap-2">
-                                            <h2 className="font-bold">Item Order Number: </h2>
-                                            <h2 className="">{order.id}</h2>
-
-                                        </div>
-
-                                        <div className="flex flex-row gap-2">
-                                            <h2 className="font-bold">Order Item: </h2>
-                                            <h2 className="">{order.item?.name}</h2>
-
-                                        </div>
-
-                                        <div className="flex flex-row gap-2">
-                                            <h2 className="font-bold">Order Status: </h2>
-                                            <h2 className="">{order.status}</h2>
-
-                                        </div>
-
-
-                                    </div>
                                 </div>
-
-
                             </li>
                         ))}
                     </ul>
+
                 </div>
             ))}
 

@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
 async function getOrderDetails (order_id: string) {
@@ -53,6 +53,7 @@ export default function Success() {
 
   return (
     <div className="bg-secondary-400 p-4 m-4 rounded-xl shadow-xl">
+      <title>Checkout | Vendur</title>
       <div className="bg-secondary-300 p-4 rounded-lg font-bold text-3xl">
         <p>Transaction successful!</p>
       </div>

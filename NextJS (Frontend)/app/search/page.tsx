@@ -41,6 +41,7 @@ export default function SearchPage() {
     
     return (
         <div className="m-2">
+            <title>Search | Vendur</title>
             <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
                 
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}

@@ -56,6 +56,7 @@ function Checkout() {
 
   return (
     <div className="bg-secondary-400 m-4 p-4 rounded-lg shadow-lg">
+      <title>Checkout | Vendur</title>
       <h2 className="text-3xl font-bold mb-2">Your Basket</h2>
       <ul className="flex gap-8 p-4 overflow-x-scroll bg-secondary-300 rounded-lg">
         {basket.map((item, index) => (
