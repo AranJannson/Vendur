@@ -73,7 +73,7 @@ export default function UserOrdersPage(){
                     groups.map(async (group: OrderGroup) => {
                         const itemDetailOrders = await Promise.all(
                             group.orders.map(async (order: Order) => {
-                                const itemResponse = await fetch("http://localhost:3000//api/getItemByID", {
+                                const itemResponse = await fetch("http://localhost:3000/api/getItemByID", {
                                     method: "POST",
                                     headers: {
                                         "Content-Type": "application/json",
@@ -89,7 +89,9 @@ export default function UserOrdersPage(){
                     })
                 );
 
-                setOrderGroups(groupsWithItemDetails);
+                const reversedGroups = groupsWithItemDetails.reverse();
+
+                setOrderGroups(reversedGroups);
             } catch (error) {
                 console.error("Failed to fetch enriched orders:", error);
                 setOrderGroups([]);
@@ -106,10 +108,12 @@ export default function UserOrdersPage(){
 
         <div className="p-4 text-center">
 
+            <title>My Orders | Vendur</title>
+
             <h1 className="text-3xl font-bold mb-4">My Orders</h1>
 
             {orderGroups?.map((group) => (
-                <div key={group.id} className="border p-4 rounded m-4 rounded-lg bg-primary-300">
+                <div key={group.id} className="border p-4 m-4 rounded-lg bg-primary-300">
                     <h2 className="text-xl font-semibold text-left pl-4">Order Number: {group.id}</h2>
                     <ul className="ml-4 mt-2 flex flex-row gap-4 bg-background-200 p-4 rounded-lg overflow-x-scroll">
                         {group.orders?.map((order) => (

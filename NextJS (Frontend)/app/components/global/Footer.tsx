@@ -45,17 +45,17 @@ export default function Footer() {
                         <div className="flex flex-row md:flex-col justify-center gap-6 md:gap-3">
                             <li>
                                 <Link href="/organisations/management" className="hover:text-gray-500">
-                                    Org Management
+                                    Vendur Management
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-gray-500">
-                                    Page 5
+                                <Link href="/organisations/management" className="hover:text-gray-500">
+                                    Create Your Own Vendur
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-gray-500">
-                                    Page 6
+                                <Link href="/orders" className="hover:text-gray-500">
+                                    My Orders
                                 </Link>
                             </li>
                         </div>
