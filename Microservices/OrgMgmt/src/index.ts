@@ -22,7 +22,7 @@ import {getOrdersByItemId,
         updateOrderGroupStatus,
         getGroupOrderStatusByOrderId
         } from "./utils/orderManagment";
-import {getAllOrgs} from "./utils/orgDetails";
+import {createOrg, getAllOrgs} from "./utils/orgDetails";
 
 dotenv.config();
 
@@ -46,6 +46,24 @@ OrgMgmt.post("/organisation", async (req: Request, res: Response) => {
         console.error("Error fetching products:", error);
         res.status(500).send({ error: "Failed to fetch products" });
     }
+})
+
+
+OrgMgmt.post("/createOrg", async (req: Request, res: Response) => {
+
+
+    try {
+        const { org_id, name, description, email, telephone, address } = req.body;
+        const data = await createOrg(org_id, name, description, email, telephone, address);
+        res.status(200).send(JSON.stringify(data));
+    } catch (error) {
+        console.error("Error creating organisation:", error);
+        res.status(500).send({ error: "Failed to create organisation" });
+    }
+
+
+
+
 })
 
 OrgMgmt.get("/getVerifiedOrgs", async (req: Request, res: Response) => {
