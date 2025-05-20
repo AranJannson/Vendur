@@ -12,7 +12,26 @@ const analyticsSupabase = createClient(
     process.env.PUBLIC_SUPABASE_ANON_KEY as string
 );
 
+const paymentSupabase = createClient(
+    process.env.PAYMENT_SUPABASE_URL as string,
+    process.env.PAYMENT_SUPABASE_ANON_KEY as string
+)
+
 // Returns value of total revenue
+
+export async function newestTotalSales(){
+    const {data, error} = await paymentSupabase
+        .from("orders")
+        .select("*", {count:'exact', head:true})
+
+    if (error){
+        console.error("Error fetching sales:", error)
+        return null;
+    }
+
+    return data;
+}
+
 // WAITING FOR ORDER TABLE TO BE IN PAYMENT DB
 export async function totalSalesEver() {
     const {data, error} = await catalogSupabase

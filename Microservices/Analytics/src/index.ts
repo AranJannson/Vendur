@@ -24,9 +24,9 @@ import {listOfAllOrgInvValue,
     oneOrgItemRevenueAnalytics,
     orgsAverageOrderValue
 } from "./utils/organisationsAnalytics"
-import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder } from "./utils/orderAnalytics";
+import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder, newestTotalSales } from "./utils/orderAnalytics";
 import trackClicks, {returnAllClickCountPages} from "./utils/track-clicks";
-import {recordView, getRecentViews, updateRecommendedProducts} from "./utils/historyAnalytics";
+import {recordView, getRecentViews, updateRecommendedProducts, getRecommendedProducts} from "./utils/historyAnalytics";
 
 dotenv.config();
 
@@ -378,6 +378,14 @@ Analytics.get("/allOrgRevenue", async (req: Request, res: Response) => {
 Analytics.get("/allOrgAOV", async (req: Request, res: Response) => {
 
     const total = await orgsAverageOrderValue()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/newTotalSales", async (req: Request, res: Response) => {
+
+    const total = await newestTotalSales()
 
     console.log(total);
     res.send(JSON.stringify(total, null, 2))

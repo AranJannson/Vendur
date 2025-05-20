@@ -20,7 +20,7 @@ export async function recordView(event: BrowsingEvent) {
             .from("sessions")
             .upsert([
                 { session_id, user_id }
-            ], { onConflict: ["session_id"] });
+            ], { onConflict: "session_id" });
 
         if (sessionError) {
             console.error("Error upserting session:", sessionError);
@@ -60,7 +60,7 @@ export async function getRecentViews(session_id: string, limit = 5): Promise<{ i
 export async function updateRecommendedProducts(user_id: string) {
     const DECAY_RATE = 0.1;
 
-    const { data: sessions } = await analyticsSupabase
+    const { data: sessions } = await catalogSupabase
         .from("sessions")
         .select("session_id")
         .eq("user_id", user_id);
@@ -69,7 +69,7 @@ export async function updateRecommendedProducts(user_id: string) {
 
     if (sessionIds.length === 0) return;
 
-    const { data: views } = await analyticsSupabase
+    const { data: views } = await catalogSupabase
         .from("browsing_history")
         .select("item_id, viewed_at")
         .in("session_id", sessionIds);
@@ -94,7 +94,7 @@ export async function updateRecommendedProducts(user_id: string) {
     if (upserts.length > 0) {
         const { error } = await catalogSupabase
             .from("recommended_products")
-            .upsert(upserts, { onConflict: ["user_id", "item_id"] });
+            .upsert(upserts, { onConflict: "user_id, item_id" });
 
         if (error) {
             console.error("Failed to upsert recommended products:", error);
