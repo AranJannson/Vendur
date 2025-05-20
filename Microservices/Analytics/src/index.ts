@@ -24,7 +24,15 @@ import {listOfAllOrgInvValue,
     oneOrgItemRevenueAnalytics,
     orgsAverageOrderValue
 } from "./utils/organisationsAnalytics"
-import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder, newestTotalSales } from "./utils/orderAnalytics";
+import {
+    orderNumberDailyList,
+    totalRevenuePerDayList,
+    averageOrderValuePerDayList,
+    avgQuantityPerItemInOrder,
+    newestTotalSales,
+    totalRevenueEver,
+    orderCountDaily,
+    orderValuePerDayList} from "./utils/orderAnalytics";
 import trackClicks, {returnAllClickCountPages} from "./utils/track-clicks";
 import {recordView, getRecentViews, updateRecommendedProducts, getRecommendedProducts} from "./utils/historyAnalytics";
 
@@ -125,13 +133,13 @@ Analytics.get("/orgRevenueList", async (req: Request, res: Response) => {
 });
 
 
-Analytics.get("/totalSales", async (req: Request, res: Response) => {
-
-    const total = await totalSalesEver()
-
-    console.log(total);
-    res.send(JSON.stringify(total, null, 2))
-});
+// Analytics.get("/totalSales", async (req: Request, res: Response) => {
+//
+//     const total = await totalSalesEver()
+//
+//     console.log(total);
+//     res.send(JSON.stringify(total, null, 2))
+// });
 
 Analytics.get("/totalSalesDaily", async (req: Request, res: Response) => {
 
@@ -386,6 +394,38 @@ Analytics.get("/allOrgAOV", async (req: Request, res: Response) => {
 Analytics.get("/newTotalSales", async (req: Request, res: Response) => {
 
     const total = await newestTotalSales()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/totalSales", async (req: Request, res: Response) => {
+
+    const total = await newestTotalSales()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/totalRevenue", async (req: Request, res: Response) => {
+
+    const total = await totalRevenueEver()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/orderDatesList", async (req: Request, res: Response) => {
+
+    const total = await orderCountDaily()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/orderValuePerDay", async (req: Request, res: Response) => {
+
+    const total = await orderValuePerDayList()
 
     console.log(total);
     res.send(JSON.stringify(total, null, 2))
