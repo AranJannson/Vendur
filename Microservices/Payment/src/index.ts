@@ -20,12 +20,10 @@ const expiryCookieName = "expiry";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
 Payment.use(express.json());
-Payment.use(
-    cors({
-        origin: "*",
-        credentials: true,
-    })
-);
+Payment.use(cors({
+    origin: ['https://vendur.shop', 'http://localhost:3000', 'https://www.vendur.shop'],
+    credentials: true
+}));
 Payment.use(cookieParser());
 
 
