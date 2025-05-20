@@ -59,6 +59,7 @@ export default function AddProducts() {
         });
 
         alert(response.ok ? 'Product added successfully' : 'Failed to add product');
+        window.location.reload();
     };
 
 
@@ -90,8 +91,14 @@ export default function AddProducts() {
                         <option value="" disabled>Select a category</option>
                         <option value="Electronics & Computing">Electronics & Computing</option>
                         <option value="Clothing & Shoes">Clothing & Shoes</option>
-                        <option value="Home, Garden & DIY">Home & Garden</option>
+                        <option value="Home, Garden & DIY">Home, Garden & DIY</option>
                         <option value="Health & Beauty">Health & Beauty</option>
+                        <option value="Books, Films & Music">Books, Films & Music</option>
+                        <option value="Sport & Activity">Sport & Activity</option>
+                        <option value="Stationary & Craft Supplies">Stationary & Craft Supplies</option>
+                        <option value="Art & Collectables">Art & Collectables</option>
+                        <option value="Pet Supplies">Pet Supplies</option>
+                        <option value="Toys & Games">Toys & Games</option>
                     </select>
                 </span>
             </div>

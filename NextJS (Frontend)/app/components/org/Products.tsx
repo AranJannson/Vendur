@@ -36,8 +36,24 @@ export default async function Products(){
         body: JSON.stringify({ org_id: orgID }),
     });
 
-    const items = await response.json();
+    const items: Item[] = await response.json();
 
+    // Fetch stock in parallel for all items
+    const itemsWithStock = await Promise.all(
+    items.map(async (item) => {
+        const stockRes = await fetch(`${URL}/api/organisations/products/get-stock`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ item_id: item.id }),
+        cache: "no-store",
+        });
+        console.log("Fetching stock for", item.id);
+        const { stock } = await stockRes.json();
+        return { ...item, stock: stock ?? 0 };
+    })
+    );
 
     return(
         <div className="bg-primary-200 aspect-square rounded-xl shadow-xl grid grid-cols-1 gap-4 p-4 w-full">
@@ -51,13 +67,13 @@ export default async function Products(){
 
             </div>
 
-            <div>
+            {/* <div>
                 <input  className="bg-background-300 p-4 rounded-lg shadow-md flex flex-row gap-4 placeholder:text-gray-700 w-full" placeholder="Search..."/>
                 
-            </div>
+            </div> */}
 
             <div className="grid grid-cols-1 gap-4 overflow-y-scroll max-h-[50vh] rounded-lg">
-                {items.map((item: Item) => (
+                {itemsWithStock.map((item) => (
                     <div key={item.id} className="bg-primary-100 p-4 rounded-lg shadow-md grid grid-cols-4 gap-3">
                         <div className="aspect-square max-h-fit object-contain">
                             <img src={item.image} alt={item.name} width={500} height={500} className="aspect-square object-contain"/>

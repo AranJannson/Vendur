@@ -39,23 +39,39 @@ export default function EditProductPage({ params }: { params: Promise<{ item_id:
 
   useEffect(() => {
     if (paramsResolved?.item_id) {
-      const fetchProduct = async () => {
+      const fetchProductAndStock = async () => {
         try {
-          const res = await fetch(`/api/organisations/products/get-product-info?id=${paramsResolved.item_id}`);
-          const data = await res.json();
+          // Fetch product info
+          const productRes = await fetch(`/api/organisations/products/get-product-info?id=${paramsResolved.item_id}`);
+          const productData = await productRes.json();
 
-          if (res.ok) {
-            setProduct(data[0]);
-          } else {
+          if (!productRes.ok || !productData[0]) {
             setError("Product not found.");
+            return;
           }
+
+          // Fetch stock info
+          const stockRes = await fetch(`/api/organisations/products/get-stock`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ item_id: paramsResolved.item_id }),
+            cache: "no-store",
+          });
+
+          const stockData = await stockRes.json();
+          const stock = stockData?.stock ?? 0;
+
+          // Combine product and stock
+          setProduct({ ...productData[0], stock });
         } catch (err) {
           setError("Error fetching product data.");
           console.error(err);
         }
       };
 
-      fetchProduct();
+      fetchProductAndStock();
     }
   }, [paramsResolved]);
 

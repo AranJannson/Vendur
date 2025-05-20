@@ -53,25 +53,43 @@ export default function OrderProcessingItems({ order_group }: { order_group: Ite
     const [groupStatuses, setGroupStatuses] = useState<{ [groupId: string]: string }>({});
     const [loadingItems, setLoadingItems] = useState<{ [orderId: number]: boolean }>({});
 
-   useEffect(() => {
-    async function fetchStatuses() {
-        const newStatuses: { [orderId: number]: string | null } = {};
+    useEffect(() => {
+        async function fetchStatusesAndGroupStatuses() {
+            const newStatuses: { [orderId: number]: string | null } = {};
+            const newGroupStatuses: { [groupId: string]: string } = {};
 
-        await Promise.all(
-            order_group.flatMap((group) =>
+            // Fetch item status
+            const itemStatusPromises = order_group.flatMap((group) =>
                 group.items.map(async (item) => {
                     const status = await fetchOrderStatus(item.orderID);
                     newStatuses[item.orderID] = status;
                 })
-            )
-        );
+            );
 
-        setStatuses(newStatuses);
-        console.log(newStatuses);
-        
-    }
+            // Fetch group status
+            const groupStatusPromises = order_group.map(async (group) => {
+                try {
+                    const res = await fetch("/api/getGroupOrderStatus", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ id: group.id }),
+                    });
 
-        fetchStatuses();
+                    const data = await res.json();
+                    newGroupStatuses[group.id] = data.status ?? group.status;
+                } catch (error) {
+                    console.error(`Failed to fetch status for group ${group.id}`, error);
+                    newGroupStatuses[group.id] = group.status;
+                }
+            });
+
+            await Promise.all([...itemStatusPromises, ...groupStatusPromises]);
+
+            setStatuses(newStatuses);
+            setGroupStatuses(newGroupStatuses);
+        }
+
+        fetchStatusesAndGroupStatuses();
     }, [order_group]);
     
 

@@ -41,27 +41,56 @@ export const getProducts = async (org_id: any) => {
 }
 
 export const createProduct = async (product: any) => {
-    const { data, error } = await cat_supabase
-        .from("items")
-        .insert([product])
+  const { data, error } = await cat_supabase
+    .from("items")
+    .insert([product])
+    .select("id");
 
-    if (error) {
-        throw new Error(`Error creating product: ${error.message}`);
-    }
-    return data;
-}
+  if (error) {
+    throw new Error(`Error creating product: ${error.message}`);
+  }
+
+  const newProductId = (data as { id: number }[] | null)?.[0]?.id;
+
+  if (!newProductId) {
+    throw new Error("Failed to retrieve new product ID");
+  }
+
+  const { error: stockError } = await cat_supabase
+    .from("stock")
+    .insert([{ item_id: newProductId, quantity: 0 }]);
+
+  if (stockError) {
+    throw new Error(`Error creating stock record: ${stockError.message}`);
+  }
+
+  return data;
+};
 
 export const updateProduct = async (productId: any, product: any) => {
+    const { stock, ...productData } = product;
     const { data, error } = await cat_supabase
         .from("items")
-        .update(product)
+        .update(productData)
         .eq("id", productId)
 
     if (error) {
         throw new Error(`Error updating product: ${error.message}`);
     }
-    return data;
-}
+
+  if (typeof stock !== "undefined") {
+    const { data: stockData, error: stockError } = await cat_supabase
+      .from("stock")
+      .update({ quantity: stock })
+      .eq("item_id", productId);
+
+    if (stockError) {
+      throw new Error(`Error updating stock: ${stockError.message}`);
+    }
+  }
+
+  return data;
+};
 
 export const deleteProduct = async (productId: any) => {
     const { data, error } = await cat_supabase
@@ -107,6 +136,32 @@ export const getProductByID = async (id: any) => {
 
     if (error) {
         throw new Error(`Error fetching product: ${error.message}`);
+    }
+    return data;
+}
+
+// Get Stock by item ID
+export const getItemStock = async (item_id: any) => {
+    const { data, error } = await cat_supabase
+        .from("stock")
+        .select()
+        .eq("item_id", item_id)
+
+    if (error) {
+        throw new Error(`Error fetching stock: ${error.message}`);
+    }
+    return data;
+}
+
+// Update Stock per item
+export const updateItemStock = async (item_id: any, quantity: any) => {
+    const { data, error } = await cat_supabase
+        .from("stock")
+        .update(quantity)
+        .eq("item_id", item_id)
+
+    if (error) {
+        throw new Error(`Error updating stock: ${error.message}`);
     }
     return data;
 }

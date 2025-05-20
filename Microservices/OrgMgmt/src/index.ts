@@ -10,6 +10,8 @@ import {
     updateProduct,
     getProductByID,
     getOrgByName,
+    getItemStock,
+    updateItemStock
 } from "./utils/productManagement";
 import {getAllVerifiedOrgs, requestVerification} from "./utils/verification";
 import {getOrdersByItemId, 
@@ -374,5 +376,17 @@ OrgMgmt.post("/getGroupOrderStatus", async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Error retrieving data", error);
         res.status(500).send({ error: "Failed to get status" });
+    }
+})
+
+//Get Stock
+OrgMgmt.post("/getItemStock", async (req: Request, res: Response) => {
+    try {
+        const { item_id } = req.body;
+        const data = await getItemStock(item_id);
+        res.status(200).send(JSON.stringify(data));
+    } catch (error) {
+        console.error("Error retrieving data", error);
+        res.status(500).send({ error: "Failed to get stock" });
     }
 })
