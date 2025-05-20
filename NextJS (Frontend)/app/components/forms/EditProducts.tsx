@@ -63,7 +63,7 @@ export default function EditProduct({ product }: EditProductProps) {
       },
     };
 
-    const response = await fetch('/api/organisations/products/update-product', {
+    const response = await fetch('http://localhost:3000/api/organisations/products/update-product', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

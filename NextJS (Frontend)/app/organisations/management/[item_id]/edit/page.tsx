@@ -20,7 +20,7 @@ export default function EditProductPage({ params }: { params: Promise<{ item_id:
   useEffect(() => {
     const fetchUserOrgId = async () => {
       try {
-        const res = await fetch("/api/organisations/get-org-id");
+        const res = await fetch("http://localhost:3000/api/organisations/get-org-id");
         const data = await res.json();
 
         if (res.ok) {
