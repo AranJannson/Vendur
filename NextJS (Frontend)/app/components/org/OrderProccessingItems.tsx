@@ -230,10 +230,6 @@ export default function OrderProcessingItems({ order_group }: { order_group: Ite
                                         <option value="Shipping">Shipping</option>
                                         <option className="bg-red-500" value="Cancelled">Cancelled</option>
                                         </select>
-
-                                        {loadingItems[item.orderID] && (
-                                        <span className="ml-2 animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-gray-500" />
-                                        )}
                                     </div>
                                     )}
                                     </div>
