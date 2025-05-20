@@ -6,11 +6,17 @@ export async function POST(req: NextRequest) {
 
         const { id, name: itemName, price, image, quantity, size, newSize } = value;
 
+        const cookie = req.headers.get("cookie") || "";
+
+        console.log("Cookie from request:", cookie);
+
         const response = await fetch("http://localhost:8002/setcookie", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                Cookie: cookie,
             },
+
             credentials: "include",
             body: JSON.stringify({
                 name,

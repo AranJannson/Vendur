@@ -8,7 +8,7 @@ interface Item {
 }
 
 export async function postItem(item: any, quantity: Number, oldSize: String | null, newSize: String | null, action: String){
-  const response = await fetch("http://localhost:3000/api/setCookies", {
+  const response = await fetch("http://localhost:8002/setcookie", {
       method: "POST",
       headers: {
           "Content-Type": "application/json",
@@ -32,7 +32,7 @@ export async function postItem(item: any, quantity: Number, oldSize: String | nu
 }
 
 export async function deleteItem (item: any) {
-  await fetch("http://localhost:3000/api/deleteValue", {
+  await fetch("http://localhost:8002/deletevalue", {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
