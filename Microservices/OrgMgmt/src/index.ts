@@ -32,7 +32,10 @@ const OrgMgmt = express();
 
 OrgMgmt.use(express.json());
 
-OrgMgmt.use(cors());
+OrgMgmt.use(cors({
+    origin: "*",
+    credentials: true
+}));
 
 const portNumber = 8003;
 
