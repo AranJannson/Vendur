@@ -169,7 +169,6 @@ Payment.post("/setcookie", (req: Request, res: Response) => {
     }
 
     let basket = [];
-
     if (req.cookies[basketCookieName]) {
         basket = JSON.parse(req.cookies[basketCookieName]);
         if (!Array.isArray(basket)) {

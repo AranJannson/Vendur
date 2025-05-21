@@ -8,7 +8,7 @@ interface Item {
 }
 
 export async function postItem(item: any, quantity: Number, oldSize: String | null, newSize: String | null, action: String){
-  const response = await fetch("http://localhost:3000/api/setCookies", {
+  const response = await fetch("/api/setCookies", {
       method: "POST",
       headers: {
           "Content-Type": "application/json",
@@ -27,7 +27,12 @@ export async function postItem(item: any, quantity: Number, oldSize: String | nu
           },
           action: action,
       }),
-  });   
+  });
+
+  if (!response.ok) {
+      throw new Error();
+  }
+
   return response.json();
 }
 

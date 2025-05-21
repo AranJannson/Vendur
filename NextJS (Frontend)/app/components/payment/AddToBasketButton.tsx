@@ -28,19 +28,20 @@ export default function AddToBasketButton( { item, formId, originalStock }: { it
 
     const handleClick = async () => {
         try {
-        const form = document.getElementById(formId) as HTMLFormElement;
-        const quantityInput = form?.querySelector("input[name='quantity']") as HTMLInputElement;
-        const selectedQuantity = quantityInput ? Number(quantityInput.value) : 1;
-        const sizeInput = form?.querySelector("select[name='size']") as HTMLInputElement;
-        const size = sizeInput ? String(sizeInput.value) : null;
+            const form = document.getElementById(formId) as HTMLFormElement;
+            const quantityInput = form?.querySelector("input[name='quantity']") as HTMLInputElement;
+            const selectedQuantity = quantityInput ? Number(quantityInput.value) : 1;
+            const sizeInput = form?.querySelector("select[name='size']") as HTMLInputElement;
+            const size = sizeInput ? String(sizeInput.value) : null;
 
-        const[itemResponse, stockResponse] = await Promise.all([postItem(item, selectedQuantity, size, size, ""), modifyStock(item, -selectedQuantity)]);        
-    } catch (error) {
-        console.error("Failed to add item: ", error);
-    } finally {
-        openModal();
-    }
-};
+            await Promise.all([postItem(item, selectedQuantity, size, size, ""), modifyStock(item, -selectedQuantity)]);
+
+            console.log("postItem and modifyStock completed")
+            openModal();
+        } catch (error) {
+            console.error("Failed to add item: ", error);
+        }
+    };
 
     return <div>
         <button type="button"
