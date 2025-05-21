@@ -22,10 +22,6 @@ export default function AddToBasketButton( { item, formId, originalStock }: { it
     };
 
     useEffect(() => {
-
-    }, []);
-
-    useEffect(() => {
         const key = `hasSetStock-${item.id}`;
         if (!sessionStorage.getItem(key)) {
           setOriginalStock(item.id, originalStock);
@@ -42,8 +38,9 @@ export default function AddToBasketButton( { item, formId, originalStock }: { it
             const size = sizeInput ? String(sizeInput.value) : null;
 
             openModal();
-
+            console.log(`Adding ${selectedQuantity} (or ${quantityInput.value}) of item ${item.id} to basket while removing ${selectedQuantity} from stock`);
             const response = postItem(user!.id, new Date().toISOString(), item.id);
+            const stockResponse = modifyStock(item.id, -selectedQuantity);
 
 
         } catch (error) {

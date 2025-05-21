@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
         });
 
         const data = await response.json();
+        // console.log("Data from getItemByID API routes: ", data)
 
         return NextResponse.json(data)
     } catch (error) {

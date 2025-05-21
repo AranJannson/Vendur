@@ -23,15 +23,15 @@ export async function postItem(user_id: string, dateTime: string, item_id: strin
   return response.json();
 }
 
-export async function deleteItem (item: any) {
-  await fetch("http://localhost:8002/deletevalue", {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({ id: item.id, size: item.size }),
-  });
+export async function deleteItem (user_id: string, item_id: number) {
+    console.log(`User ${user_id} is deleting item with ID: ${item_id}`);
+    await fetch("http://localhost:3000/api/decreaseBasketQuantity", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id: user_id, item_id: item_id }),
+    })
 }
 
 export const fetchBasket = async (user_id: string): Promise<Item[]> => {
