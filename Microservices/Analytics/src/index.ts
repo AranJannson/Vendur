@@ -24,9 +24,16 @@ import {listOfAllOrgInvValue,
     oneOrgItemRevenueAnalytics,
     orgsAverageOrderValue
 } from "./utils/organisationsAnalytics"
-import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder } from "./utils/orderAnalytics";
+import {
+    orderNumberDailyList,
+    orderValuePerDayList,
+    newestTotalSales,
+    totalRevenueEver,
+    orderCountDaily,
+    averageOrderValuePerDayList
+    } from "./utils/orderAnalytics";
 import trackClicks, {returnAllClickCountPages} from "./utils/track-clicks";
-import {recordView, getRecentViews} from "./utils/historyAnalytics";
+import {recordView, getRecentViews, updateRecommendedProducts, getRecommendedProducts} from "./utils/historyAnalytics";
 
 dotenv.config();
 
@@ -125,13 +132,13 @@ Analytics.get("/orgRevenueList", async (req: Request, res: Response) => {
 });
 
 
-Analytics.get("/totalSales", async (req: Request, res: Response) => {
-
-    const total = await totalSalesEver()
-
-    console.log(total);
-    res.send(JSON.stringify(total, null, 2))
-});
+// Analytics.get("/totalSales", async (req: Request, res: Response) => {
+//
+//     const total = await totalSalesEver()
+//
+//     console.log(total);
+//     res.send(JSON.stringify(total, null, 2))
+// });
 
 Analytics.get("/totalSalesDaily", async (req: Request, res: Response) => {
 
@@ -147,30 +154,6 @@ Analytics.get("/numberSalesDaily", async (req: Request, res: Response) => {
 
     console.log(dailyTotal);
     res.send(JSON.stringify(dailyTotal, null, 2))
-});
-
-Analytics.get("/totalRevenueDaily", async (req: Request, res: Response) => {
-
-    const revenueList = await totalRevenuePerDayList()
-
-    console.log(revenueList);
-    res.send(JSON.stringify(revenueList, null, 2))
-});
-
-Analytics.get("/avgOrderPerDayList", async (req: Request, res: Response) => {
-
-    const avgDayList = await averageOrderValuePerDayList()
-
-    console.log(avgDayList);
-    res.send(JSON.stringify(avgDayList, null, 2))
-});
-
-Analytics.get("/avgQuantityOrderList", async (req: Request, res: Response) => {
-
-    const avgQuantityList = await avgQuantityPerItemInOrder()
-
-    console.log(avgQuantityList);
-    res.send(JSON.stringify(avgQuantityList, null, 2))
 });
 
 Analytics.post("/track-clicks", async (req: Request, res: Response): Promise<any> => {
@@ -325,6 +308,32 @@ Analytics.post("/recent-views", async (req: Request, res: Response) => {
     }
 });
 
+Analytics.post("/update-recommended-products", async (req: Request, res: Response) => {
+    const { user_id } = req.body;
+
+    try {
+        const data = await updateRecommendedProducts(user_id);
+        res.status(200).json(data);
+    } catch (error) {
+        console.error("Error updating recommended products:", error);
+        res.status(500).json({ error: "Error updating recommended products" });
+    }
+})
+
+Analytics.post("/get-recommended-products", async (req: Request, res: Response) => {
+    const { user_id } = req.body;
+
+    try {
+        const data = await getRecommendedProducts(user_id);
+        res.status(200).json(data);
+    } catch (error) {
+        console.error("Error fetching recommended products:", error);
+        res.status(500).json({ error: "Error fetching recommended products" });
+    }
+})
+
+// Single Org Analytics
+
 Analytics.post("/oneOrgRevTest", async (req: Request, res: Response) => {
     const { org_id } = req.body;
     const total = await oneOrgItemRevenueAnalytics(org_id)
@@ -352,6 +361,54 @@ Analytics.get("/allOrgRevenue", async (req: Request, res: Response) => {
 Analytics.get("/allOrgAOV", async (req: Request, res: Response) => {
 
     const total = await orgsAverageOrderValue()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/newTotalSales", async (req: Request, res: Response) => {
+
+    const total = await newestTotalSales()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/totalSales", async (req: Request, res: Response) => {
+
+    const total = await newestTotalSales()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/totalRevenue", async (req: Request, res: Response) => {
+
+    const total = await totalRevenueEver()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/orderDatesList", async (req: Request, res: Response) => {
+
+    const total = await orderCountDaily()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/orderValuePerDay", async (req: Request, res: Response) => {
+
+    const total = await orderValuePerDayList()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/avgOrderValueDay", async (req: Request, res: Response) => {
+
+    const total = await averageOrderValuePerDayList()
 
     console.log(total);
     res.send(JSON.stringify(total, null, 2))

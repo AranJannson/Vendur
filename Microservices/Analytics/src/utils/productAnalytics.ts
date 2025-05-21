@@ -83,16 +83,6 @@ export async function avgItemPricePerCategory(org_id: string){
     }
 }
 
-// Returns a list of all org categories and the number of sales/orders there have been with/involving it
-export async function orgCategoriesBySales(org_id: string) {
-
-}
-
-// Returns a list of all org products and the number of sales/orders there have been with/involving it
-export async function orgProductsBySales(org_id: string) {
-
-}
-
 // !!!!!!!!!!!!!! Admin !!!!!!!!!!!!!!!!!
 
 // Returns list of categories by number of items listed with category
@@ -153,7 +143,7 @@ export async function categoriesByAverageItemPrice(){
 
         for (const category in categoryCount){
             const{total, price} = categoryCount[category];
-            avg = price / total;
+            avg = Math.round((price/total)*100)/100
             avgItemCategoryPrice[category] =(avgItemCategoryPrice[category] || 0) + avg;
         }
         return avgItemCategoryPrice;
@@ -233,4 +223,8 @@ export async function get_category_sales_summary() {
         return null;
     }
     return data;
+}
+
+export async function recommendedProducts(user_id: string) {
+    // Get the list of items purchased by the user
 }

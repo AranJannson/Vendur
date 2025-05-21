@@ -311,72 +311,6 @@ export async function listOfAllOrgInvValue() {
 }
 
 // Returns a list of organisations and their respective average rating across their products
-export async function oldAverageOrganisationProductRating() {
-    const itemOrgQuery = await catalogSupabase
-      .from("items")
-      .select("id, org:organisations!org_id (id)");
-  
-    if (itemOrgQuery.error) {
-      console.error("Error fetching organisations:", itemOrgQuery.error);
-      return 0;
-    }
-  
-    const reviewQuery = await catalogSupabase
-      .from("reviews")
-      .select("id, item_id, rating");
-  
-    if (reviewQuery.error) {
-      console.error("Error fetching stock:", reviewQuery.error);
-      return 0;
-    }
-  
-    const reviewData = reviewQuery.data;
-    const itemOrgData = itemOrgQuery.data;
-  
-    //Maps item id to organisation id
-    const itemOrgTable: Record<number, number> = {};
-    itemOrgData.forEach((item) => {
-      const itemId = item.id;
-      const orgId = Array.isArray(item.org)
-        ? (item.org as { id: number }[])[0]?.id
-        : (item.org as { id: number }).id;
-      if (itemId) {
-        itemOrgTable[itemId] = orgId;
-      }
-    });
-  
-    //Links organisation ids to review data via item id
-    const combinedResults = reviewData.map((review) => {
-      const reviewItemId = review.item_id;
-      const rating = review.rating;
-      const orgId = itemOrgTable[reviewItemId];
-      return { itemId: reviewItemId, orgId, rating };
-    });
-  
-    //Adds total ratings and number of reviews (count) per organisation
-    const orgAggregates: Record<number, { total: number; count: number }> = {};
-    for (const result of combinedResults) {
-      const { orgId, rating } = result;
-      if (orgId !== undefined) {
-        if (!orgAggregates[orgId]) {
-          orgAggregates[orgId] = { total: 0, count: 0 };
-        }
-        orgAggregates[orgId].total += rating;
-        orgAggregates[orgId].count++;
-      }
-    }
-  
-    // Calculates average rating per organisation
-    const orgAverages: Record<number, number> = {};
-    for (const orgId in orgAggregates) {
-      const { total, count } = orgAggregates[orgId];
-      orgAverages[Number(orgId)] = total / count;
-    }
-  
-    return orgAverages;
-  }
-
-// Returns a list of organisations and their respective average rating across their products
 export async function averageOrganisationProductRating() {
     const { data, error } = await catalogSupabase
         .rpc('average_org_product_ratings')
@@ -431,34 +365,6 @@ export async function orgNumberOfSales() {
     });
 
     return orgSalesCount;
-}
-
-// Returns a list of each organisation and how much total revenue they have made
-export async function oldOrgTotalRevenueList(){
-    const orderQuery = await catalogSupabase
-        .from("orders")
-        .select("price, item:items!id(org_id)")
-
-    if (orderQuery.error) {
-        console.error("Error fetching order:", orderQuery.error);
-        return 0;
-    }
-
-    const orderData = orderQuery.data;
-
-    const orgOrderValueList: Record<number, number> = {};
-    orderData.forEach((item) => {
-        const price = item.price;
-        const org_id = Array.isArray(item.item)
-            ? (item.item as { org_id: number }[])[0]?.org_id
-            : (item.item as { org_id: number }).org_id;
-        if (org_id){
-           orgOrderValueList[org_id] = (orgOrderValueList[org_id] || 0) + price;
-        }
-    })
-
-    return Object.entries(orgOrderValueList)
-        .sort((a, b) => b[1] - a[1]);
 }
 
 // Returns a list of each organisation and how much total revenue they have made
