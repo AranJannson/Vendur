@@ -5,6 +5,7 @@ import GetBasket from "../components/payment/GetBasket";
 
 export default function Payment() {
   const user = useUser();
+  // console.log()
 
   return (
     <div>

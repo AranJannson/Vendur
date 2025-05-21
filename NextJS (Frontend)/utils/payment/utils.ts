@@ -7,27 +7,14 @@ interface Item {
   image: string;
 }
 
-export async function postItem(item: any, quantity: Number, oldSize: String | null, newSize: String | null, action: String){
-   const response = await fetch("/api/setCookies", {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-          name: "basket",
-          value: {
-              id: item.id, 
-              name:item.name,
-              price: item.discount === null || item.discount === 0 ? ( item.price ) : ((item.price * (1 - item.discount / 100))),
-              image: item.image,
-              quantity: quantity,
-              size: oldSize,
-              newSize: newSize,
-          },
-          action: action,
-      }),
-  });
+export async function postItem(user_id: string, dateTime: string, item_id: string) {
+   const response = await fetch("http://localhost:8002/addToNewBasket", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ user_id, dateTime, item_id }),
+   });
 
   if (!response.ok) {
       throw new Error();
@@ -47,24 +34,12 @@ export async function deleteItem (item: any) {
   });
 }
 
-export const fetchBasket = async (): Promise<Item[]> => {
-  try {
-    const response = await fetch("/api/getBasket", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch basket");
-    }
-
-    const data: Item[] = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching basket:", error);
-    return [];
-  }
+export const fetchBasket = async (user_id: string): Promise<Item[]> => {
+  const res = await fetch("/api/getBasketNew", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id }),
+  });
+  if (!res.ok) throw new Error("Failed to fetch basket");
+  return (await res.json()) as Item[];  // TS-cast to Item[]
 };

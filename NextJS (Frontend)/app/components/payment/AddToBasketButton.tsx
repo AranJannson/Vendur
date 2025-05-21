@@ -4,8 +4,11 @@ import React, {useEffect, useState} from "react";
 import { modifyStock, setOriginalStock } from "@/utils/catalogue/utils";
 import { postItem } from "@/utils/payment/utils";
 import Modal from "@/app/components/admin/VerificationFormModal";
+import {useUser} from "@stackframe/stack";
 
 export default function AddToBasketButton( { item, formId, originalStock }: { item: any, formId: string, originalStock: number }) {
+
+    const user = useUser();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -17,6 +20,10 @@ export default function AddToBasketButton( { item, formId, originalStock }: { it
         setIsModalOpen(false);
         window.location.reload();
     };
+
+    useEffect(() => {
+
+    }, []);
 
     useEffect(() => {
         const key = `hasSetStock-${item.id}`;
@@ -34,10 +41,11 @@ export default function AddToBasketButton( { item, formId, originalStock }: { it
             const sizeInput = form?.querySelector("select[name='size']") as HTMLInputElement;
             const size = sizeInput ? String(sizeInput.value) : null;
 
-            await Promise.all([postItem(item, selectedQuantity, size, size, ""), modifyStock(item, -selectedQuantity)]);
-
-            console.log("postItem and modifyStock completed")
             openModal();
+
+            const response = postItem(user!.id, new Date().toISOString(), item.id);
+
+
         } catch (error) {
             console.error("Failed to add item: ", error);
         }
