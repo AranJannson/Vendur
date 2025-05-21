@@ -19,7 +19,7 @@ export default function OrgItemSalesGraph() {
             if (!orgID) return;
 
             try {
-                const response = await fetch('http://localhost:8001/oneOrgSalesCountTest', {
+                const response = await fetch('/api/analytics/orgMan/orgNumSalesPerItem', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

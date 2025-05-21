@@ -19,7 +19,7 @@ export default function OrgDailyReviewsGraph() {
             if (!orgID) return;
 
             try {
-                const response = await fetch('http://localhost:8001/reviewsPerDay', {
+                const response = await fetch('/api/analytics/orgMan/orgDailyReviewCount', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

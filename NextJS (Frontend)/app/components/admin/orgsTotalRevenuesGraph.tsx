@@ -18,7 +18,7 @@ export default function OrgTotalRevenues() {
         async function fetchData() {
 
             try {
-                const response = await fetch('http://localhost:8001/orgInvList');
+                const response = await fetch('api/analytics/admin/orgTotalRevenue');
 
                 const data = await response.json();
 

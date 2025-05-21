@@ -19,7 +19,7 @@ export default function OrgItemCategoryListedGraph() {
             if (!orgID) return;
 
             try {
-                const response = await fetch('http://localhost:8001/popularCategory', {
+                const response = await fetch('/api/analytics/orgMan/orgsNumItemListed/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -28,10 +28,6 @@ export default function OrgItemCategoryListedGraph() {
                 });
 
                 const data = await response.json();
-
-                const transformedData = {
-                    [data.category]: data.count
-                };
 
                 const labels = Object.keys(data);
                 console.log(labels);

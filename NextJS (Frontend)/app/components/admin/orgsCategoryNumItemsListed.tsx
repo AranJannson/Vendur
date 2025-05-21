@@ -18,7 +18,7 @@ export default function OrgsCategoryNumItemsListed() {
         async function fetchData() {
 
             try {
-                const response = await fetch('http://localhost:8001/categoriesItemListed');
+                const response = await fetch('api/analytics/admin/itemsPerCategory');
 
                 const data = await response.json();
 

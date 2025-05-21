@@ -19,7 +19,7 @@ export default function OrgAvgPriceCategoryGraph() {
             if (!orgID) return;
 
             try {
-                const response = await fetch('http://localhost:8001/avgItemPriceCategory', {
+                const response = await fetch('/api/analytics/orgMan/orgAvgPriceCategory', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

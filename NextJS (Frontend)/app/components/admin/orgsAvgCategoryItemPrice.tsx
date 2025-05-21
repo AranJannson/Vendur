@@ -18,7 +18,7 @@ export default function OrgsAvgCategoryItmPrice() {
         async function fetchData() {
 
             try {
-                const response = await fetch('http://localhost:8001/categoriesAverageItemPrice');
+                const response = await fetch('/api/analytics/admin/categoriesAverageItemPrice');
 
                 const data = await response.json();
 

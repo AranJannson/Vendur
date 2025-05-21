@@ -5,6 +5,11 @@ import OrgTotalRevenues from "@/app/components/admin/orgsTotalRevenuesGraph";
 import OrgsAvgCategoryItmPrice from "@/app/components/admin/orgsAvgCategoryItemPrice";
 import OrgsCategoryNumItemsListed from "@/app/components/admin/orgsCategoryNumItemsListed";
 import ReviewsPerDay from "@/app/components/admin/SitewideReviewsPerDay";
+import TotalOrders from "@/app/components/admin/TotalOrders"
+import TotalRevenue from "@/app/components/admin/TotalRevenue"
+import OrdersPerDay from "@/app/components/admin/OrdersPerDay"
+import OrderValuePerDay from "@/app/components/admin/OrderValuePerDay"
+import OrderAvgValuePerDay from "@/app/components/admin/OrderAvgValuePerDay"
 
 export default function Analytics() {
     return (
@@ -44,6 +49,31 @@ export default function Analytics() {
                 <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
                     <h2 className="text-base font-light p-2">Number of reviews per day</h2>
                     <ReviewsPerDay/>
+
+                </div>
+                <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                    <h2 className="text-base font-light p-2">Total Orders</h2>
+                    <TotalOrders/>
+
+                </div>
+                <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                    <h2 className="text-base font-light p-2">Total Revenue Ever</h2>
+                    <TotalRevenue/>
+
+                </div>
+                <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                    <h2 className="text-base font-light p-2">Orders Per Day</h2>
+                    <OrdersPerDay/>
+
+                </div>
+                <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                    <h2 className="text-base font-light p-2">Order Value Per Day</h2>
+                    <OrderValuePerDay/>
+
+                </div>
+                <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                    <h2 className="text-base font-light p-2">Average Order Value Per Day</h2>
+                    <OrderAvgValuePerDay/>
 
                 </div>
             </div>
