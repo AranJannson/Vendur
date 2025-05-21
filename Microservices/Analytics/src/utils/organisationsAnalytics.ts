@@ -166,7 +166,7 @@ export async function oneOrgItemSalesAnalytics(org_id: string) {
 
     const itemQuery = await catalogSupabase
     .from("items")
-    .select("id, org_id")
+    .select("name, id, org_id")
         .eq("org_id", org_id);
 
     if (itemQuery.error){
@@ -175,22 +175,26 @@ export async function oneOrgItemSalesAnalytics(org_id: string) {
     }
 
     const orgItems: Record<number, string> = {};
+    const orgItems1: Record<number, string> = {};
     const itemData = itemQuery.data;
 
     itemData.forEach((item) => {
         const itemId = item.id;
         const org_id = item.org_id;
+        const itemName = item.name;
         orgItems[itemId] = (orgItems[itemId] || 0) + org_id;
+        orgItems1[itemId] = (orgItems1[itemId] || 0) + itemName;
 
     })
 
 
-    const orgSalesMap: Record<number, number> = {}
+    const orgSalesMap: Record<number, string> = {}
 
     for (const item in itemOrderFrequencyMap){
-        for (const orgItem in orgItems){
+        for (const orgItem in orgItems1){
+            const name = orgItems1[orgItem]
             if (orgItem == item){
-                orgSalesMap[item] = (orgSalesMap[item] || 0) + itemOrderFrequencyMap[item];
+                orgSalesMap[item] = (orgSalesMap[item] || 0) + name;
             }
         }
     }
@@ -225,7 +229,7 @@ export async function oneOrgItemRevenueAnalytics(org_id: string){
 
     const itemQuery = await catalogSupabase
         .from("items")
-        .select("id, price, org_id")
+        .select("name, id, price, org_id")
         .eq("org_id", org_id)
 
     if (itemQuery.error){
@@ -236,13 +240,17 @@ export async function oneOrgItemRevenueAnalytics(org_id: string){
     const itemData = itemQuery.data;
 
     const itemDataMap: Record<number, number> = {};
+    const itemNameMap: Record<number, string> = {};
 
     itemData.forEach((item) => {
         const itemId = item.id;
         const price = item.price;
+        const name = item.name
         itemDataMap[itemId] = (itemDataMap[itemId] || 0) + price;
+        itemNameMap[itemId] = (itemNameMap[itemId] || 0) + name;
     })
     const itemRevenueMap: Record<number, number> = {}
+    const newItemRevenueMap: Record<string, number> = {}
     let orderValue = 0;
     let totalItemRevenue = 0;
     for (const entry of itemOrderQuantityList){
@@ -250,14 +258,15 @@ export async function oneOrgItemRevenueAnalytics(org_id: string){
             const quantity = entry.quantity
             if (itemDataMap[itemId]){
                 const newPrice = itemDataMap[itemId];
+                const itemName = itemNameMap[itemId]
                 const orderValue = newPrice * quantity
                 totalItemRevenue += orderValue;
-
                 itemRevenueMap[itemId] = (itemRevenueMap[itemId] || 0) + orderValue;
+                newItemRevenueMap[itemName] = (newItemRevenueMap[itemName] || 0) + orderValue;
             }
     }
 
-    return itemRevenueMap
+    return newItemRevenueMap
 }
 
 // !!!!!!!!!!!!!!!!!!!! Admin Analytics !!!!!!!!!!!!!!!!!!!!!
