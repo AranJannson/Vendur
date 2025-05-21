@@ -140,133 +140,104 @@ export async function orgProductRatingList(org_id: string) {
 export async function oneOrgItemSalesAnalytics(org_id: string) {
     const paymentQuery = await paymentSupabase
         .from("orders")
-        .select("item_id, group_id")
+        .select("item_id");
 
-
-    if (paymentQuery.error){
-        console.error("Error fetching order:", paymentQuery.error);
-        return 0;
+    if (paymentQuery.error) {
+        console.error("Error fetching orders:", paymentQuery.error);
+        return {};
     }
 
     const paymentData = paymentQuery.data;
-    const itemOrderFrequencyMap: Record<number, number> = {}
 
+    const itemOrderFrequencyMap: Record<number, number> = {};
     paymentData.forEach((item) => {
         const itemId = item.item_id;
-        if (!itemId){
-            return
+        if (itemId) {
+            itemOrderFrequencyMap[itemId] = (itemOrderFrequencyMap[itemId] || 0) + 1;
         }
-
-        if(itemOrderFrequencyMap[itemId]){
-            itemOrderFrequencyMap[itemId]++;
-        } else {
-            itemOrderFrequencyMap[itemId] = 1;
-        }
-    })
-
-    const itemQuery = await catalogSupabase
-    .from("items")
-    .select("name, id, org_id")
-        .eq("org_id", org_id);
-
-    if (itemQuery.error){
-        console.error("Error fetching items:", itemQuery.error);
-        return 0;
-    }
-
-    const orgItems: Record<number, string> = {};
-    const orgItems1: Record<number, string> = {};
-    const itemData = itemQuery.data;
-
-    itemData.forEach((item) => {
-        const itemId = item.id;
-        const org_id = item.org_id;
-        const itemName = item.name;
-        orgItems[itemId] = (orgItems[itemId] || 0) + org_id;
-        orgItems1[itemId] = (orgItems1[itemId] || 0) + itemName;
-
-    })
-
-
-    const orgSalesMap: Record<number, string> = {}
-
-    for (const item in itemOrderFrequencyMap){
-        for (const orgItem in orgItems1){
-            const name = orgItems1[orgItem]
-            if (orgItem == item){
-                orgSalesMap[item] = (orgSalesMap[item] || 0) + name;
-            }
-        }
-    }
-
-
-    return orgSalesMap
-}
-
-// Returns a list of items from one org and how many sales each item has been a part of
-export async function oneOrgItemRevenueAnalytics(org_id: string){
-    const paymentQuery = await paymentSupabase
-        .from("orders")
-        .select("item_id, quantity")
-
-    if (paymentQuery.error){
-        console.error("Error fetching order data:", paymentQuery.error);
-        return 0;
-    }
-
-    const paymentData = paymentQuery.data;
-    const itemOrderQuantityList: {itemId: number, quantity: number}[] = [];
-
-    paymentData.forEach((item) => {
-        const itemId = item.item_id;
-        const quantity = item.quantity
-        itemOrderQuantityList.push({
-            itemId: itemId,
-            quantity: quantity
-        })
-
-    })
+    });
 
     const itemQuery = await catalogSupabase
         .from("items")
-        .select("name, id, price, org_id")
-        .eq("org_id", org_id)
+        .select("id, name")
+        .eq("org_id", org_id);
 
-    if (itemQuery.error){
-        console.error("Error fetching item data:", itemQuery.error);
-        return 0;
+    if (itemQuery.error) {
+        console.error("Error fetching items:", itemQuery.error);
+        return {};
     }
 
     const itemData = itemQuery.data;
 
-    const itemDataMap: Record<number, number> = {};
-    const itemNameMap: Record<number, string> = {};
+    const orgSalesMap: Record<string, number> = {};
 
     itemData.forEach((item) => {
         const itemId = item.id;
-        const price = item.price;
-        const name = item.name
-        itemDataMap[itemId] = (itemDataMap[itemId] || 0) + price;
-        itemNameMap[itemId] = (itemNameMap[itemId] || 0) + name;
-    })
-    const itemRevenueMap: Record<number, number> = {}
-    const newItemRevenueMap: Record<string, number> = {}
-    let orderValue = 0;
-    let totalItemRevenue = 0;
-    for (const entry of itemOrderQuantityList){
-            const itemId = entry.itemId
-            const quantity = entry.quantity
-            if (itemDataMap[itemId]){
-                const newPrice = itemDataMap[itemId];
-                const itemName = itemNameMap[itemId]
-                const orderValue = newPrice * quantity
-                totalItemRevenue += orderValue;
-                itemRevenueMap[itemId] = (itemRevenueMap[itemId] || 0) + orderValue;
-                newItemRevenueMap[itemName] = (newItemRevenueMap[itemName] || 0) + orderValue;
-            }
+        const itemName = item.name;
+        const count = itemOrderFrequencyMap[itemId] || 0;
+        orgSalesMap[itemName] = count;
+    });
+
+    return orgSalesMap;
+}
+
+
+// Returns a list of items from one org and how many sales each item has been a part of
+export async function oneOrgItemRevenueAnalytics(org_id: string) {
+    const paymentQuery = await paymentSupabase
+        .from("orders")
+        .select("item_id, quantity");
+
+    if (paymentQuery.error) {
+        console.error("Error fetching order data:", paymentQuery.error);
+        return {};
     }
 
-    return newItemRevenueMap
+    const paymentData = paymentQuery.data;
+
+    const itemOrderQuantityList: { itemId: number, quantity: number }[] = [];
+
+    paymentData.forEach((item) => {
+        if (item.item_id && item.quantity) {
+            itemOrderQuantityList.push({
+                itemId: item.item_id,
+                quantity: item.quantity
+            });
+        }
+    });
+
+    const itemQuery = await catalogSupabase
+        .from("items")
+        .select("id, name, price")
+        .eq("org_id", org_id);
+
+    if (itemQuery.error) {
+        console.error("Error fetching item data:", itemQuery.error);
+        return {};
+    }
+
+    const itemData = itemQuery.data;
+
+    const itemPriceMap: Record<number, number> = {};
+    const itemNameMap: Record<number, string> = {};
+
+    itemData.forEach((item) => {
+        itemPriceMap[item.id] = item.price;
+        itemNameMap[item.id] = item.name;
+    });
+
+    const revenueByItemName: Record<string, number> = {};
+
+    for (const entry of itemOrderQuantityList) {
+        const price = itemPriceMap[entry.itemId];
+        const name = itemNameMap[entry.itemId];
+        if (price !== undefined && name) {
+            const revenue = price * entry.quantity;
+            revenueByItemName[name] = (revenueByItemName[name] || 0) + revenue;
+        }
+    }
+
+    return revenueByItemName;
 }
 
 // !!!!!!!!!!!!!!!!!!!! Admin Analytics !!!!!!!!!!!!!!!!!!!!!
