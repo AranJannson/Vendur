@@ -7,8 +7,7 @@ import { Chart as ChartJS, Tooltip, Legend, CategoryScale, LinearScale, BarEleme
 
 ChartJS.register(Tooltip, Legend, CategoryScale, LinearScale, BarElement, ArcElement);
 
-export default function ReviewsPerDay() {
-    console.log("Reviews per day function")
+export default function OrdersPerDay() {
     const user = useUser();
     const allTeams = user!.useTeams();
     const orgID: string = allTeams[0]?.id;
@@ -19,25 +18,21 @@ export default function ReviewsPerDay() {
         async function fetchData() {
 
             try {
-                console.log("Fetching from ")
-                const response = await fetch('api/analytics/admin/reviewsPerDay');
-                console.log("Fetch response", response)
+                const response = await fetch('/api/analytics/admin/ordersPerDay');
 
                 const data = await response.json();
 
 
 
-                const items = Object.keys(data);
-                const rating = Object.values(data)
-                console.log("Labels:", items);
-                console.log("Prices:", rating);
+                const dates = Object.keys(data);
+                const orders = Object.values(data)
 
                 const chartFormattedData = {
-                    labels: items,
+                    labels: dates,
                     datasets: [
                         {
-                            label: 'Number of reviews',
-                            data: rating,
+                            label: 'Item Price',
+                            data: orders,
                             backgroundColor: [
                                 'rgb(3,75,252)',
                                 'rgb(0,120,197)',
@@ -71,7 +66,7 @@ export default function ReviewsPerDay() {
     }
 
     return (
-        <div style={{ width: "300px", height: "200px" }}>
+        <div style={{ width: "500px", height: "250px" }}>
             <Bar
                 data={chartData}
                 options={{
