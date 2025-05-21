@@ -72,6 +72,7 @@ export default function OrgTotalRevenues() {
             <Bar
                 data={chartData}
                 options={{
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {

@@ -72,6 +72,7 @@ export default function OrgsCategoryNumItemsListed() {
             <Bar
                 data={chartData}
                 options={{
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {

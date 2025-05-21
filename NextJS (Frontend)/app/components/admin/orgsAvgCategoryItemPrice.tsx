@@ -72,6 +72,7 @@ export default function OrgsAvgCategoryItmPrice() {
             <Bar
                 data={chartData}
                 options={{
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
