@@ -68,7 +68,7 @@ export default function OrgsCategoryNumItemsListed() {
     }
 
     return (
-        <div style={{ width: "400px", height: "400px" }}>
+        <div style={{ width: "300px", height: "200px" }}>
             <Bar
                 data={chartData}
                 options={{

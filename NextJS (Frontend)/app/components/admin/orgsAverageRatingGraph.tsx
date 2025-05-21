@@ -68,7 +68,7 @@ export default function OrgsAverageRating() {
     }
 
     return (
-        <div style={{ width: "400px", height: "300px" }}>
+        <div style={{ width: "300px", height: "200px" }}>
             <Bar
                 data={chartData}
                 width = {400}

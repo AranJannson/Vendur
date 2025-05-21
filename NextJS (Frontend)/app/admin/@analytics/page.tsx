@@ -22,21 +22,36 @@ export default function Analytics() {
                 <PageClickViewer/>
 
             </div>
-            <div className="text-3xl font-bold pb-4 text-center">
+            <div className="text-3xl font-bold pb-4 text-center flex flex-col">
                 Analytic Graphs
             </div>
-            <div className="w-full h-fit bg-primary-200 rounded-lg shadow-xl col-span-3 grid grid-cols-3">
-                <div className="w-[400] h-[400] bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                    <h2 className="text-base font-light p-2">Total Inventory Value of all organisations</h2>
-                    <OrgTotalRevenues/>
+
+            <div className="flex flex-row w-full bg-primary-200 rounded-lg shadow-xl col-span 2">
+                <div className="bg-background-300 m-4 w-[600] mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                    <h2 className="text-base font-light p-2">Total Orders</h2>
+                    <TotalOrders/>
 
                 </div>
-                <div className="w-[400px] h-[400px] bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                <div className="bg-background-300 m-4 w-[600] mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                    <h2 className="text-base font-light p-2">Total Revenue Ever</h2>
+                    <TotalRevenue/>
+
+                </div>
+            </div>
+
+            <br className="my-2"/>
+
+            <div className="w-full h-fit bg-primary-200 rounded-lg shadow-xl col-span-2 flex flex-row overflow-x-scroll gap-4">
+                <div className="bg-background-300 m-4 mx-4 rounded-xl aspect-square flex flex-col text-center justify-center items-center content-center">
                     <h2 className="text-base font-light p-2">Average rating for all organisations</h2>
                     <OrgsAverageRating/>
-
                 </div>
-                <div className="w-[400px] h-[400px] bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
+                {/*<div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">*/}
+                {/*    <h2 className="text-base font-light p-2">Average rating for all organisations</h2>*/}
+                {/*    <OrgsAverageRating/>*/}
+
+                {/*</div>*/}
+                <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
                     <h2 className="text-base font-light p-2">Number of items per category</h2>
                     <OrgsCategoryNumItemsListed/>
 
@@ -51,14 +66,10 @@ export default function Analytics() {
                     <ReviewsPerDay/>
 
                 </div>
-                <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                    <h2 className="text-base font-light p-2">Total Orders</h2>
-                    <TotalOrders/>
 
-                </div>
                 <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                    <h2 className="text-base font-light p-2">Total Revenue Ever</h2>
-                    <TotalRevenue/>
+                    <h2 className="text-base font-light p-2">Number of reviews per day</h2>
+                    <ReviewsPerDay/>
 
                 </div>
                 <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">

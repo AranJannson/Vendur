@@ -77,37 +77,37 @@ export default async function OrganisationsManagement() {
                     </div>
 
                 </div>
-                <div className="w-full h-fit bg-primary-200 rounded-lg shadow-xl col-span-3 grid grid-cols-3 gap-4 mt-8">
-                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                        <h2 className="text-base font-light p-2">Avg Price Of Product (By Category)</h2>
-                        <OrgAvgPriceCategoryGraph/>
-
+                <div className="w-screen overflow-x-auto">
+                    <div className="h-fit bg-primary-200 rounded-lg shadow-xl flex flex-row gap-4 px-4 py-2 w-max">
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                            <h2 className="text-base font-light p-2">Avg Price Of Product (By Category)</h2>
+                            <OrgAvgPriceCategoryGraph />
+                        </div>
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                            <h2 className="text-2xl font-light p-2">Number of Listings (By Category)</h2>
+                            <OrgItemCategoryListedGraph />
+                        </div>
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                            <h2 className="text-2xl font-light p-2">Org Stock Value</h2>
+                            <OrgStockValue />
+                        </div>
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                            <h2 className="text-2xl font-light p-2">Average Review Rating</h2>
+                            <OrgAvgRatingGraph />
+                        </div>
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                            <h2 className="text-2xl font-light p-2">Number of Reviews Per Day</h2>
+                            <OrgDailyReviewsGraph />
+                        </div>
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                            <h2 className="text-2xl font-light p-2">Number of Sales Per Item</h2>
+                            <OrgItemSalesGraph />
+                        </div>
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                            <h2 className="text-2xl font-light p-2">Item Revenue</h2>
+                            <OrgItemRevenueGraph />
+                        </div>
                     </div>
-                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                        <h2 className="text-2xl font-light p-2">Number of Listings (By Category)</h2>
-                        <OrgItemCategoryListedGraph/>
-                    </div>
-                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                        <h2 className="text-2xl font-light p-2">Org Stock Value</h2>
-                        <OrgStockValue/>
-                    </div>
-                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                        <h2 className="text-2xl font-light p-2">Average Review Rating</h2>
-                        <OrgAvgRatingGraph/>
-                    </div>
-                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                        <h2 className="text-2xl font-light p-2">Number of Reviews Per Day</h2>
-                        <OrgDailyReviewsGraph/>
-                    </div>
-                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                        <h2 className="text-2xl font-light p-2">Number of Sales Per Item</h2>
-                        <OrgItemSalesGraph/>
-                    </div>
-                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                        <h2 className="text-2xl font-light p-2">Item Revenue</h2>
-                        <OrgItemRevenueGraph/>
-                    </div>
-
                 </div>
 
             </div>

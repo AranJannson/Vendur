@@ -66,7 +66,7 @@ export default function OrdersPerDay() {
     }
 
     return (
-        <div style={{ width: "500px", height: "250px" }}>
+        <div style={{ width: "300px", height: "20px" }}>
             <Bar
                 data={chartData}
                 options={{

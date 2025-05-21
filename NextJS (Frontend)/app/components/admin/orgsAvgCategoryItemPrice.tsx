@@ -68,7 +68,7 @@ export default function OrgsAvgCategoryItmPrice() {
     }
 
     return (
-        <div style={{ width: "500px", height: "250px" }}>
+        <div style={{ width: "300px", height: "200px" }}>
             <Bar
                 data={chartData}
                 options={{
