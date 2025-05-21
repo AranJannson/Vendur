@@ -58,6 +58,7 @@ Payment.post('/addToNewBasket', async (req: Request, res: Response) => {
 
     try{
         await addToBasket(user_id, dateTime, item_id);
+        res.status(200).json({event: "Item Added to Basket Successfully"});
 
     }catch (error){
         console.error("Error adding to basket:", error);

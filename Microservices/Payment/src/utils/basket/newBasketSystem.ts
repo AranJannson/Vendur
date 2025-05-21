@@ -66,27 +66,9 @@ export default async function addToBasket(user_id: string, dateTime: Date, item_
 
             return UserBasket;
         }
-    } else {
-        const { data: newBasket, error: insertError } = await supabase
-            .from("basket")
-            .insert({
-                user_id,
-                dateTime,
-                items: [item_id],
-                quantities: [1],
-            })
-            .select("user_id")
-            .single();
-
-        if (insertError) {
-            console.error("Error inserting new basket:", insertError);
-            return null;
-        }
-
-        return newBasket;
     }
 
-    return null;
+    return UserBasket;
 }
 
 
