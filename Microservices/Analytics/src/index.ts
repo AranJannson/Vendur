@@ -26,13 +26,12 @@ import {listOfAllOrgInvValue,
 } from "./utils/organisationsAnalytics"
 import {
     orderNumberDailyList,
-    totalRevenuePerDayList,
-    averageOrderValuePerDayList,
-    avgQuantityPerItemInOrder,
+    orderValuePerDayList,
     newestTotalSales,
     totalRevenueEver,
     orderCountDaily,
-    orderValuePerDayList} from "./utils/orderAnalytics";
+    averageOrderValuePerDayList
+    } from "./utils/orderAnalytics";
 import trackClicks, {returnAllClickCountPages} from "./utils/track-clicks";
 import {recordView, getRecentViews, updateRecommendedProducts, getRecommendedProducts} from "./utils/historyAnalytics";
 
@@ -155,30 +154,6 @@ Analytics.get("/numberSalesDaily", async (req: Request, res: Response) => {
 
     console.log(dailyTotal);
     res.send(JSON.stringify(dailyTotal, null, 2))
-});
-
-Analytics.get("/totalRevenueDaily", async (req: Request, res: Response) => {
-
-    const revenueList = await totalRevenuePerDayList()
-
-    console.log(revenueList);
-    res.send(JSON.stringify(revenueList, null, 2))
-});
-
-Analytics.get("/avgOrderPerDayList", async (req: Request, res: Response) => {
-
-    const avgDayList = await averageOrderValuePerDayList()
-
-    console.log(avgDayList);
-    res.send(JSON.stringify(avgDayList, null, 2))
-});
-
-Analytics.get("/avgQuantityOrderList", async (req: Request, res: Response) => {
-
-    const avgQuantityList = await avgQuantityPerItemInOrder()
-
-    console.log(avgQuantityList);
-    res.send(JSON.stringify(avgQuantityList, null, 2))
 });
 
 Analytics.post("/track-clicks", async (req: Request, res: Response): Promise<any> => {
@@ -426,6 +401,14 @@ Analytics.get("/orderDatesList", async (req: Request, res: Response) => {
 Analytics.get("/orderValuePerDay", async (req: Request, res: Response) => {
 
     const total = await orderValuePerDayList()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/avgOrderValueDay", async (req: Request, res: Response) => {
+
+    const total = await averageOrderValuePerDayList()
 
     console.log(total);
     res.send(JSON.stringify(total, null, 2))
