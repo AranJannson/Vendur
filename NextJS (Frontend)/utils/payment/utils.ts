@@ -8,7 +8,6 @@ interface Item {
 }
 
 export async function postItem(item: any, quantity: Number, oldSize: String | null, newSize: String | null, action: String){
-   const cookieStore = await cookies();
    const response = await fetch("/api/setCookies", {
       method: "POST",
       headers: {
@@ -33,10 +32,6 @@ export async function postItem(item: any, quantity: Number, oldSize: String | nu
   if (!response.ok) {
       throw new Error();
   }
-
-  const cookieBody = await response.json();
-
-  cookieStore.set('basket', cookieBody)
 
   return response.json();
 }
