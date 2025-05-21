@@ -21,6 +21,10 @@ export async function revertStock(item: any){
         body: JSON.stringify({ item_id: item_id, quantity: originalQuantity}),
       });
 
+    if (!quantityResponse.ok) {
+        throw new Error();
+    }
+
     return quantityResponse.json();
 }
 
