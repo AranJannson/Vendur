@@ -11,6 +11,8 @@ import orderProcessing, {
 } from "./utils/orders/orderProccessing";
 import Stripe from "stripe";
 
+import addToBasket, {decreaseQuantity, deleteBasket, getBasket} from "./utils/basket/newBasketSystem";
+
 dotenv.config();
 
 const Payment = express();
@@ -47,6 +49,77 @@ Payment.post('/getUserOrders', async (req: Request, res: Response) => {
     }catch (error){
         res.status(500).json({error: "Order Details Were Not Retrieved Successfully"});
     }
+})
+
+
+Payment.post('/addToNewBasket', async (req: Request, res: Response) => {
+
+    const {user_id, dateTime, item_id} = req.body;
+
+    try{
+        await addToBasket(user_id, dateTime, item_id);
+
+    }catch (error){
+        console.error("Error adding to basket:", error);
+        res.status(500).json({error: "Could not add to basket"});
+    }
+
+})
+
+Payment.post('/decreaseQuantity', async (req: Request, res: Response) => {
+    const { user_id, item_id } = req.body;
+
+    console.log("//decreaseQuantity item_id: ", item_id)
+
+    try{
+        await decreaseQuantity(item_id, user_id);
+
+        res.status(200).json({event: "Item Quantity Decreased Successfully"});
+    }catch (error){
+        res.status(500).json({error: "Item Quantity Was Not Decreased Successfully"});
+    }
+})
+
+
+Payment.post('/getBasket', async (req: Request, res: Response) => {
+
+    const { user_id } = req.body;
+
+    console.log("//getBasket user_id: ", user_id)
+
+    try {
+        const basket = await getBasket(user_id);
+
+        if (basket) {
+            res.status(200).json({event: "Basket Retrieved Successfully", basket});
+        } else {
+            res.status(500).json({error: "Basket Was Not Retrieved Successfully"});
+        }
+    }catch (error){
+        res.status(500).json({error: "Basket Was Not Retrieved Successfully"});
+    }
+
+})
+
+
+Payment.post('/deleteBasket' , async (req: Request, res: Response) => {
+
+    const { user_id } = req.body;
+
+    console.log("//deleteBasket user_id: ", user_id)
+
+    try {
+        const basket = await deleteBasket(user_id);
+
+        if (basket) {
+            res.status(200).json({event: "Basket Retrieved Successfully", basket});
+        } else {
+            res.status(500).json({error: "Basket Was Not Retrieved Successfully"});
+        }
+    }catch (error){
+        res.status(500).json({error: "Basket Was Not Retrieved Successfully"});
+    }
+
 })
 
 
