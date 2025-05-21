@@ -85,6 +85,8 @@ export default async function addToBasket(user_id: string, dateTime: Date, item_
 
         return newBasket;
     }
+
+    return null;
 }
 
 
