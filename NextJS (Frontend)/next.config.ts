@@ -7,7 +7,8 @@ const nextConfig: NextConfig = {
     },
     eslint: {
         ignoreDuringBuilds: true,
-    }
+    },
+    allowedDevOrigins: ['http://localhost:3000', 'https://www.vendur.shop', 'https://vendur.shop'],
 };
 
 export default nextConfig;
