@@ -52,7 +52,7 @@ export default async function OrganisationsManagement() {
                         {allTeams[0]?.displayName} - Dashboard
                     </h1>
 
-                    {/*<Products/>*/}
+                    <Products/>
 
                 </div>
 

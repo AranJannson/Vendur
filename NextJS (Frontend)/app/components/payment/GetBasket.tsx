@@ -21,6 +21,7 @@ interface Item {
   name: string;
   price: number;
   image: string;
+  discount: number;
 }
 
 export default function GetBasket() {
@@ -130,24 +131,8 @@ export default function GetBasket() {
 
                                     <div
                                         className="bg-secondary-200 rounded-lg flex md:flex-row flex-col gap-2 justify-start items-center p-2 mt-2">
-                                        <label className="font-bold">Quantity:</label>
-                                        <select
-                                            value={basket?.quantities[index] ?? 1}
-                                            onChange={(e) => {
-                                                const newQuantities = [...(basket?.quantities ?? [])];
-                                                newQuantities[index] = parseInt(e.target.value);
-                                                setBasket((prev) =>
-                                                    prev ? {...prev, quantities: newQuantities} : prev
-                                                );
-                                            }}
-                                            className="p-2 bg-primary-300 rounded-full w-13"
-                                        >
-                                            {[...Array(10)].map((_, i) => (
-                                                <option key={i + 1} value={i + 1}>
-                                                    {i + 1}
-                                                </option>
-                                            ))}
-                                        </select>
+                                        <b>Quantity: </b>
+                                        {basket?.quantities[index] ?? 1}
                                     </div>
                                 </div>
 

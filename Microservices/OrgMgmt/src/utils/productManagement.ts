@@ -122,6 +122,9 @@ export const applyDiscount = async (productId: any, discount: any) => {
         .eq("id", productId)
         .single()
 
+    console.log("Discount applied:", data);
+    console.log(`Discount value: ${discount}\nProduct ID: ${productId}`);
+
     if (error) {
         throw new Error(`Error applying discount: ${error.message}`);
     }

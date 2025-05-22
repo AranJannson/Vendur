@@ -3,6 +3,7 @@ import { GoPlus } from "react-icons/go";
 import {stackServerApp} from "@/stack";
 import DeleteItemBtn from "@/app/components/org/DeleteItemBtn";
 import SearchBar from "@/app/components/org/SearchBar";
+import AddDiscountBtn from "@/app/components/org/AddDiscountBtn";
 
 interface Item{
     id: number;
@@ -24,7 +25,7 @@ export default async function Products(){
 
     const orgID: string = allTeams[0]?.id;
 
-    const response = await fetch(`/api/organisations/products/get-products`, {
+    const response = await fetch(`http://localhost:3000/api/organisations/products/get-products`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -37,7 +38,7 @@ export default async function Products(){
     // Fetch stock in parallel for all items
     const itemsWithStock = await Promise.all(
     items.map(async (item) => {
-        const stockRes = await fetch(`/api/organisations/products/get-stock`, {
+        const stockRes = await fetch(`http://localhost:3000/api/organisations/products/get-stock`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -91,8 +92,10 @@ export default async function Products(){
                                 <div className="bg-red-500 h-fit w-2/3 text-center p-3 font-semibold rounded-xl transition-colors hover:bg-red-600">
                                     <DeleteItemBtn productId={item.id}/>
                                 </div>
-                                
 
+                                <div >
+                                    <AddDiscountBtn productId={item.id} />
+                                </div>
                             </div>
                         </div>
 

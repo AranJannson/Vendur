@@ -13,6 +13,7 @@ const VerificationStatus: React.FC<VerificationStatusProps> = ({ id }) => {
     const [checkIfVerified, setCheckIfVerified] = useState<boolean | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [requestSent, setRequestSent] = useState<boolean | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleVerificationRequest = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -39,10 +40,12 @@ const VerificationStatus: React.FC<VerificationStatusProps> = ({ id }) => {
             });  
             const data = await res.json();
             setCheckIfVerified(data.verified);
+            setIsLoading(false);
 
         } catch (error) {
         console.error("Error fetching data:", error);
         setCheckIfVerified(false);
+        setIsLoading(false);
         }
     };
 
@@ -75,6 +78,15 @@ const VerificationStatus: React.FC<VerificationStatusProps> = ({ id }) => {
             fetchStatus();
         }
         }, [id]);
+
+    if (isLoading) {
+        return (
+            <div className="bg-primary-100 shadow-xl rounded-xl p-4 h-fit">
+                <h1 className="font-bold text-xl mb-2">Verification Status</h1>
+                <p>Loading...</p>
+            </div>
+        );
+    }
 
 return (
     <div className="bg-primary-100 shadow-xl rounded-xl p-4 h-fit">

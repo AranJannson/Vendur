@@ -81,14 +81,6 @@ export default function SearchPage() {
                                 )}
                             </div>
                         </div>
-
-                        <div className="flex justify-end">
-                            <div className="bg-primary-300 rounded-xl p-2">
-                                <h3 className="font-bold border-b-2 border-black">Details</h3>
-                                <p className="text-gray-600 text-sm">Item ID: {item.id}</p>
-                                <p className="text-sm">{`Rating: ${item.rating}`}</p>
-                            </div>
-                        </div>
                     </Link>
                 ))}
             </div>

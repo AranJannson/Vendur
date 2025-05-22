@@ -61,11 +61,6 @@ export default async function ItemPage({params,}: { params: Promise<{ item: stri
     if (!item) {
         return <div>Error loading item: Item not found</div>;
     }
-
-    console.log(`url for getting reviews: http://localhost:3000/api/review/get-item-reviews?item_id=${item.id}`)
-    // const reviewsResponse = await fetch(`http://localhost:3000/api/review/get-item-reviews?item_id=${item.id}`, {
-    //     method: 'GET',
-    // });
     const reviewsResponse = await fetch(
   `http://localhost:3000/api/review/get-item-reviews?item_id=${item.id}`,
   { method: 'GET' }
@@ -73,10 +68,10 @@ export default async function ItemPage({params,}: { params: Promise<{ item: stri
 
 if (!reviewsResponse.ok) {
   console.error('Failed to load reviews:', reviewsResponse.status);
-  return []; // or handle the error
+  return [];
 }
 
-const reviews = await reviewsResponse.json();     // ← this is now your array of review objects
+const reviews = await reviewsResponse.json();
 console.log('fetched reviews:', reviews);
 
     if (reviewsResponse.status !== 200) {
