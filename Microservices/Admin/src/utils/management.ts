@@ -7,7 +7,7 @@ const org_supabase = connectOrgMgmt();
 export async function deleteProductById(id: string): Promise<{ error: string | null }> {
   console.log("Deleting product with ID:", id);
 
-  const { err } = await cat_supabase.from('stock').delete().eq('item_id', id);
+  const { error: err } = await cat_supabase.from('stock').delete().eq('item_id', id);
   const { error } = await cat_supabase.from('items').delete().eq('id', id);
 
   if (err) {
