@@ -53,7 +53,6 @@ export default function VendurSpotlight() {
                         name={org.name}
                         image={org.image_thumbnail}
                         link={`/organisations/${org.name}`}
-                        desc={org.description || "No description provided"}
                     />
                 ))}
             </div>

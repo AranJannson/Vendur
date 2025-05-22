@@ -1,9 +1,8 @@
 import Link from "next/link";
-import Image from 'next/image';
-export default function VendurCard({ name, link, desc, image }: { name: string; link: string, desc: string, image?: string }) {
+export default function VendurCard({ name, link, image }: { name: string; link: string, image?: string }) {
     return (
         <div className="flex flex-col p-2 bg-primary-200 rounded-lg shadow-md m-4 overflow-hidden aspect-3/4 h-fit w-fit">
-            <Image
+            <img
                 src={image || "https://dummyimage.com/600x900/fff/000.png"}
                 alt={name}
                 width={600}
