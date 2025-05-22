@@ -13,6 +13,7 @@ interface Item {
   quantity: number;
   size: (string & { length: 1 }) | null;
   image: string;
+  discount: number;
 }
 
 interface Basket{
@@ -35,7 +36,6 @@ function Checkout() {
 
     let [itemDetails, setItemDetails] = useState<Item[]>([]);
     const [basket, setBasket] = useState<Basket>();
-    const [basketLoading, setBasketLoading] = useState(true);
     const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   useEffect(() => {
@@ -117,9 +117,9 @@ function Checkout() {
     // console.log(`Checkout Page: Item Details: ${JSON.stringify(itemDetails)}`);
     if (loading) return <p>Loading...</p>;
   // const amount = itemDetails.reduce((sum, item, index) => {return sum + item.price * (basket?.quantities[index] ?? 1);}, 0).toFixed(2)
-    const amount = itemDetails.length > 0 && basket?.quantities?.length > 0
+    const amount = itemDetails.length > 0 && basket!.quantities?.length > 0
   ? itemDetails.reduce((total, item, index) => {
-      const quantity = Number(basket.quantities[index] ?? 1);
+      const quantity = Number(basket!.quantities[index] ?? 1);
       const basePrice = Number(item.price ?? 0);
       const discount = Number(item.discount ?? 0);
 
