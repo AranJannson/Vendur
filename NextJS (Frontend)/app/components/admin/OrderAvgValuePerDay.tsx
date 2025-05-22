@@ -31,7 +31,7 @@ export default function OrderAvgValuePerDay() {
                     labels: dates,
                     datasets: [
                         {
-                            label: 'Item Price',
+                            label: 'Average Order Value',
                             data: orders,
                             backgroundColor: [
                                 'rgb(3,75,252)',

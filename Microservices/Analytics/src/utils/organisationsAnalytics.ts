@@ -78,62 +78,58 @@ export async function orgInvValue(org_id: string) {
 }
 
 // Returns list of items from an org and their average rating
-export async function orgProductRatingList(org_id: string) {
+export async function orgProductRatingList(org_id: string): Promise<Record<string, number>> {
     const itemQuery = await catalogSupabase
         .from("items")
-        .select("id, name, org_id").eq("org_id", org_id);
+        .select("id, name, org_id")
+        .eq("org_id", org_id);
 
     if (itemQuery.error) {
-        console.error("Error fetching organisations:", itemQuery.error);
-        return 0;
+        console.error("Error fetching organisation items:", itemQuery.error);
+        return {};
     }
+
+    if (!itemQuery.data || itemQuery.data.length < 1) {
+        return {};
+    }
+
+    const itemData = itemQuery.data;
+    const idToItemName: Record<string, string> = {};
+    itemData.forEach((item) => {
+        idToItemName[item.id] = item.name;
+    });
 
     const reviewQuery = await catalogSupabase
         .from("reviews")
         .select("item_id, rating");
 
     if (reviewQuery.error) {
-        console.error("Error fetching stock:", reviewQuery.error);
-        return 0;
+        console.error("Error fetching reviews:", reviewQuery.error);
+        return {};
     }
 
-    if (itemQuery.data.length<2){
-        return itemQuery.data
-    } else {
-        const itemData = itemQuery.data;
-        const idToItemName: Record<string, string>={};
-        itemData.forEach((item) => {
-            idToItemName[item.id] = item.name;
-        })
-        const reviewData = reviewQuery.data;
-        const reviewList: { itemName: string; rating: number }[] = [];
-        reviewData.forEach((review) => {
-            const reviewItemId = review.item_id;
-            const rating = review.rating;
+    const reviewData = reviewQuery.data;
 
-            if (reviewItemId in idToItemName) {
-                const name = idToItemName[reviewItemId];
-                reviewList.push({ itemName: name, rating: rating });
-            }
-        })
-        const reviewSum: Record<string, number> = {};   // To track total sum
-        const reviewCount: Record<string, number> = {}; // To track number of ratings
-        for (const review of reviewList) {
-            const itemName = review.itemName
-            const rating = review.rating
-            if (!reviewSum[itemName]){
-                reviewSum[itemName] = 0;
-                reviewCount[itemName] = 0;
-            }
-            reviewSum[itemName] += rating;
-            reviewCount[itemName] +=1
+    const reviewSum: Record<string, number> = {};
+    const reviewCount: Record<string, number> = {};
+
+    reviewData.forEach((review) => {
+        const itemId = review.item_id;
+        const rating = review.rating;
+
+        if (itemId in idToItemName) {
+            const itemName = idToItemName[itemId];
+            reviewSum[itemName] = (reviewSum[itemName] || 0) + rating;
+            reviewCount[itemName] = (reviewCount[itemName] || 0) + 1;
         }
-        const reviewAverage: Record<string, number> = {};
-        for (const itemName in reviewSum){
-            reviewAverage[itemName] = reviewSum[itemName]/reviewCount[itemName];
-        }
-        return reviewAverage
+    });
+
+    const reviewAverage: Record<string, number> = {};
+    for (const itemName in reviewSum) {
+        reviewAverage[itemName] = reviewSum[itemName] / reviewCount[itemName];
     }
+
+    return reviewAverage;
 }
 
 // Returns a list of items from one org and how many sales each item has been a part of

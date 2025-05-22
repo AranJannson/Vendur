@@ -66,17 +66,6 @@ export default function Analytics() {
                     <ReviewsPerDay/>
 
                 </div>
-
-                <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                    <h2 className="text-base font-light p-2">Number of reviews per day</h2>
-                    <ReviewsPerDay/>
-
-                </div>
-                <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                    <h2 className="text-base font-light p-2">Orders Per Day</h2>
-                    <OrdersPerDay/>
-
-                </div>
                 <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
                     <h2 className="text-base font-light p-2">Order Value Per Day</h2>
                     <OrderValuePerDay/>

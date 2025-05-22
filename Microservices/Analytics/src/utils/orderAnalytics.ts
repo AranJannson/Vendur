@@ -72,10 +72,9 @@ export async function totalRevenueEver() {
         } else {
             finalPrice = price;
         }
-        itemIdPrice[itemId] = (itemIdPrice[itemId] || 0) + finalPrice;
+        itemIdPrice[itemId] = finalPrice;
     })
     let totalRevenue = 0
-    let orderValue = 0
     itemQuantity.forEach((item) => {
         for (const itemPrice in itemIdPrice){
             const itemId = Number(itemPrice)
@@ -95,7 +94,7 @@ export async function totalRevenueEver() {
 
 // Shows list of sales numbers per day (actual number of orders, not order value)
 export async function orderNumberDailyList() {
-    const {data, error} = await catalogSupabase
+    const {data, error} = await paymentSupabase
     .from("orders").select("created_at, price")
 
     if (error){
@@ -196,24 +195,17 @@ export async function orderValuePerDayList() {
     return orderValuePerDay;
 }
 
-// Total order value per day (for which an order was placed)
 export async function averageOrderValuePerDayList() {
     const paymentQuery = await paymentSupabase
         .from("orders")
         .select("created_at, item_id, quantity");
 
     if (paymentQuery.error) {
-        console.error("Error fetching items:", paymentQuery.error);
+        console.error("Error fetching orders:", paymentQuery.error);
         return null;
     }
 
-    const data = paymentQuery.data;
-
-    const dateCount: Record<string, number> = {};
-    data.forEach((item) => {
-        const orderdate = String(item.created_at).slice(0, 10);
-        dateCount[orderdate] = (dateCount[orderdate] || 0) + 1;
-    })
+    const orders = paymentQuery.data;
 
     const catalogQuery = await catalogSupabase
         .from("items")
@@ -224,36 +216,36 @@ export async function averageOrderValuePerDayList() {
         return null;
     }
 
-
     const itemIdPrice: Record<number, number> = {};
     catalogQuery.data.forEach((item) => {
-        const itemId = item.id;
         const price = item.price;
         const discount = item.discount ?? 0;
-        const finalPrice = price * (1 - (discount / 100));
-        itemIdPrice[itemId] = finalPrice;
+        const finalPrice = price * (1 - discount / 100);
+        itemIdPrice[item.id] = finalPrice;
     });
 
-    const orderValuePerDay: Record<string, number> = {};
+    const totalValuePerDay: Record<string, number> = {};
+    const orderCountPerDay: Record<string, number> = {};
 
-    data.forEach((order) => {
+    orders.forEach((order) => {
         const date = String(order.created_at).slice(0, 10);
         const itemId = order.item_id;
         const quantity = order.quantity;
 
         const price = itemIdPrice[itemId] ?? 0;
         const orderValue = quantity * price;
-        for (const orderDate in dateCount){
-            if (orderDate == date){
-                const count = dateCount[date]
-                const averageOrderValue = orderValue/count;
-                orderValuePerDay[date] = (orderValuePerDay[date] || 0) + averageOrderValue;
-            }
-        }
 
-
+        totalValuePerDay[date] = (totalValuePerDay[date] || 0) + orderValue;
+        orderCountPerDay[date] = (orderCountPerDay[date] || 0) + 1;
     });
 
-    return orderValuePerDay;
+    const averageOrderValuePerDay: Record<string, number> = {};
+    for (const date in totalValuePerDay) {
+        const totalValue = totalValuePerDay[date];
+        const count = orderCountPerDay[date];
+        averageOrderValuePerDay[date] = totalValue / count;
+    }
+
+    return averageOrderValuePerDay;
 }
 
