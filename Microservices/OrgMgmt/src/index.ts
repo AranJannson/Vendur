@@ -138,8 +138,8 @@ OrgMgmt.put("/update-product", async (req: Request, res: Response) => {
 // Delete a product
 OrgMgmt.delete("/delete-product", async (req: Request, res: Response) => {
     try {
-        const { id } = req.body;
-        const data = await deleteProduct(id);
+        const { id, org_id } = req.body;
+        const data = await deleteProduct(id, org_id);
         res.status(200).send(JSON.stringify(data));
     } catch (error) {
         console.error("Error deleting product:", error);
@@ -230,18 +230,6 @@ OrgMgmt.post("/getOrderGroups", async (req: Request, res: Response) => {
         res.status(500).send("Internal Server Error");
     }
 })
-
-//Delete Item by ID
-OrgMgmt.post('/deleteProduct', async (req: Request, res: Response): Promise<any> => {
-    const { id } = req.body;
-    const { error } = await deleteProduct(id);
-    
-    if (error) {
-      return res.status(500).json({ message: error });
-    }
-  
-    return res.status(200).json({ message: 'Product deleted successfully' });
-  });
 
 //Get Item by ID
   OrgMgmt.get("/getProductByID", async (req, res): Promise<any> => {

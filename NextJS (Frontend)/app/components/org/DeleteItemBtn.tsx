@@ -14,7 +14,7 @@ export default function DeleteItemBtn({ productId }: DeleteItemBtnProps) {
 
     try {
       const res = await fetch("/api/deleteProduct", {
-        method: "POST",
+        method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: productId }),
       });

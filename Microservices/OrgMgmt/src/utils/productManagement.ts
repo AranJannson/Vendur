@@ -92,22 +92,30 @@ export const updateProduct = async (productId: any, product: any) => {
   return data;
 };
 
-export const deleteProduct = async (productId: any) => {
-    const { data, error } = await cat_supabase
-        .from("items")
-        .delete()
-        .eq("id", productId);
+export const deleteProduct = async (productId: number, org_id: string) => {
+  const { data, error } = await cat_supabase
+    .from("items")
+    .delete()
+    .eq("id", productId)
+    .select("*");
 
-    if (error) {
-        throw new Error(`Error deleting product: ${error.message}`);
-    }
+  if (error) {
+    throw new Error(`Error deleting product: ${error.message}`);
+  }
 
-    if (!data || (data as any[]).length === 0) {
-        throw new Error("No product found to delete.");
-    }
+  const deleted = data as { org_id: string }[];
 
-    return data;
+  if (!deleted || deleted.length === 0) {
+    throw new Error("No product found to delete.");
+  }
+
+  if (deleted[0].org_id !== org_id) {
+    throw new Error("You are not authorised to delete this product.");
+  }
+
+  return deleted;
 };
+
 
 // Applying Discounts to Products
 // If want to remove discount, pass null as discount value
