@@ -7,21 +7,28 @@ const org_supabase = connectOrgMgmt();
 export async function deleteProductById(id: string): Promise<{ error: string | null }> {
   console.log("Deleting product with ID:", id);
 
-  const { error: err } = await cat_supabase.from('stock').delete().eq('item_id', id);
-  if (err) {
-    console.error("Error deleting product stock:", err.message);
-    return { error: err.message };
+  const { error: reviewsErr } = await cat_supabase.from('reviews').delete().eq('item_id', id);
+  if (reviewsErr) {
+    console.error("Error deleting product reviews:", reviewsErr.message);
+    return { error: reviewsErr.message };
   }
 
-  const { error } = await cat_supabase.from('items').delete().eq('id', id);
-  if (error) {
-    console.error("Error deleting product:", error.message);
-    return { error: error.message };
+  const { error: stockErr } = await cat_supabase.from('stock').delete().eq('item_id', id);
+  if (stockErr) {
+    console.error("Error deleting product stock:", stockErr.message);
+    return { error: stockErr.message };
+  }
+
+  const { error: itemErr } = await cat_supabase.from('items').delete().eq('id', id);
+  if (itemErr) {
+    console.error("Error deleting product:", itemErr.message);
+    return { error: itemErr.message };
   }
 
   console.log("Product deleted successfully");
   return { error: null };
 }
+
 
 export async function getAllOrgs() {
   console.log("Fetching all organisations...");
