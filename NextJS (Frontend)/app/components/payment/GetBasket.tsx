@@ -50,7 +50,7 @@ export default function GetBasket() {
 
           if (data.basket?.items?.length) {
             const itemDetails: Item[] = await Promise.all(
-              data.basket.items.map(async (itemId): Promise<Item> => {
+              data.basket.items.map(async (itemId: number): Promise<Item> => {
                 const res = await fetch("/api/getItemByID", {
                   method: "POST",
                   headers: {
@@ -77,9 +77,9 @@ export default function GetBasket() {
       fetchBasketAndItems();
     }, [userId]);
 
-    const amount = itemDetails.length > 0 && basket?.quantities?.length > 0
+    const amount = itemDetails.length > 0 && basket!.quantities?.length > 0
   ? itemDetails.reduce((total, item, index) => {
-      const quantity = Number(basket.quantities[index] ?? 1);
+      const quantity = Number(basket!.quantities[index] ?? 1);
       const basePrice = Number(item.price ?? 0);
       const discount = Number(item.discount ?? 0);
 
@@ -137,6 +137,8 @@ export default function GetBasket() {
                                 </div>
 
                                 <div className="self-start">
+                                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                                    {/*@ts-expect-error*/}
                                     <DeleteItemButton item_id={item.id} user_id={userId} refreshBasket={() => {
                                     }}/>
                                 </div>

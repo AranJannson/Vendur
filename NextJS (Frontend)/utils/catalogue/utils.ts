@@ -28,7 +28,7 @@ export async function revertStock(item: any){
     return quantityResponse.json();
 }
 
-export async function modifyStock(item_id, quantity: number){
+export async function modifyStock(item_id: number, quantity: number){
     const stockResponse = await fetch('/api/getStock', {
         method: 'POST',
         credentials: 'include',
