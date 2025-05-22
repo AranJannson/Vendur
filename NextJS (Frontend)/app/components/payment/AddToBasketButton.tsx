@@ -39,8 +39,8 @@ export default function AddToBasketButton( { item, formId, originalStock }: { it
 
             openModal();
             console.log(`Adding ${selectedQuantity} (or ${quantityInput.value}) of item ${item.id} to basket while removing ${selectedQuantity} from stock`);
-            const response = postItem(user!.id, new Date().toISOString(), item.id);
-            const stockResponse = modifyStock(item.id, -selectedQuantity);
+            await postItem(user!.id, new Date().toISOString(), item.id, selectedQuantity);
+            await modifyStock(item.id, -selectedQuantity);
 
 
         } catch (error) {

@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-export default async function addToBasket(user_id: string, dateTime: Date, item_id: number) {
+export default async function addToBasket(user_id: string, dateTime: Date, item_id: number, quantity: number) {
     const supabase = createClient(
         process.env.PUBLIC_SUPABASE_URL as string,
         process.env.PUBLIC_SUPABASE_ANON_KEY as string
@@ -20,7 +20,7 @@ export default async function addToBasket(user_id: string, dateTime: Date, item_
                 user_id,
                 created_at: new Date(),
                 items: [item_id],
-                quantities: [1],
+                quantities: [quantity],
             })
             .single();
 
@@ -37,7 +37,7 @@ export default async function addToBasket(user_id: string, dateTime: Date, item_
 
         if (index !== -1) {
             const updatedQuantity = [...UserBasket.quantities];
-            updatedQuantity[index] += 1;
+            updatedQuantity[index] += quantity;
 
             const { error: updateError } = await supabase
                 .from("basket")
@@ -52,7 +52,7 @@ export default async function addToBasket(user_id: string, dateTime: Date, item_
             return UserBasket;
         } else {
             const updatedItems = [...UserBasket.items, item_id];
-            const updatedQuantity = [...UserBasket.quantities, 1];
+            const updatedQuantity = [...UserBasket.quantities, quantity];
 
             const { error: updateError } = await supabase
                 .from("basket")

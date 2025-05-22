@@ -7,17 +7,17 @@ interface Item {
   image: string;
 }
 
-export async function postItem(user_id: string, dateTime: string, item_id: string) {
-   const response = await fetch("http://localhost:8002/addToNewBasket", {
+export async function postItem(user_id: string, dateTime: string, item_id: number, quantity: number) {
+  const response = await fetch("http://localhost:8002/addToNewBasket", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ user_id, dateTime, item_id }),
-   });
+    body: JSON.stringify({ user_id, dateTime, item_id, quantity }),
+  });
 
   if (!response.ok) {
-      throw new Error();
+    throw new Error();
   }
 
   return response.json();

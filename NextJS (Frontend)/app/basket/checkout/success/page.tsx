@@ -5,7 +5,7 @@ import Link from "next/link";
 
 async function getOrderDetails (order_id: string) {
   
-  const response = await fetch(`http://localhost:8002/getOrderDetails`, {
+  const response = await fetch(`/api/getOrderDetails`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -16,7 +16,8 @@ async function getOrderDetails (order_id: string) {
     })
   });
 
-  const data = await response.json();
+  let data = await response.json();
+
 
   const addressString = data.orderDetails.delivery_address;
   const addressObject = JSON.parse(addressString);
@@ -24,7 +25,6 @@ async function getOrderDetails (order_id: string) {
     addressObject.line1,
     addressObject.line2,
     addressObject.city,
-    addressObject.state,
     addressObject.postal_code,
     addressObject.country
   ].filter(Boolean);

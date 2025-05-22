@@ -75,6 +75,17 @@ export default function GetBasket() {
       fetchBasketAndItems();
     }, [userId]);
 
+    const amount = itemDetails.length > 0 && basket?.quantities?.length > 0
+  ? itemDetails.reduce((total, item, index) => {
+      const quantity = Number(basket.quantities[index] ?? 1);
+      const basePrice = Number(item.price ?? 0);
+      const discount = Number(item.discount ?? 0);
+
+      const discountedPrice = basePrice * (1 - discount / 100);
+      return total + discountedPrice * quantity;
+    }, 0)
+  : 0;
+
 
     return (
         <div className="bg-secondary-400 rounded-xl m-4">
@@ -112,7 +123,8 @@ export default function GetBasket() {
                                     </p>
                                     <p>
                                         <b>Price:</b>
-                                        £{item.price.toFixed(2)}
+                                        {/* Find final price after discounts if any */}
+                                        £{(item.price * (1 - (item.discount ?? 0) / 100)).toFixed(2)}
                                     </p>
 
                                     <div
@@ -156,13 +168,9 @@ export default function GetBasket() {
                             <p className="text-2xl">
                                 <b>Total:</b>
                                 £
-                                {itemDetails
-                                    .reduce((sum, item, index) => {
-                                        return sum + item.price * (basket?.quantities[index] ?? 1);
-                                    }, 0)
-                                    .toFixed(2)}
+                                {amount.toFixed(2)}
                             </p>
-                            <a href="/payment/checkout">
+                            <a href="/basket/checkout">
                                 <button
                                     className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4">
                                     Go to Checkout
