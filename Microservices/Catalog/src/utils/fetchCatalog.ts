@@ -21,7 +21,7 @@ export async function fetchOrgProducts(org_id: string){
 
 export async function fetchStock(item_id: number) {
 
-    const { data } = await supabase.from("stock").select("*").eq("item_id", item_id).maybeSingle();
+    const { data } = await supabase.from("stock").select("*").eq("item_id", item_id).single();
 
     return data;
 

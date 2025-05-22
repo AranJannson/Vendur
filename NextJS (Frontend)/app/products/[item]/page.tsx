@@ -88,7 +88,7 @@ console.log('fetched reviews:', reviews);
 
     const ratings = await ratingResponse.json();
     const rating = Array.isArray(ratings) && ratings.length > 0 ? ratings[0].rating : 0;
-
+    console.log(`item_id: ${item.id}`);
     const stockResponse = await fetch(`http://localhost:3000/api/getStock`, {
         method: 'POST',
         headers: {
@@ -166,19 +166,6 @@ console.log('fetched reviews:', reviews);
                             )}
 
                             <form className="flex flex-col" id="itemForm">
-
-                                {item?.category === 'Clothing & Shoes' ? (
-                                    <div className="flex flex-col">
-                                        <label className="font-bold ml-1">Size</label>
-                                        <select className="p-2 bg-primary-200 rounded-full w-20" name="size">
-                                            <option value="S">S</option>
-                                            <option value="M">M</option>
-                                            <option value="L">L</option>
-                                            <option value="XL">XL</option>
-                                        </select>
-                                    </div>
-
-                                ) : null}
 
                                 <label className="font-bold ml-1">Quantity</label>
                                 <ProductQuantity availableQuantity={availableQuantity} formId="itemForm"/>

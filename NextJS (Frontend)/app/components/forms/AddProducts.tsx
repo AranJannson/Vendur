@@ -82,7 +82,7 @@ export default function AddProducts() {
             <div className="flex flex-col gap-2 bg-background-200 p-2 rounded-lg">
                 <span className="flex flex-col gap-2">
                     <label>Product Price</label>
-                    <input type="number" name="price" placeholder="Product Price" required className="p-2 rounded-lg"/>
+                    <input type="number" step="0.01" name="price" placeholder="Product Price" required className="p-2 rounded-lg"/>
                 </span>
 
                 <span className="flex flex-col gap-2">

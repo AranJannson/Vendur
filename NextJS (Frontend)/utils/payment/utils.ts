@@ -8,7 +8,8 @@ interface Item {
 }
 
 export async function postItem(user_id: string, dateTime: string, item_id: number, quantity: number) {
-  const response = await fetch("http://localhost:8002/addToNewBasket", {
+  console.log(`User ${user_id} is adding item with ID: ${item_id} to the basket with quantity: ${quantity}`);
+    const response = await fetch("/api/addToBasket", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
