@@ -57,7 +57,7 @@ function Checkout() {
 
           if (data.basket?.items?.length) {
             const itemDetails: Item[] = await Promise.all(
-              data.basket.items.map(async (itemId): Promise<Item> => {
+              data.basket.items.map(async (itemId: number): Promise<Item> => {
                 const res = await fetch("/api/getItemByID", {
                   method: "POST",
                   headers: {
