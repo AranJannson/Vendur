@@ -18,12 +18,14 @@ item?: ItemStats;
 }
 
 export default function ReviewSection({ reviews = [], item_id, item = { rating: undefined, reviewsCount: 0 } }: ReviewSectionProps) {
+    let averageRating = 0;
+    averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length || 0;
     return (
         <div className = "bg-secondary-100 m-4 rounded-lg p-5 flex flex-col gap-4 shadow-xl" >
         <h2 className = "text-2xl font-bold" > Reviews </h2>
 
     <div className="grid grid-cols-2 bg-primary-200 rounded-lg p-4">
-        <h3 className="text-sm font-semibold">Average Rating: null</h3>
+        <h3 className="text-sm font-semibold">Average Rating: {averageRating.toFixed(1)}</h3>
         <h3 className="text-sm font-semibold">Total Reviews: {reviews?.length}</h3>
     </div>
 
