@@ -174,10 +174,10 @@ export default function GetBasket() {
                             {/* Update basket in db */}
                             <CheckoutButton handleClick={async () => {
                                 if (basket) {
-                                    await fetch("/api/", {
+                                    await fetch("/api/modifyBasket", {
                                         method: "POST",
                                         headers: {"Content-Type": "application/json"},
-                                        body: JSON.stringify(basket),
+                                        body: JSON.stringify({user_id: userId, basket}),
                                     });
                                 }
                             }}/>

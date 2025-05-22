@@ -41,5 +41,5 @@ export const fetchBasket = async (user_id: string): Promise<Item[]> => {
     body: JSON.stringify({ user_id }),
   });
   if (!res.ok) throw new Error("Failed to fetch basket");
-  return (await res.json()) as Item[];  // TS-cast to Item[]
+  return (await res.json()) as Item[];
 };

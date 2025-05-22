@@ -16,10 +16,6 @@ interface Item{
     stock: number;
 }
 
-const URL =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
-    : 'https://vendur.shop';
 
 export default async function Products(){
 
@@ -28,7 +24,7 @@ export default async function Products(){
 
     const orgID: string = allTeams[0]?.id;
 
-    const response = await fetch(`${URL}/api/organisations/products/get-products`, {
+    const response = await fetch(`/api/organisations/products/get-products`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -41,7 +37,7 @@ export default async function Products(){
     // Fetch stock in parallel for all items
     const itemsWithStock = await Promise.all(
     items.map(async (item) => {
-        const stockRes = await fetch(`${URL}/api/organisations/products/get-stock`, {
+        const stockRes = await fetch(`/api/organisations/products/get-stock`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

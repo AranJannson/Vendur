@@ -30,7 +30,7 @@ export default async function Products() {
     const productsWithRatings = await Promise.all(
         items.map(async (item: Item) => {
 
-            const reviewResponse = await fetch('http://localhost:3000/api/review/check-item-review', {
+            const reviewResponse = await fetch('http://localhost:3000/api/check-item-review', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export default async function Products() {
 
             const ratings = await reviewResponse.json();
             const rating = ratings.length > 0 ? ratings[0].rating : 0;
-
+            console.log("ratings", ratings);
             return { ...item, rating };
         })
     );

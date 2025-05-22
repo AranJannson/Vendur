@@ -123,7 +123,7 @@ const FormClientComponent: React.FC<Props> = ({ id }) => {
 
         <div>
           <label htmlFor="website" className="block font-bold">Website</label>
-          <input type="url" id="website" name="website" defaultValue={org.website} className="w-full px-3 py-2 border border-gray-300 rounded-md" required/>
+          <input type="url" id="website" name="website" defaultValue={org.website} className="w-full px-3 py-2 border border-gray-300 rounded-md"/>
         </div>
 
         <div>
@@ -133,12 +133,12 @@ const FormClientComponent: React.FC<Props> = ({ id }) => {
 
         <div>
           <label htmlFor="address" className="block font-bold">Product Type</label>
-          <input type="text" id="product_type" name="product_type" defaultValue={org.product_type} className="w-full px-3 py-2 border border-gray-300 rounded-md" required/>
+          <input type="text" id="product_type" name="product_type" defaultValue={org.product_type} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
         </div>
 
         <div>
           <label htmlFor="address" className="block font-bold">Shipping Type</label>
-          <input type="text" id="shipping_type" name="shipping_type" defaultValue={org.shipping_type} className="w-full px-3 py-2 border border-gray-300 rounded-md" required/>
+          <input type="text" id="shipping_type" name="shipping_type" defaultValue={org.shipping_type} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
         </div>
 
         <div>

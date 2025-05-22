@@ -47,33 +47,52 @@ export default async function ItemPage({params,}: { params: Promise<{ item: stri
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ id: item?.org_id }),
-    })
+    });
 
-    const orgDetails = await responseOrg.json();
+    let orgDetails;
 
+    if(!responseOrg){
+        orgDetails = "Unknown Seller"
+    }else{
+        orgDetails = await responseOrg.json();
+
+    }
 
     if (!item) {
         return <div>Error loading item: Item not found</div>;
     }
+
+    console.log(`url for getting reviews: http://localhost:3000/api/review/get-item-reviews?item_id=${item.id}`)
     // const reviewsResponse = await fetch(`http://localhost:3000/api/review/get-item-reviews?item_id=${item.id}`, {
     //     method: 'GET',
     // });
-    // const reviews = await reviewsResponse;
-    //
-    // if (reviewsResponse.status !== 200) {
-    //     console.error("Error fetching reviews:", reviews);
-    // }
-    //
-    // const reviewResponse = await fetch('http://localhost:3000/api/review/check-item-review', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ item_id: item.id }),
-    // });
+    const reviewsResponse = await fetch(
+  `http://localhost:3000/api/review/get-item-reviews?item_id=${item.id}`,
+  { method: 'GET' }
+);
 
-    // const ratings = await reviewResponse.json();
-    // const rating = Array.isArray(ratings) && ratings.length > 0 ? ratings[0].rating : 0;
+if (!reviewsResponse.ok) {
+  console.error('Failed to load reviews:', reviewsResponse.status);
+  return []; // or handle the error
+}
+
+const reviews = await reviewsResponse.json();     // ← this is now your array of review objects
+console.log('fetched reviews:', reviews);
+
+    if (reviewsResponse.status !== 200) {
+        console.error("Error fetching reviews:", reviews);
+    }
+
+    const ratingResponse = await fetch('http://localhost:3000/api/review/check-item-review', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ item_id: item.id }),
+    });
+
+    const ratings = await ratingResponse.json();
+    const rating = Array.isArray(ratings) && ratings.length > 0 ? ratings[0].rating : 0;
 
     const stockResponse = await fetch(`http://localhost:3000/api/getStock`, {
         method: 'POST',
@@ -117,7 +136,7 @@ export default async function ItemPage({params,}: { params: Promise<{ item: stri
                                 <i className="text-gray-400">Item ID: {item.id}</i>
 
                             </div>
-                            {/*<StarRating rating={rating}/>*/}
+                            <StarRating rating={rating}/>
 
                             {availableQuantity === 0 ? (
                                 <p className="text-red-600">Out of Stock</p>
@@ -186,11 +205,11 @@ export default async function ItemPage({params,}: { params: Promise<{ item: stri
                 </div>
                 <div className="bg-background-50 shadow-2xl m-4 rounded-lg p-5">
                     <h2 className="text-2xl font-bold mb-3">Description</h2>
-                    {/*<p>Sold by: <Link href={`/organisations/${orgDetails?.name ?? ""}`} className="text-text font-bold underline text-text mt-2">{orgDetails?.name ?? "Unknown seller"}</Link>*/}
-                    {/*</p>*/}
+                    <p>Sold by: <Link href={`/organisations/${orgDetails?.name ?? ""}`} className="text-text font-bold underline text-text mt-2">{orgDetails?.name ?? "Unknown seller"}</Link>
+                    </p>
                     <p>{item.description}</p>
                 </div>
-                {/*<ReviewSection reviews={reviews} item_id={item.id}/>*/}
+                <ReviewSection reviews={reviews} item_id={item.id}/>
             </div>
         </>
 
