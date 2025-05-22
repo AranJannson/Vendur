@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     try{
-        const { user_id, item_id} = await req.json();
+        const { order_id } = await req.json();
 
-        const response = await fetch("http://localhost:8002/decreaseQuantity", {
+        const response = await fetch("http://localhost:8002/getOrderDetails", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({user_id, item_id})
+            body: JSON.stringify({order_id})
         });
 
         const data = await response.json();
@@ -17,8 +17,10 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(data)
     }catch(error){
 
-        console.error("Error in decreaseQuantity API:", error);
+        console.error("Error in getOrderDetails API:", error);
         return Response.json({ error: "Internal Server Error" }, { status: 500 });
 
     }
+
+
 }

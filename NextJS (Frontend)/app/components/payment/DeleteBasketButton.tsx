@@ -1,32 +1,38 @@
 "use client";
-import { revertStock } from "@/utils/catalogue/utils";
 import { useState } from "react";
+import {useUser} from "@stackframe/stack";
 
-export default function DeleteBasketButton({basket, refreshBasket}: {basket: any[], refreshBasket: any}) {
+export default function DeleteBasketButton() {
     const [loading, setLoading] = useState(false);
+
+    const userId = useUser()?.id;
     
     const handleDelete = async () => {
         try {
 
             setLoading(true);
             
-            await fetch("http://localhost:8002/deletecookie", {
-                method: "DELETE",
+            const response = await fetch("/api/deleteBasket", {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                credentials: "include",
+                body: JSON.stringify({user_id: userId})
             });
-            
-            basket.forEach((item) => {
-                revertStock(item);
-            })
+
+            if(!response){
+                console.log("Failed To Delete Basket")
+            }
+
+            if(response){
+                console.log("Basket Deleted")
+            }
 
         } catch (error) {
             console.error("Failed to remove basket");
         } finally {
-            refreshBasket();
             setLoading(false);
+            window.location.reload()
         }
 
     };

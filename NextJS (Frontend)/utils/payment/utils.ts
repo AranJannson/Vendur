@@ -7,31 +7,31 @@ interface Item {
   image: string;
 }
 
-export async function postItem(user_id: string, dateTime: string, item_id: string) {
-   const response = await fetch("http://localhost:8002/addToNewBasket", {
+export async function postItem(user_id: string, dateTime: string, item_id: number, quantity: number) {
+  const response = await fetch("http://localhost:8002/addToNewBasket", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ user_id, dateTime, item_id }),
-   });
+    body: JSON.stringify({ user_id, dateTime, item_id, quantity }),
+  });
 
   if (!response.ok) {
-      throw new Error();
+    throw new Error();
   }
 
   return response.json();
 }
 
-export async function deleteItem (item: any) {
-  await fetch("http://localhost:8002/deletevalue", {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({ id: item.id, size: item.size }),
-  });
+export async function deleteItem (user_id: string, item_id: number) {
+    console.log(`User ${user_id} is deleting item with ID: ${item_id}`);
+    await fetch("http://localhost:3000/api/decreaseBasketQuantity", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id: user_id, item_id: item_id }),
+    })
 }
 
 export const fetchBasket = async (user_id: string): Promise<Item[]> => {
@@ -41,5 +41,5 @@ export const fetchBasket = async (user_id: string): Promise<Item[]> => {
     body: JSON.stringify({ user_id }),
   });
   if (!res.ok) throw new Error("Failed to fetch basket");
-  return (await res.json()) as Item[];  // TS-cast to Item[]
+  return (await res.json()) as Item[];
 };

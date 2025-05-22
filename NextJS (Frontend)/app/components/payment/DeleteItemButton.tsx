@@ -1,17 +1,18 @@
+'use client';
+
 import { modifyStock } from "@/utils/catalogue/utils";
 import { deleteItem } from "@/utils/payment/utils";
 
-export default function DeleteItemButton({ item, refreshBasket }: {item: any, refreshBasket: any}) {
+export default function DeleteItemButton({ user_id, item_id, refreshBasket }: {user_id: string, item_id: number, refreshBasket: any}) {
     const handleDelete = async () => {
   
       try {
-        const[itemResponse, stockResponse] = await Promise.all([deleteItem(item), modifyStock(item, +item.quantity)]);
+        const[itemResponse, stockResponse] = await Promise.all([deleteItem(user_id, item_id), modifyStock(item_id, 1)]);
       } catch (error) {
         console.error("Error deleting item:", error);
       } finally{
-        await refreshBasket(); 
+        await refreshBasket();
       }
-
     };
   
     return <div>

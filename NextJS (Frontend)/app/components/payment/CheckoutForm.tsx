@@ -22,6 +22,8 @@ export const CheckoutForm = ({basket, amount}: {basket: Item[], amount: number})
   
   const user = useUser();
 
+  const userID = user?.id;
+
   const stripe = useStripe();
   const elements = useElements();
   const [detailsLoading, setDetailsLoading] = useState(true);
@@ -49,18 +51,18 @@ export const CheckoutForm = ({basket, amount}: {basket: Item[], amount: number})
       setErrorMessage(error.message || "An unexpected error occurred.");
     } else {
 
-      await fetch("http://localhost:8002/deletecookie", {
-        method: "DELETE",
+      await fetch("/api/deleteBasket", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
+        body: JSON.stringify({user_id: userID})
       });
 
       const deliveryAddress = addressDetails?.value.address;
       const fullName = addressDetails?.value.name;
 
-      const response = await fetch("http://localhost:8002/orderProcessing", {
+      const response = await fetch("/api/orderProcessing", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

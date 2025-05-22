@@ -54,10 +54,10 @@ Payment.post('/getUserOrders', async (req: Request, res: Response) => {
 
 Payment.post('/addToNewBasket', async (req: Request, res: Response) => {
 
-    const {user_id, dateTime, item_id} = req.body;
+    const {user_id, dateTime, item_id, quantity} = req.body;
 
     try{
-        await addToBasket(user_id, dateTime, item_id);
+        await addToBasket(user_id, dateTime, item_id, quantity);
 
     }catch (error){
         console.error("Error adding to basket:", error);
