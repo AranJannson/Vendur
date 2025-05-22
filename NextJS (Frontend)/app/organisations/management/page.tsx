@@ -103,7 +103,7 @@ export default async function OrganisationsManagement() {
                             <h2 className="text-2xl font-light p-2">Number of Sales Per Item</h2>
                             <OrgItemSalesGraph />
                         </div>
-                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center mr-4">
                             <h2 className="text-2xl font-light p-2">Item Revenue</h2>
                             <OrgItemRevenueGraph />
                         </div>
