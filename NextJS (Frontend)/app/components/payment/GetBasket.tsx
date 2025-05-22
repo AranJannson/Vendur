@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import DeleteBasketButton from "@/app/components/payment/DeleteBasketButton";
 import DeleteItemButton from "@/app/components/payment/DeleteItemButton";
 import Link from "next/link"
+import CheckoutButton from "@/app/components/payment/CheckoutButton";
 
 interface Basket{
 
@@ -118,11 +119,11 @@ export default function GetBasket() {
                                 <div className="flex flex-col w-full bg-secondary-100 p-4 rounded-lg text-left">
                                     <h2 className="text-xl font-bold mb-2">{item.name}</h2>
                                     <p>
-                                        <b>Id:</b>
+                                        <b>Id: </b>
                                         {item.id}
                                     </p>
                                     <p>
-                                        <b>Price:</b>
+                                        <b>Price: </b>
                                         {/* Find final price after discounts if any */}
                                         £{(item.price * (1 - (item.discount ?? 0) / 100)).toFixed(2)}
                                     </p>
@@ -170,12 +171,16 @@ export default function GetBasket() {
                                 £
                                 {amount.toFixed(2)}
                             </p>
-                            <a href="/basket/checkout">
-                                <button
-                                    className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4">
-                                    Go to Checkout
-                                </button>
-                            </a>
+                            {/* Update basket in db */}
+                            <CheckoutButton handleClick={async () => {
+                                if (basket) {
+                                    await fetch("/api/", {
+                                        method: "POST",
+                                        headers: {"Content-Type": "application/json"},
+                                        body: JSON.stringify(basket),
+                                    });
+                                }
+                            }}/>
                         </div>
                     </ul>
                 </div>
