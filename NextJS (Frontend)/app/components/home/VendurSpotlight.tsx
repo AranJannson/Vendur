@@ -8,6 +8,7 @@ interface Org {
     name: string;
     desc?: string;
     description?: string;
+    image?: string;
 }
 
 export default function VendurSpotlight() {
@@ -50,6 +51,7 @@ export default function VendurSpotlight() {
                     <ShopCard
                         key={index}
                         name={org.name}
+                        image={org.image}
                         link={`/organisations/${org.name}`}
                         desc={org.description || "No description provided"}
                     />
