@@ -8,12 +8,12 @@ export async function deleteProductById(id: string): Promise<{ error: string | n
   console.log("Deleting product with ID:", id);
 
   const { error: err } = await cat_supabase.from('stock').delete().eq('item_id', id);
-  const { error } = await cat_supabase.from('items').delete().eq('id', id);
-
   if (err) {
-    console.error("Error deleting product stock:", error.message);
-    return { error: error.message };
+    console.error("Error deleting product stock:", err.message);
+    return { error: err.message };
   }
+
+  const { error } = await cat_supabase.from('items').delete().eq('id', id);
   if (error) {
     console.error("Error deleting product:", error.message);
     return { error: error.message };
