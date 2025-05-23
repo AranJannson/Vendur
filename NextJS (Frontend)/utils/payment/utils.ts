@@ -26,7 +26,7 @@ export async function postItem(user_id: string, dateTime: string, item_id: numbe
 
 export async function deleteItem (user_id: string, item_id: number) {
     console.log(`User ${user_id} is deleting item with ID: ${item_id}`);
-    await fetch("http://localhost:3000/api/decreaseBasketQuantity", {
+    await fetch("/api/decreaseBasketQuantity", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
