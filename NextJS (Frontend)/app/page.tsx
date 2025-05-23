@@ -6,6 +6,8 @@ import OneByFourHistory from "./components/ui/productDisplays/1x4_history";
 import CategoryDisplay from "./components/ui/productDisplays/category_display";
 import VendurSpotlight from "./components/home/VendurSpotlight";
 import { stackServerApp } from "@/stack";
+import RecommendedItems from "@/app/components/product/RecommendedItems";
+
 export const metadata = {
     title: "Home | Vendur",
     description: "",
@@ -36,17 +38,7 @@ export default async function Home() {
 
                 <div className="w-full primary-200 h-10"/>
 
-                <div className="bg-background-100">
-                    <div className="mx-4">
-                        <Featured/>
-
-                    </div>
-
-                    <div>
-                        <OneByFour/>
-                    </div>
-
-                </div>
+                {user_id && <RecommendedItems />}
 
                 <div>
                     <VendurSpotlight/>

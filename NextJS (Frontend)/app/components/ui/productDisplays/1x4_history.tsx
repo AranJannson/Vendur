@@ -50,6 +50,7 @@ export default async function ContinueBrowsing({ user_id }: { user_id: string })
     item_ids.map(async (item_id) => {
       //@ts-ignore
       console.log(`[ContinueBrowsing] Fetching item details for ID: ${item_id.item_id}`);
+      // @ts-ignore
       const res = await fetch("http://localhost:3000/api/getItemByID", {
         method: "POST",
         cache: "no-store",
