@@ -42,7 +42,7 @@ export const CheckoutForm = ({basket, amount}: {basket: Item[], amount: number})
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:3000/basket/checkout/success",
+        return_url: "https://vendur.shop/basket/checkout/success",
       },
       redirect: "if_required",
     });

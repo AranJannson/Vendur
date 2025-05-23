@@ -17,12 +17,12 @@ export default function CheckoutButton({ handleClick } : { handleClick: () => vo
     }
 
     return (
-        // <a href="/basket/checkout">
+        <a href="/basket/checkout">
             <button
                 onClick={handleClick}
                 className="bg-primary-400 p-4 rounded-lg transition-colors hover:bg-primary-500 px-8 mt-4">
                 Go to Checkout
             </button>
-        // </a>
+        </a>
     );
 }
