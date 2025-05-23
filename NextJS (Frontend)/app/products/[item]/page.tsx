@@ -111,9 +111,10 @@ console.log('fetched reviews:', reviews);
     const availableQuantity = stock;
     const discount = ((item.price * (1 - item.discount / 100)).toFixed(2));
     const percentage_discount = `${item.discount}%`;
+    console.log(`[ItemPage] item: ${JSON.stringify(item)}\nitem_id: ${item.id}`);
     return (
         <>
-            <TrackView item_id={item.id as unknown as string}/>
+            <TrackView item_id={item.id}/>
             <div className="md:w-[70%] mx-auto">
                 <div className="grid md:grid-cols-2 grid-cols-1">
                     <div>
