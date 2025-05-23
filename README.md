@@ -9,7 +9,6 @@ Vendur is a simple, lightweight, and easy-to-use e-commerce platform. It is buil
 - **User Management**: View and manage users.
 - **Payment Gateway**: Accept payments.
 - **Authentication**: Sign in and sign up with email and password.
-- **Role-based Access Control**: Define roles and permissions for users/organisations.
 - **Analytics**: View sales, user data and more.
 - **Admin Panel**: Manage your store from a simple and intuitive admin panel.
 - **Organisation Management**: Multiple companies and sellers can use the platform and manage their products.
@@ -59,6 +58,10 @@ docker-compose down
 
 ```
 
+[//]: # (Issues)
+## Issues
+- Verification for Organisation Management is not working. The verification payload is not working.
+- The analytics microservice is not working in the hosted version. It is working locally.
 ## Default Routes
 
 - **Frontend**: http://localhost:3000
@@ -66,3 +69,4 @@ docker-compose down
 - **Catalog Microservice**: http://localhost:8000
 - **Analytics Microservice**: http://localhost:8001
 - **Payment Microservice**: http://localhost:8002
+- **Organisation Management Microservice**: http://localhost:8003

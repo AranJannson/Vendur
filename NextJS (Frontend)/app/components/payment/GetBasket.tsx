@@ -95,8 +95,6 @@ export default function GetBasket() {
             <div className="bg-secondary-200 rounded-xl border-2 border-primary-500">
                 <h1 className="text-3xl font-bold p-2">Your Basket</h1>
                 <span className="flex flex-row gap-2 p-2">
-                    <b>Checkout In: </b>
-                    {/*<GetBasketCountdownTimer basket={basket} />*/}
                 </span>
                 <p className="p-2">To Secure Your Items Before They Sell Out!</p>
             </div>
