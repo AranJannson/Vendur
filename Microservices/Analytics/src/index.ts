@@ -41,7 +41,10 @@ const Analytics = express();
 
 Analytics.use(express.json());
 
-Analytics.use(cors());
+Analytics.use(cors({
+    origin: "*",
+    credentials: true
+}));
 
 const portNumber = 8001;
 

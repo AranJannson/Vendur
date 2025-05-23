@@ -71,19 +71,23 @@ export default async function Products(){
 
             <div className="grid grid-cols-1 gap-4 overflow-y-scroll max-h-[50vh] rounded-lg">
                 {itemsWithStock.map((item) => (
-                    <div key={item.id} className="bg-primary-100 p-4 rounded-lg shadow-md grid grid-cols-4 gap-3">
-                        <div className="aspect-square max-h-fit object-contain">
-                            <img src={item.image} alt={item.name} width={500} height={500} className="aspect-square object-contain"/>
+                    <div key={item.id} className="bg-primary-100 p-4 rounded-lg shadow-md grid grid-cols-2 gap-3">
+                        <div>
+                            <div className="aspect-square max-h-32 object-contain">
+                                <img src={item.image} alt={item.name} width={200} height={200} className="aspect-square object-contain"/>
+                            </div>
+                            <div className="col-span-2">
+                                <h2 className="text-lg font-bold">{item.name}</h2>
+                                {/*<p>{item.description}</p>*/}
+                                <p>Price: £{item.price}</p>
+                                <p>Stock: {item.stock}</p>
+                            </div>
                         </div>
-                        <div className="col-span-2">
-                            <h2 className="text-lg font-bold">{item.name}</h2>
-                            {/*<p>{item.description}</p>*/}
-                            <p>Price: £{item.price}</p>
-                            <p>Stock: {item.stock}</p>
-                        </div>
-                        <div className="flex justify-end">
 
-                            <div className="flex flex-row gap-2">
+
+                        <div className="flex justify-end items-end">
+
+                            <div className="flex flex-col jus gap-2">
 
                                 <Link href={`/organisations/management/${item.id}/edit`} className="bg-secondary-300 h-fit w-2/3 text-center p-3 font-semibold rounded-xl transition-colors hover:bg-secondary-400">
                                     Edit
@@ -98,6 +102,7 @@ export default async function Products(){
                                 </div>
                             </div>
                         </div>
+
 
                     </div>
                 ))}
