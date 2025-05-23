@@ -49,9 +49,8 @@ export default async function Home() {
                 </div>
 
                 <div>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment /}
-                    {/@ts-expect-error*/}
-                    <OneByFourHistory user_id={user_id}/>
+                    {user_id && <OneByFourHistory user_id={user_id}/>}
+
                 </div>
             </div>
         </div>
