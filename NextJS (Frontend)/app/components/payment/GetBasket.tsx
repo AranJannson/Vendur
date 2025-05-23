@@ -25,8 +25,11 @@ interface Item {
 }
 
 export default function GetBasket() {
-
-    const userId = useUser()?.id
+    const user = useUser();
+    if (!user) {
+        return <p className="p-4">Please log in to view your basket.</p>;
+    }
+    const userId = user.id
 
     const [basket, setBasket] = useState<Basket>();
     const [itemDetails, setItemDetails] = useState<Item[]>([]);
@@ -140,6 +143,7 @@ export default function GetBasket() {
                                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                                     {/*@ts-expect-error*/}
                                     <DeleteItemButton item_id={item.id} user_id={userId} refreshBasket={() => {
+                                        window.location.reload()
                                     }}/>
                                 </div>
                             </li>

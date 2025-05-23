@@ -169,8 +169,7 @@ console.log('fetched reviews:', reviews);
                             <form className="flex flex-col" id="itemForm">
 
                                 <label className="font-bold ml-1">Quantity</label>
-                                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                                {/*@ts-expect-error*/}
+
                                 <ProductQuantity availableQuantity={availableQuantity} formId="itemForm"/>
                                 <div>
                                     {availableQuantity === 0 ? (
