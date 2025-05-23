@@ -11,7 +11,7 @@ export default function DeleteItemButton({ user_id, item_id, refreshBasket }: {u
       } catch (error) {
         console.error("Error deleting item:", error);
       } finally{
-        await refreshBasket();
+        // await refreshBasket();
       }
     };
   
