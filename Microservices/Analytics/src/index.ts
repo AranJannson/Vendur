@@ -269,68 +269,32 @@ Analytics.post("/oneOrgSalesCountTest", async (req: Request, res: Response) => {
 });
 
 // Browsing History Analytics
+
 Analytics.post("/record-view", async (req: Request, res: Response) => {
-    try {
-        // Check if there is a viewed at property in the request body
-        if (!req.body.viewed_at) {
-            const { session_id, item_id } = req.body;
-            const event = {
-                session_id,
-                item_id,
-            };
-            const data = await recordView(event);
-            res.status(200).json(data);
-        } else {
-            const { session_id, item_id, viewed_at } = req.body;
-            const event = {
-                session_id,
-                item_id,
-                viewed_at,
-            };
-            const data = await recordView(event);
-            res.status(200).json(data);
-        }
-    } catch (error) {
-        console.error("Error recording view:", error);
-        res.status(500).json({ error: "Error recording view" });
-    }
+    const {user_id, item_id} = req.body;
+
+    await recordView({ user_id, item_id });
+    res.status(200).json({ message: "View recorded successfully" });
 })
 
 Analytics.post("/recent-views", async (req: Request, res: Response) => {
-    try {
-        const { session_id, limit } = req.body;
-        const data = await getRecentViews(session_id, limit);
-
-        res.status(200).json(data);
-    } catch (error) {
-        console.error("Error fetching recent views:", error);
-        res.status(500).json({ error: "Error fetching recent views" });
-    }
+    const { user_id , limit} = req.body;
+    const recentViews = await getRecentViews(user_id, limit);
+    res.status(200).json(recentViews);
 });
 
 Analytics.post("/update-recommended-products", async (req: Request, res: Response) => {
     const { user_id } = req.body;
-
-    try {
-        const data = await updateRecommendedProducts(user_id);
-        res.status(200).json(data);
-    } catch (error) {
-        console.error("Error updating recommended products:", error);
-        res.status(500).json({ error: "Error updating recommended products" });
-    }
-})
+    await updateRecommendedProducts(user_id);
+    res.status(200).json({ message: "Recommended products updated successfully" });
+});
 
 Analytics.post("/get-recommended-products", async (req: Request, res: Response) => {
     const { user_id } = req.body;
+    const recommendedProducts = await getRecommendedProducts(user_id);
+    res.status(200).json(recommendedProducts);
+});
 
-    try {
-        const data = await getRecommendedProducts(user_id);
-        res.status(200).json(data);
-    } catch (error) {
-        console.error("Error fetching recommended products:", error);
-        res.status(500).json({ error: "Error fetching recommended products" });
-    }
-})
 
 // Single Org Analytics
 

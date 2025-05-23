@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { cookies } from "next/headers";
 
 interface Item {
   id: number;
@@ -11,11 +10,20 @@ interface Item {
   price: number;
 }
 
-export default async function ContinueBrowsing() {
-  const cookieStore = await cookies();
-  const sessionID = cookieStore.get("session_id")?.value;
+/*
+item_id = { item_id: number }
+ */
+interface ItemID {
+    item_id: number;
+}
 
-  if (!sessionID) return null;
+export default async function ContinueBrowsing({ user_id }: { user_id: string }) {
+  console.log("[ContinueBrowsing] Component loaded with user_id:", user_id);
+
+  if (!user_id) {
+    console.warn("[ContinueBrowsing] No user_id provided.");
+    return null;
+  }
 
   const res = await fetch("http://localhost:3000/api/getContinueViewing", {
     method: "POST",
@@ -23,40 +31,52 @@ export default async function ContinueBrowsing() {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ session_id: sessionID }),
+    body: JSON.stringify({ user_id }),
   });
 
   if (!res.ok) {
-    console.error("Failed to fetch continued viewing items");
+    console.error("[ContinueBrowsing] Failed to fetch continued viewing items. Status:", res.status);
     return null;
   }
 
-  let item_ids = await res.json();
-  item_ids = item_ids.map((item: { item_id: number }) => item.item_id);
+  let item_ids: number[] = await res.json();
+  console.log("[ContinueBrowsing] Raw item_ids response:", item_ids);
+
+  // item_ids = item_ids.filter((id): id is number => typeof id === "number");
+  // console.log("[ContinueBrowsing] Filtered item_ids:", item_ids);
 
   const itemFetches = await Promise.all(
-    item_ids.map(async (item_id: number) => {
+
+    item_ids.map(async (item_id) => {
+      //@ts-ignore
+      console.log(`[ContinueBrowsing] Fetching item details for ID: ${item_id.item_id}`);
       const res = await fetch("http://localhost:3000/api/getItemByID", {
         method: "POST",
         cache: "no-store",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: item_id }),
+        body: JSON.stringify({ id: item_id.item_id }),
       });
 
       if (!res.ok) {
-        console.error("Failed to fetch item", item_id);
+        console.error(`[ContinueBrowsing] Failed to fetch item ${item_id}. Status:`, res.status);
         return null;
       }
 
-      return res.json();
+      const item = await res.json();
+      console.log(`[ContinueBrowsing] Fetched item:`, item);
+      return item;
     })
   );
 
   const items: Item[] = itemFetches.filter((item): item is Item => item !== null);
+  console.log("[ContinueBrowsing] Final items array:", items);
 
-  if (!items || items.length === 0) return null;
+  if (!items || items.length === 0) {
+    console.warn("[ContinueBrowsing] No items to display.");
+    return null;
+  }
 
   return (
     <div className="bg-background-50 m-4 rounded-lg max-w-screen">

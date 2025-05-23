@@ -1,36 +1,37 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { getSessionID } from "@/app/utils/session/utils";
+import { useUser } from "@stackframe/stack";
 
 interface TrackViewProps {
-  item_id: string;
+  item_id: number;
 }
 
 export default function TrackView({ item_id }: TrackViewProps) {
   const hasTracked = useRef(false);
+  const user = useUser();
+  const user_id = user?.id;
 
   useEffect(() => {
-    if (hasTracked.current) return;
+    if (!user_id || !item_id || hasTracked.current) return;
     hasTracked.current = true;
-
-    if (!item_id) return;
-
-    const sessionID = getSessionID();
-    console.log(`Session ID: ${sessionID} | Item ID: ${item_id}`);
 
     fetch("/api/track-view", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ session_id: sessionID, item_id }),
+      body: JSON.stringify({ user_id, item_id }),
     })
-      .then((response) => {
-        if (!response.ok) throw new Error(response.statusText);
-        return response.json();
+      .then((res) => {
+        if (!res.ok) throw new Error("Tracking failed");
+        return res.json();
       })
-      .then((data) => console.log("Tracked view:", data))
-      .catch((err) => console.error("Track-view error:", err));
-  }, [item_id]);
+      .then((data) => {
+        console.log("Tracked view successfully:", data);
+      })
+      .catch((err) => {
+        console.error("TrackView error:", err);
+      });
+  }, [user_id, item_id]);
 
   return null;
 }
