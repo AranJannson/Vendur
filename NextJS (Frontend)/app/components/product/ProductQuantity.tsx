@@ -1,7 +1,8 @@
 "use client"
 import { ChangeEvent } from "react";
 
-export default function ProductQuantity(availableQuantity: number, formId: string) {
+export default function ProductQuantity({availableQuantity, formId}: {availableQuantity: number, formId: string}) {
+    console.log(`Available quantity: ${JSON.stringify(availableQuantity)}`);
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         if (value.length > 2) {
