@@ -5,7 +5,7 @@ create table public.order_groups (
   ordered_at timestamp with time zone null default now(),
   delivery_address jsonb null,
   full_name text null,
-  total_cost bigint null,
+  total_cost float8 null,
   status group_status NOT NULL DEFAULT 'Processing',
   constraint order_groups_pkey primary key (id)
 ) TABLESPACE pg_default;
