@@ -8,12 +8,10 @@ import Link from "next/link"
 import CheckoutButton from "@/app/components/payment/CheckoutButton";
 
 interface Basket{
-
 user_id: string;
 created_at: Date;
 items: number[];
 quantities: number[];
-
 }
 
 interface Item {
