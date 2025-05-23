@@ -17,7 +17,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function Home() {
     const user = await  stackServerApp.getUser();
-    const user_id = user!.id;
+    const user_id = user?.id;
     console.log("[Home] User ID:", user_id);
 
     return (
