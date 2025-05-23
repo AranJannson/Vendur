@@ -7,11 +7,14 @@ interface Product {
   description: string;
   price: number;
   category: string;
+  stock: number;
+  image: string;
 }
 
 interface EditProductProps {
   product: Product;
 }
+
 
 export default function EditProduct({ product }: EditProductProps) {
   const [category, setCategory] = useState(product.category);
@@ -23,7 +26,30 @@ export default function EditProduct({ product }: EditProductProps) {
     const category = formData.get('category') as string;
     const description = formData.get('description') as string;
     const price = parseFloat(formData.get('price') as string);
-    // TODO Handle image upload
+    const stock = parseFloat(formData.get('stock') as string);
+  // Get the file from input
+  const imageFile = formData.get('image') as File | null;
+
+  let imageUrl = product.image;
+
+  if (imageFile && imageFile.size > 0) {
+    const imageData = new FormData();
+    imageData.append('file', imageFile);
+    imageData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
+
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`, {
+        method: 'POST',
+        body: imageData,
+    });
+
+    if (!res.ok) {
+      alert("Failed to upload image");
+      return;
+    }
+
+    const data = await res.json();
+    imageUrl = data.secure_url;
+  }
 
     const payload = {
       id: product.id,
@@ -32,10 +58,12 @@ export default function EditProduct({ product }: EditProductProps) {
         description,
         price,
         category,
+        stock,
+        image: imageUrl,
       },
     };
 
-    const response = await fetch('http://localhost:3000/api/organisations/products/update-product', {
+    const response = await fetch('/api/organisations/products/update-product', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -89,6 +117,18 @@ export default function EditProduct({ product }: EditProductProps) {
         </span>
 
         <span className="flex flex-col gap-2">
+          <label>Product Stock</label>
+          <input
+            type="number"
+            name="stock"
+            placeholder="Product Stock"
+            required
+            defaultValue={product.stock}
+            className="p-2 rounded-lg"
+          />
+        </span>
+
+        <span className="flex flex-col gap-2">
           <label>Product Category</label>
           <select
             value={category}
@@ -101,12 +141,12 @@ export default function EditProduct({ product }: EditProductProps) {
             <option value="Clothing & Shoes">Clothing & Shoes</option>
             <option value="Home, Garden & DIY">Home, Garden & DIY</option>
             <option value="Health & Beauty">Health & Beauty</option>
-            <option value="Health & Beauty">Books, Films & Music</option>
-            <option value="Health & Beauty">Sport & Activity</option>
-            <option value="Health & Beauty">Stationary & Craft Supplies</option>
-            <option value="Health & Beauty">Art & Collectables</option>
-            <option value="Health & Beauty">Pet Supplies</option>
-            <option value="Health & Beauty">Toys & Games</option>
+            <option value="Books, Films & Music">Books, Films & Music</option>
+            <option value="Sport & Activity">Sport & Activity</option>
+            <option value="Stationary & Craft Supplies">Stationary & Craft Supplies</option>
+            <option value="Art & Collectables">Art & Collectables</option>
+            <option value="Pet Supplies">Pet Supplies</option>
+            <option value="Toys & Games">Toys & Games</option>
           </select>
         </span>
       </div>
@@ -114,7 +154,7 @@ export default function EditProduct({ product }: EditProductProps) {
       <div className="flex flex-col gap-2 bg-background-200 p-2 rounded-lg">
         <span className="flex flex-col gap-2">
           <label>Product Image</label>
-          <input type="file" name="image" accept="image/*" className="p-2 rounded-lg" />
+          <input type="file" name="image" accept=".jpg, .jpeg, .png, .gif" className="p-2 rounded-lg" />
         </span>
       </div>
 

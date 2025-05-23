@@ -12,6 +12,7 @@ interface Organisation {
     address: string;
     is_verified: boolean;
     created_at: string;
+    active: boolean;
 }
 
 const OrgInfo = () => {
@@ -73,7 +74,6 @@ return (
     <table className="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden">
       <thead className="bg-gray-200">
         <tr>
-        <th className={`py-2 px-4 border-b cursor-pointer ${sortConfig.key === 'id' ? 'bg-background-200 font-semibold' : ''}`} onClick={() => handleSort('id')}>ID {sortConfig.key === 'id' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
         <th className={`py-2 px-4 border-b cursor-pointer ${sortConfig.key === 'name' ? 'bg-background-200 font-semibold' : ''}`} onClick={() => handleSort('name')}>Name {sortConfig.key === 'name' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
         <th className={`py-2 px-4 border-b cursor-pointer ${sortConfig.key === 'description' ? 'bg-background-200 font-semibold' : ''}`} onClick={() => handleSort('description')}>Description {sortConfig.key === 'description' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
         <th className={`py-2 px-4 border-b cursor-pointer ${sortConfig.key === 'email' ? 'bg-background-200 font-semibold' : ''}`} onClick={() => handleSort('email')}>Email {sortConfig.key === 'email' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
@@ -82,14 +82,14 @@ return (
         <th className={`py-2 px-4 border-b cursor-pointer ${sortConfig.key === 'address' ? 'bg-background-200 font-semibold' : ''}`} onClick={() => handleSort('address')}>Address {sortConfig.key === 'address' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
         <th className={`py-2 px-4 border-b cursor-pointer ${sortConfig.key === 'created_at' ? 'bg-background-200 font-semibold' : ''}`} onClick={() => handleSort('created_at')}>Date Created {sortConfig.key === 'created_at' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
         <th className={`py-2 px-4 border-b cursor-pointer ${sortConfig.key === 'is_verified' ? 'bg-background-200 font-semibold' : ''}`} onClick={() => handleSort('is_verified')}>Verification Status {sortConfig.key === 'is_verified' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
+        <th className={`py-2 px-4 border-b cursor-pointer ${sortConfig.key === 'active' ? 'bg-background-200 font-semibold' : ''}`} onClick={() => handleSort('active')}>Active Status {sortConfig.key === 'active' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}</th>
         <th className="py-2 px-4 border-b">Store Link</th>
-        <th className="py-2 px-4 border-b">Edit Store</th>
+        <th className="py-2 px-4 border-b">Edit Org</th>
         </tr>
       </thead>
       <tbody>
         {currentRows.map((org) => (
           <tr key={org.id} className="hover:bg-gray-100 text-center">
-            <td>{org.id}</td>
             <td>{org.name}</td>
             <td>{org.description}</td>
             <td>{org.email}</td>
@@ -98,6 +98,7 @@ return (
             <td>{org.address}</td>
             <td>{new Date(org.created_at).toLocaleDateString()}</td>
             <td>{org.is_verified ? "Verified ✅" : "Not Verified ❌"}</td>
+            <td>{org.active ? "Active ✅" : "Banned ❌"}</td>
             <td className="underline text-center bg-background-100 rounded-lg shadow-xl py-1"><Link href={`/organisations/${org.name}`}>Link</Link></td>
             <td className="underline text-center bg-background-200 rounded-lg shadow-xl py-1"><Link href={`/admin/edit-org/${encodeURIComponent(org.id)}`}>Edit</Link></td>
           </tr>

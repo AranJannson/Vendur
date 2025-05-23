@@ -18,6 +18,7 @@
     "@types/react-scroll": "^1.8.10",
     "advancedwebcw": "file:",
     "chart.js": "^4.4.9",
+    "cloudinary": "^2.6.0",
     "embla-carousel-autoplay": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
     "lucide-react": "^0.503.0",

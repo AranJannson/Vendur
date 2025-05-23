@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { id, org_id, shippingMethod, productInfo } = await req.json();
+    const { id, org_id, shippingMethod, productInfo, image_document, image_thumbnail } = await req.json();
     const backendResponse = await fetch('http://localhost:5078/admin/acceptVerificationRequest', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, org_id, shippingMethod, productInfo }),
+      body: JSON.stringify({ id, org_id, shippingMethod, productInfo, image_document, image_thumbnail }),
     });
     const data = await backendResponse.json();
     return NextResponse.json(data);

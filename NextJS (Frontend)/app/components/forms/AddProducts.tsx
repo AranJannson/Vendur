@@ -11,31 +11,57 @@ export default function AddProducts() {
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        const name = formData.get('name');
-        const category = formData.get('category');
-        const description = formData.get('description');
-        const price = formData.get('price');
-        const image = formData.get('image');
+
+        const name = formData.get('name') as string;
+        const category = formData.get('category') as string;
+        const description = formData.get('description') as string;
+        const price = formData.get('price') as string;
+        const imageFile = formData.get('image') as File;
+
+        if (!imageFile || imageFile.size === 0) {
+            alert("Please upload an image.");
+            return;
+        }
+
+        const imageData = new FormData();
+        imageData.append('file', imageFile);
+        imageData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
+
+        // https://cloudinary.com/documentation/image_upload_api_reference
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`, {
+            method: 'POST',
+            body: imageData,
+        });
+
+        const data = await res.json();
+        const imageUrl = data.secure_url;
+
+        if (!imageUrl) {
+            alert("Failed to upload image");
+            return;
+        }
 
         const payload = {
-            product : {
+            product: {
                 name,
                 description,
                 price,
                 category,
-                image,
+                image: imageUrl,
                 org_id: allTeams[0]?.id,
             }
         };
-        // TODO: Change this to actually use the API route instead of the backend directly
-        const response = await fetch('http://localhost:8003/products', {
+
+        const response = await fetch('/api/getCreateProduct', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
         });
 
         alert(response.ok ? 'Product added successfully' : 'Failed to add product');
+        window.location.reload();
     };
+
 
     return (
         <form onSubmit={onSubmit} className="flex flex-col gap-4 p-4 bg-primary-100 rounded-lg shadow-md">
@@ -56,7 +82,7 @@ export default function AddProducts() {
             <div className="flex flex-col gap-2 bg-background-200 p-2 rounded-lg">
                 <span className="flex flex-col gap-2">
                     <label>Product Price</label>
-                    <input type="number" name="price" placeholder="Product Price" required className="p-2 rounded-lg"/>
+                    <input type="number" step="0.01" name="price" placeholder="Product Price" required className="p-2 rounded-lg"/>
                 </span>
 
                 <span className="flex flex-col gap-2">
@@ -65,8 +91,14 @@ export default function AddProducts() {
                         <option value="" disabled>Select a category</option>
                         <option value="Electronics & Computing">Electronics & Computing</option>
                         <option value="Clothing & Shoes">Clothing & Shoes</option>
-                        <option value="Home, Garden & DIY">Home & Garden</option>
+                        <option value="Home, Garden & DIY">Home, Garden & DIY</option>
                         <option value="Health & Beauty">Health & Beauty</option>
+                        <option value="Books, Films & Music">Books, Films & Music</option>
+                        <option value="Sport & Activity">Sport & Activity</option>
+                        <option value="Stationary & Craft Supplies">Stationary & Craft Supplies</option>
+                        <option value="Art & Collectables">Art & Collectables</option>
+                        <option value="Pet Supplies">Pet Supplies</option>
+                        <option value="Toys & Games">Toys & Games</option>
                     </select>
                 </span>
             </div>

@@ -14,7 +14,8 @@ export async function POST(req: NextRequest) {
 
         const json = await response.json();
         return NextResponse.json(json, { status: response.status });
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+        return NextResponse.json({ error: "Failed to check item review" }, { status: 500 });
     }
 }

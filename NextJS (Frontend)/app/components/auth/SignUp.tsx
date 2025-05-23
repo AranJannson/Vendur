@@ -48,7 +48,7 @@ export default function CustomCredentialSignUp() {
             </span>
 
           <span className="flex flex-col">
-              <label className="text-lg font-bold text-left">Email</label>
+              <label className="text-lg font-bold text-left">Password</label>
               <input type='password' placeholder="Password" value={password}
                      onChange={(e) => setPassword(e.target.value)} className="rounded-lg text-black p-2"/>
             </span>

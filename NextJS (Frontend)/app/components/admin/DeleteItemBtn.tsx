@@ -12,7 +12,7 @@ export default function DeleteItemBtn({ productId }: DeleteItemBtnProps) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5078/admin/deleteProduct", {
+      const res = await fetch("/api/admin/deleteProduct", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: productId }),

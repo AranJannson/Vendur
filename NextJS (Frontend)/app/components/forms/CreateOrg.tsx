@@ -42,10 +42,23 @@ export default function CreateOrg() {
         }
 
         if(org){
-            const { error } = await supabase.from('orgs').insert({id: orgID, name: name, description: description, email: email, telephone: telephone, address: address});
+            const response = await fetch("/api/createOrg", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    org_id: orgID,
+                    name: name,
+                    description: description,
+                    email: email,
+                    telephone: telephone,
+                    address: address
+                })
+            });
 
-            if (error) {
-                console.error('Error creating organisation:', error);
+            if (!response) {
+                console.error('Error creating organisation');
                 setIsLoading(false);
                 await org.delete();
                 return;

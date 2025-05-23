@@ -1,9 +1,10 @@
 "use client"
 import { useUser } from "@stackframe/stack";
-import { useState } from "react";
-export default function ReviewForm({ item_id }) {
+export default function ReviewForm({ item_id }: { item_id: number }) {
     const user = useUser();
     // Use userid from user object
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     const onSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
@@ -18,7 +19,7 @@ export default function ReviewForm({ item_id }) {
             rating: rating
         }
         // TODO: Popup to show success or error
-        const response = await fetch('http://localhost:3000/api/review/make-review', {
+        const response = await fetch('/api/review/make-review', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

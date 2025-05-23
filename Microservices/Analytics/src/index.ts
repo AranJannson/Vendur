@@ -6,30 +6,34 @@ import {
     mostPopularCategoryByItemsListed,
     mostPopularCategoryBySalesList,
     avgItemPricePerCategory,
+    categoriesByItemsListed,
+    categoriesByAverageItemPrice, get_category_sales_summary, top5ProductsBySales
 } from "./utils/productAnalytics"
-import { fetchAllProducts } from "./utils/fetchAllProducts";
-import { inventoryValue, lowerStock, outOfStock, mostValuableStockItem, listOfItemStockValue } from "./utils/stockAnalysis";
-import { mostReviewedProduct,
-    highestReviewedProduct,
-    productsByReviewValue,
-    dateWithMostReviews,
-    oldListOfReviewsPerDay,
+import { inventoryValue, lowerStock, outOfStock, listOfItemStockValue } from "./utils/stockAnalysis";
+import {
     listOfReviewsPerDay,
-    ratingDistribution} from "./utils/reviewAnalytics";
+    orgListOfReviewsPerDay,
+    } from "./utils/reviewAnalytics";
 import {listOfAllOrgInvValue,
     averageOrganisationProductRating,
     orgNumberOfSales,
     orgTotalRevenueList,
-    orgAverageOrderValue,
     orgInvValue,
-    orgProductRatingList
+    orgProductRatingList,
+    oneOrgItemSalesAnalytics,
+    oneOrgItemRevenueAnalytics,
+    orgsAverageOrderValue
 } from "./utils/organisationsAnalytics"
-import { totalSalesEver, orderNumberDailyList, totalRevenuePerDayList, averageOrderValuePerDayList, avgQuantityPerItemInOrder } from "./utils/orderAnalytics";
-import { userOrderList, userAvgOrderList } from "./utils/userAnalytics";
-import {presenceCheck} from "./utils/metadata";
-import * as meta  from "./utils/metadata";
+import {
+    orderNumberDailyList,
+    orderValuePerDayList,
+    newestTotalSales,
+    totalRevenueEver,
+    orderCountDaily,
+    averageOrderValuePerDayList
+    } from "./utils/orderAnalytics";
 import trackClicks, {returnAllClickCountPages} from "./utils/track-clicks";
-
+import {recordView, getRecentViews, updateRecommendedProducts, getRecommendedProducts} from "./utils/historyAnalytics";
 
 dotenv.config();
 
@@ -37,37 +41,15 @@ const Analytics = express();
 
 Analytics.use(express.json());
 
-Analytics.use(cors());
+Analytics.use(cors({
+    origin: "*",
+    credentials: true
+}));
 
 const portNumber = 8001;
 
 Analytics.listen(portNumber, () => {
     console.log(`Analytics is running on port ${portNumber}`);
-});
-
-// Analytics.get("/orderAverage", async (req: Request, res: Response) => {
-
-//     const orderAvg = await getOrderAverage()
-
-//     console.log("This is the Order Average:", orderAvg);
-
-// }); 
-
-// Analytics.get("/orderDates", async (req: Request, res: Response) => {
-
-//     const popularDay = await mostPopularDate()
-
-//     console.log("This was the most popular day:", popularDay);
-
-// }); 
-
-Analytics.get("/fetchAllProducts", async (req: Request, res: Response) => {
-
-    const productList = await fetchAllProducts()
-
-    console.log("The modified version with catalog is:", productList);
-
-    res.send(JSON.stringify(productList, null, 2))
 });
 
 // Stock Analytic Tests
@@ -94,56 +76,7 @@ Analytics.get("/outOfStock", async (req: Request, res: Response) => {
 
     console.log("These are the items out of stock:", outOfStockList);
     res.send(JSON.stringify(outOfStockList, null, 2))
-}); 
-
-Analytics.get("/highValueStockItem", async (req: Request, res: Response) => {
-
-    const highStockItem = await mostValuableStockItem()
-
-    console.log("This item has the highest value:", highStockItem);
-    res.send(JSON.stringify(highStockItem, null, 2))
 });
-
-Analytics.get("/mostReviewedProduct", async (req: Request, res: Response) => {
-
-    const mostReviewedItem = await mostReviewedProduct()
-
-    console.log("This is the product with the most reviews", mostReviewedItem);
-    res.send(JSON.stringify(mostReviewedItem, null, 2))
-});
-
-Analytics.get("/productReviewList", async (req: Request, res: Response) => {
-
-    const mostReviewedItem = await productsByReviewValue()
-
-    console.log("List of products by reviews", mostReviewedItem);
-    res.send(JSON.stringify(mostReviewedItem, null, 2))
-});
-
-Analytics.get("/highRatedProduct", async (req: Request, res: Response) => {
-
-    const mostReviewedItem = await highestReviewedProduct()
-
-    console.log("This is the product with the highest rating", mostReviewedItem);
-    res.send(JSON.stringify(mostReviewedItem, null, 2))
-});
-
-Analytics.get("/dateWithMostReviews", async (req: Request, res: Response) => {
-
-    const mostReviewedItem = await dateWithMostReviews()
-
-    console.log(mostReviewedItem);
-    res.send(JSON.stringify(mostReviewedItem, null, 2))
-});
-
-Analytics.get("/listOfReviewsPerDay", async (req: Request, res: Response) => {
-
-    const mostReviewedItem = await oldListOfReviewsPerDay()
-
-    console.log(mostReviewedItem);
-    res.send(JSON.stringify(mostReviewedItem, null, 2))
-});
-
 
 Analytics.get("/orgInvList", async (req: Request, res: Response) => {
 
@@ -159,14 +92,6 @@ Analytics.get("/listItemStockValue", async (req: Request, res: Response) => {
 
     console.log(itemStockValueList);
     res.send(JSON.stringify(itemStockValueList, null, 2))
-});
-
-Analytics.get("/ratingDistribution", async (req: Request, res: Response) => {
-
-    const ratingDistributionResult = await ratingDistribution()
-
-    console.log(ratingDistributionResult);
-    res.send(JSON.stringify(ratingDistributionResult, null, 2))
 });
 
 Analytics.get("/avgOrgProd", async (req: Request, res: Response) => {
@@ -209,21 +134,14 @@ Analytics.get("/orgRevenueList", async (req: Request, res: Response) => {
     res.send(JSON.stringify(orgRevenueList, null, 2))
 });
 
-Analytics.get("/orgAvgOrderList", async (req: Request, res: Response) => {
 
-    const orgAvgList = await orgAverageOrderValue()
-
-    console.log(orgAvgList);
-    res.send(JSON.stringify(orgAvgList, null, 2))
-});
-
-Analytics.get("/totalSales", async (req: Request, res: Response) => {
-
-    const total = await totalSalesEver()
-
-    console.log(total);
-    res.send(JSON.stringify(total, null, 2))
-});
+// Analytics.get("/totalSales", async (req: Request, res: Response) => {
+//
+//     const total = await totalSalesEver()
+//
+//     console.log(total);
+//     res.send(JSON.stringify(total, null, 2))
+// });
 
 Analytics.get("/totalSalesDaily", async (req: Request, res: Response) => {
 
@@ -239,54 +157,6 @@ Analytics.get("/numberSalesDaily", async (req: Request, res: Response) => {
 
     console.log(dailyTotal);
     res.send(JSON.stringify(dailyTotal, null, 2))
-});
-
-Analytics.get("/totalRevenueDaily", async (req: Request, res: Response) => {
-
-    const revenueList = await totalRevenuePerDayList()
-
-    console.log(revenueList);
-    res.send(JSON.stringify(revenueList, null, 2))
-});
-
-Analytics.get("/avgOrderPerDayList", async (req: Request, res: Response) => {
-
-    const avgDayList = await averageOrderValuePerDayList()
-
-    console.log(avgDayList);
-    res.send(JSON.stringify(avgDayList, null, 2))
-});
-
-Analytics.get("/userOrderList", async (req: Request, res: Response) => {
-
-    const userOrderNumberList = await userOrderList()
-
-    console.log(userOrderNumberList);
-    res.send(JSON.stringify(userOrderNumberList, null, 2))
-});
-
-Analytics.get("/userAvgOrderList", async (req: Request, res: Response) => {
-
-    const userOrderAverageList = await userAvgOrderList()
-
-    console.log(userOrderAverageList);
-    res.send(JSON.stringify(userOrderAverageList, null, 2))
-});
-
-Analytics.get("/avgQuantityOrderList", async (req: Request, res: Response) => {
-
-    const avgQuantityList = await avgQuantityPerItemInOrder()
-
-    console.log(avgQuantityList);
-    res.send(JSON.stringify(avgQuantityList, null, 2))
-});
-
-Analytics.get("/presenceCheck", async (req: Request, res: Response) => {
-
-    const presenceC = await presenceCheck()
-
-    console.log(presenceC);
-    res.send(JSON.stringify(presenceC, null, 2))
 });
 
 Analytics.post("/track-clicks", async (req: Request, res: Response): Promise<any> => {
@@ -331,6 +201,19 @@ Analytics.post("/popularCategory", async (req: Request, res: Response) => {
     res.send(JSON.stringify(productList, null, 2))
 });
 
+Analytics.get("/category-sales-summary", async (req: Request, res: Response) => {
+    const { org_id } = req.body;
+    const categorySalesSummary = await get_category_sales_summary();
+
+    res.status(200).json(categorySalesSummary);
+
+});
+
+Analytics.get("/top-5-products-by-sales", async (req: Request, res: Response) => {
+    const top5Products = await top5ProductsBySales();
+    res.status(200).json(top5Products);
+});
+
 Analytics.post("/revampedOrgInvList", async (req: Request, res: Response) => {
 
     const {org_id} = req.body
@@ -350,9 +233,150 @@ Analytics.post("/orgRatingList", async (req: Request, res: Response) => {
 
 Analytics.post("/reviewsPerDay", async (req: Request, res: Response) => {
     const { org_id } = req.body;
-    const dailyReviews = await listOfReviewsPerDay(org_id)
+    const dailyReviews = await orgListOfReviewsPerDay(org_id)
 
     console.log(dailyReviews);
     res.send(JSON.stringify(dailyReviews, null, 2))
 });
 
+Analytics.get("/categoriesItemListed", async (req: Request, res: Response) => {
+
+    const total = await categoriesByItemsListed()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/categoriesAverageItemPrice", async (req: Request, res: Response) => {
+
+    const total = await categoriesByAverageItemPrice()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/dailyReviewsSitewide", async (req: Request, res: Response) => {
+
+    const total = await listOfReviewsPerDay()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.post("/oneOrgSalesCountTest", async (req: Request, res: Response) => {
+    const { org_id } = req.body;
+    const total = await oneOrgItemSalesAnalytics(org_id)
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+// Browsing History Analytics
+
+Analytics.post("/record-view", async (req: Request, res: Response) => {
+    const {user_id, item_id} = req.body;
+
+    await recordView({ user_id, item_id });
+    res.status(200).json({ message: "View recorded successfully" });
+})
+
+Analytics.post("/recent-views", async (req: Request, res: Response) => {
+    const { user_id , limit} = req.body;
+    const recentViews = await getRecentViews(user_id, limit);
+    res.status(200).json(recentViews);
+});
+
+Analytics.post("/update-recommended-products", async (req: Request, res: Response) => {
+    const { user_id } = req.body;
+    await updateRecommendedProducts(user_id);
+    res.status(200).json({ message: "Recommended products updated successfully" });
+});
+
+Analytics.post("/get-recommended-products", async (req: Request, res: Response) => {
+    const { user_id } = req.body;
+    const recommendedProducts = await getRecommendedProducts(user_id);
+    res.status(200).json(recommendedProducts);
+});
+
+
+// Single Org Analytics
+
+Analytics.post("/oneOrgRevTest", async (req: Request, res: Response) => {
+    const { org_id } = req.body;
+    const total = await oneOrgItemRevenueAnalytics(org_id)
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/allOrgNumSales", async (req: Request, res: Response) => {
+
+    const total = await orgNumberOfSales()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/allOrgRevenue", async (req: Request, res: Response) => {
+
+    const total = await orgTotalRevenueList()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/allOrgAOV", async (req: Request, res: Response) => {
+
+    const total = await orgsAverageOrderValue()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/newTotalSales", async (req: Request, res: Response) => {
+
+    const total = await newestTotalSales()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/totalSales", async (req: Request, res: Response) => {
+
+    const total = await newestTotalSales()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/totalRevenue", async (req: Request, res: Response) => {
+
+    const total = await totalRevenueEver()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/orderDatesList", async (req: Request, res: Response) => {
+
+    const total = await orderCountDaily()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/orderValuePerDay", async (req: Request, res: Response) => {
+
+    const total = await orderValuePerDayList()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});
+
+Analytics.get("/avgOrderValueDay", async (req: Request, res: Response) => {
+
+    const total = await averageOrderValuePerDayList()
+
+    console.log(total);
+    res.send(JSON.stringify(total, null, 2))
+});

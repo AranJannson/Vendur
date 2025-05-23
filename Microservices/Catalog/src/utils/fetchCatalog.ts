@@ -1,6 +1,7 @@
 import { connect } from "./dbConnect"
+import {createClient} from "@supabase/supabase-js";
 
-const supabase = connect();
+let supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL as string, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string);
 
 export async function fetchCatalouge(){
 
@@ -20,7 +21,7 @@ export async function fetchOrgProducts(org_id: string){
 
 export async function fetchStock(item_id: number) {
 
-    const { data } = await supabase.from("stock").select("*").eq("item_id", item_id).maybeSingle();
+    const { data } = await supabase.from("stock").select("*").eq("item_id", item_id).single();
 
     return data;
 

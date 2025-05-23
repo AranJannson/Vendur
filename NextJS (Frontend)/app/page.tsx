@@ -1,31 +1,30 @@
-import NavBar from "@/app/components/home/NavBar";
 import Featured from "@/app/components/home/Featured";
-import FourByFour from "@/app/components/ui/productDisplays/4x4";
 import OneByFour from "@/app/components/ui/productDisplays/1x4";
 import OneByFourCat from "@/app/components/ui/productDisplays/1x4_category";
 import CarouselClient from "./components/animation/CarouselClient";
 import OneByFourHistory from "./components/ui/productDisplays/1x4_history";
 import CategoryDisplay from "./components/ui/productDisplays/category_display";
 import VendurSpotlight from "./components/home/VendurSpotlight";
+import { stackServerApp } from "@/stack";
+import RecommendedItems from "@/app/components/product/RecommendedItems";
 
 export const metadata = {
     title: "Home | Vendur",
     description: "",
 };
 
+export const dynamic = 'force-dynamic';
 
-export default function Home() {
+export default async function Home() {
+    const user = await  stackServerApp.getUser();
+    const user_id = user?.id;
+    console.log("[Home] User ID:", user_id);
 
     return (
         <div className="flex flex-col gap-5 overflow-hidden bg-background-50">
             <div className="flex flex-col">
                 <div
                     className="w-full py-4  grid grid-cols-1 md:grid-cols-3 gap-5 items-center justify-center content-center md:px-0 px-4">
-                    {/* <HeroProduct url="https://dummyimage.com/500x350/fff/000.png" text="Temp1"/>
-                    <HeroProduct url="https://dummyimage.com/500x350/fff/000.png" text="Temp2"/>
-                    <HeroProduct url="https://dummyimage.com/500x350/fff/000.png" text="Temp3"/> */}
-
-                    
 
                 </div>
 
@@ -39,17 +38,7 @@ export default function Home() {
 
                 <div className="w-full primary-200 h-10"/>
 
-                <div className="bg-background-100">
-                    <div className="mx-4">
-                        <Featured/>
-
-                    </div>
-
-                    <div>
-                        <OneByFour/>
-                    </div>
-
-                </div>
+                {user_id && <RecommendedItems />}
 
                 <div>
                     <VendurSpotlight/>
@@ -60,11 +49,9 @@ export default function Home() {
                 </div>
 
                 <div>
-                    <OneByFourHistory/>
+                    {user_id && <OneByFourHistory user_id={user_id}/>}
+
                 </div>
-
-                
-
             </div>
         </div>
     );

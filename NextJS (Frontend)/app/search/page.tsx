@@ -41,6 +41,7 @@ export default function SearchPage() {
     
     return (
         <div className="m-2">
+            <title>Search | Vendur</title>
             <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
                 
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
@@ -78,14 +79,6 @@ export default function SearchPage() {
                                             </span>
                                     </div>
                                 )}
-                            </div>
-                        </div>
-
-                        <div className="flex justify-end">
-                            <div className="bg-primary-300 rounded-xl p-2">
-                                <h3 className="font-bold border-b-2 border-black">Details</h3>
-                                <p className="text-gray-600 text-sm">Item ID: {item.id}</p>
-                                <p className="text-sm">{`Rating: ${item.rating}`}</p>
                             </div>
                         </div>
                     </Link>

@@ -12,7 +12,7 @@ export async function revertStock(item: any){
     const item_id = item.id as number;
     const originalQuantity = getOriginalStock(item_id)
 
-    const quantityResponse = await fetch('http://localhost:8000/modifyStockQuantity', {
+    const quantityResponse = await fetch('/api/revertStock', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -21,14 +21,15 @@ export async function revertStock(item: any){
         body: JSON.stringify({ item_id: item_id, quantity: originalQuantity}),
       });
 
+    if (!quantityResponse.ok) {
+        throw new Error();
+    }
+
     return quantityResponse.json();
 }
 
-export async function modifyStock(item: any, quantity: number){
-    
-    const item_id = item.id;
-
-    const stockResponse = await fetch('http://localhost:3000/api/getStock', {
+export async function modifyStock(item_id: number, quantity: number){
+    const stockResponse = await fetch('/api/getStock', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -41,7 +42,7 @@ export async function modifyStock(item: any, quantity: number){
   
     const newQuantity = stockData.quantity + quantity;
   
-    const quantityResponse = await fetch('http://localhost:8000/modifyStockQuantity', {
+    const quantityResponse = await fetch('/api/updateStockQuantity', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

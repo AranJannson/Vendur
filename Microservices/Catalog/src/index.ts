@@ -6,6 +6,7 @@ import checkStock from "./utils/fetchIItemInfo";
 import {fetchAllReviews, reviews, makeReview, checkIfItemHasReview} from "./utils/reviews";
 import {fetchCatalouge, fetchItemsBasedOnCategory, fetchOrgProducts, fetchStock} from "./utils/fetchCatalog";
 import {modifyStockQuantity} from "./utils/modifyStock";
+import {fetchItemsByID} from "./utils/fetchItemByID";
 
 dotenv.config();
 
@@ -14,8 +15,7 @@ const Catalog = express();
 Catalog.use(express.json());
 
 Catalog.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true
+    origin: '*',
 }));
 
 const portNumber = 8000;
@@ -36,6 +36,13 @@ Catalog.get("/getItems", async (req: Request, res: Response) => {
     }
 
 
+});
+
+Catalog.post("/getItemByID", async (req: Request, res: Response) => {
+    const { id } = req.body;
+
+    const item = await fetchItemsByID(id);
+    res.send(JSON.stringify(item, null, 2));
 });
 
 

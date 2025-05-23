@@ -1,4 +1,3 @@
-import StarRating from "@/app/components/product/StarRating";
 import ProductList from "@/app//products/productList";
 
 export const metadata = {
@@ -17,11 +16,13 @@ interface Item {
     discount: number;
     org_id: number;
 }
+export const dynamic = 'force-dynamic';
 
 export default async function Products() {
 
     const response = await fetch('http://localhost:3000/api/getItems', {
         method: 'GET',
+        cache: 'no-store',
     });
 
     const items = await response.json();
@@ -36,10 +37,10 @@ export default async function Products() {
                 },
                 body: JSON.stringify({ item_id: item.id }),
             });
-
+            console.log("")
             const ratings = await reviewResponse.json();
             const rating = ratings.length > 0 ? ratings[0].rating : 0;
-
+            console.log("ratings", ratings);
             return { ...item, rating };
         })
     );

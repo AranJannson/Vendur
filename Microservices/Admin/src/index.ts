@@ -10,7 +10,7 @@ const Admin = express();
 Admin.use(express.json());
 
 Admin.use(cors({
-    origin: "http://localhost:3000",
+    origin: "*",
     credentials: true
 }));
 
@@ -52,8 +52,8 @@ Admin.post('/admin/orgDetails', async (req: Request, res: Response): Promise<any
 
 Admin.put('/admin/editOrgDetails', async (req, res): Promise<any> => {
     try {
-      const { id, email, name, description, telephone, website, address } = req.body;
-      const updateData = { name, description, email, telephone, website, address }
+      const { id, email, name, description, telephone, website, address, product_type, shipping_type, active, is_verified } = req.body;
+      const updateData = { name, description, email, telephone, website, address, product_type, shipping_type, active, is_verified }
       const { data, error } = await updateOrganisationByID(id, updateData);
 
       return res.status(200).json({ message: "Organisation updated successfully", data });
@@ -93,8 +93,8 @@ Admin.delete('/admin/denyVerificationRequest', async (req: Request, res: Respons
 });
 
 Admin.post('/admin/acceptVerificationRequest', async (req: Request, res: Response): Promise<any> => {
-  const { id, org_id, shippingMethod, productInfo } = req.body;
-  const org = await acceptVerificationRequest(id, org_id, shippingMethod, productInfo);
+  const { id, org_id, shippingMethod, productInfo, image_document, image_thumbnail } = req.body;
+  const org = await acceptVerificationRequest(id, org_id, shippingMethod, productInfo, image_document, image_thumbnail);
   if (!org) {
       return res.status(500).json({ error: "Failed to fetch" });
     }

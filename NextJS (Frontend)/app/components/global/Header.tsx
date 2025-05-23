@@ -1,11 +1,44 @@
 "use client"
 import Link from "next/link";
-import { UserButton } from "@stackframe/stack";
+import {UserButton, useUser} from "@stackframe/stack";
 import VendurLogo from "../ui/VendurLogo";
 import SearchBar from "@/app/components/global/SearchBar";
 import { RiShoppingBasket2Line } from "react-icons/ri";
 
+import {useEffect, useState} from "react";
+
 export default function Header() {
+
+    // const [basketLength, setBasketLength] = useState(0);
+    // TODO: Get basket length and display as a badge
+    // const { user } = useUser();
+    // useEffect(() => {
+    //     // Get the basket from the API routes
+    //     const fetchBasket = async () => {
+    //         try {
+    //             const response = await fetch("/api/getBasketNew", {
+    //                 method: "POST",
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                 },
+    //                 body: JSON.stringify({ user_id: user?.id }),
+    //             });
+    //
+    //             if (!response.ok) {
+    //                 throw new Error("Failed to fetch basket");
+    //             }
+    //
+    //             const data = await response.json();
+    //             setBasketLength((data.items).length);
+    //         } catch (error) {
+    //             console.error("Error fetching basket:", error);
+    //         }
+    //     };
+    //     fetchBasket();
+    // }, []);
+    //
+    // console.log(user?.id)
+    // console.log(`Basket Length : ${basketLength}`)
 
     return (
         <header className="text-center bg-background-100 border-b-2 border-background-400 ">
@@ -33,11 +66,18 @@ export default function Header() {
                             </Link>
                         </li>
 
-                        <li className="text-2xl rounded-full bg-primary-400 text-black p-2 hover:bg-primary-500 transition-colors hover:cursor-pointer">
-                            <Link href="/payment">
-                                <RiShoppingBasket2Line />
+                        <li className="rounded-full bg-primary-400 text-black p-2 hover:bg-primary-500 transition-colors hover:cursor-pointer">
+                            <Link href="/basket" className="relative inline-block">
+                                <RiShoppingBasket2Line className="text-3xl" />
+                                {/*{basketLength > 0 && (*/}
+                                {/*    <p className="absolute bottom-0 right-0 bg-primary-800 text-white text-[10px] w-6 h-6 flex items-center justify-center rounded-full translate-x-1/2 translate-y-1/2 leading-none font-bold">*/}
+                                {/*        {basketLength}*/}
+                                {/*    </p>*/}
+                                {/*)}*/}
                             </Link>
                         </li>
+
+
 
                         <li>
                             <UserButton/>

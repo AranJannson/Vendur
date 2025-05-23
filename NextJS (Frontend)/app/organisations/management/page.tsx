@@ -2,14 +2,17 @@ import Link from "next/link"
 import Products from "@/app/components/org/Products";
 import AddProducts from "@/app/components/forms/AddProducts";
 import VerificationStatus from "@/app/components/org/VerificationStatus";
-import OrgAnalytics from "@/app/components/org/Analytics";
+// import OrgAnalytics from "@/app/components/org/Analytics";
 import { stackServerApp } from "@/stack";
-import NewestOrgAnalytics from "@/app/components/org/NewOrgAnalytics";
+// import NewestOrgAnalytics from "@/app/components/org/NewOrgAnalytics";
 import OrgAvgPriceCategoryGraph from "@/app/components/org/orgAvgPriceCategoryGraph";
 import OrgItemCategoryListedGraph from "@/app/components/org/orgItemsListedCategoryGraph";
 import OrgStockValue from "@/app/components/org/orgStockValue";
 import OrgAvgRatingGraph from "@/app/components/org/orgAvgReviewGraph";
 import OrgDailyReviewsGraph from "@/app/components/org/orgDailyReviewsGraph";
+import OrgItemSalesGraph from "@/app/components/org/orgItemSalesGraph";
+import OrgItemRevenueGraph from "@/app/components/org/orgItemRevenueGraph";
+import OrderProcessing from "@/app/components/org/OrderProccessing";
 
 export const metadata = {
     title: "Org Management | Vendur",
@@ -53,13 +56,16 @@ export default async function OrganisationsManagement() {
 
                 </div>
 
-                <div className="col-span-2">
+                <div className="col-span-2 relative max-h-[85vh]">
 
-                    <div className="w-full h-[82vh] bg-primary-200 rounded-lg shadow-xl p-4 grid grid-cols-2 gap-4">
+                    <div className="w-full h-full bg-primary-200 rounded-lg shadow-xl p-4 grid grid-cols-2 gap-4">
 
-                        <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-3 max-h-[85vh] overflow-y-scroll">
 
                             <VerificationStatus id={id}/>
+
+
+                            <OrderProcessing/>
                             
 
 
@@ -71,29 +77,37 @@ export default async function OrganisationsManagement() {
                     </div>
 
                 </div>
-                <div className="w-full h-fit bg-primary-200 rounded-lg shadow-xl col-span-3 grid grid-cols-3 gap-4 mt-8">
-                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                        <h2 className="text-base font-light p-2">Avg Price Of Product (By Category)</h2>
-                        <OrgAvgPriceCategoryGraph/>
-
+                <div className="w-screen overflow-x-auto">
+                    <div className="h-fit bg-primary-200 rounded-lg shadow-xl flex flex-row gap-4 px-4 py-2 w-max">
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                            <h2 className="text-base font-light p-2">Avg Price Of Product (By Category)</h2>
+                            <OrgAvgPriceCategoryGraph />
+                        </div>
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                            <h2 className="text-2xl font-light p-2">Number of Listings (By Category)</h2>
+                            <OrgItemCategoryListedGraph />
+                        </div>
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                            <h2 className="text-2xl font-light p-2">Org Stock Value</h2>
+                            <OrgStockValue />
+                        </div>
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                            <h2 className="text-2xl font-light p-2">Average Review Rating</h2>
+                            <OrgAvgRatingGraph />
+                        </div>
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                            <h2 className="text-2xl font-light p-2">Number of Reviews Per Day</h2>
+                            <OrgDailyReviewsGraph />
+                        </div>
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center">
+                            <h2 className="text-2xl font-light p-2">Number of Sales Per Item</h2>
+                            <OrgItemSalesGraph />
+                        </div>
+                        <div className="bg-background-300 w-fit rounded-xl flex flex-col text-center justify-center items-center mr-4">
+                            <h2 className="text-2xl font-light p-2">Item Revenue</h2>
+                            <OrgItemRevenueGraph />
+                        </div>
                     </div>
-                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                        <h2 className="text-2xl font-light p-2">Number of Listings (By Category)</h2>
-                        <OrgItemCategoryListedGraph/>
-                    </div>
-                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                        <h2 className="text-2xl font-light p-2">Org Stock Value</h2>
-                        <OrgStockValue/>
-                    </div>
-                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                        <h2 className="text-2xl font-light p-2">Average Review Rating</h2>
-                        <OrgAvgRatingGraph/>
-                    </div>
-                    <div className="bg-background-300 m-4 w-fit mx-4 rounded-xl flex flex-col text-center justify-center items-center content-center">
-                        <h2 className="text-2xl font-light p-2">Number of Reviews Per Day</h2>
-                        <OrgDailyReviewsGraph/>
-                    </div>
-
                 </div>
 
             </div>

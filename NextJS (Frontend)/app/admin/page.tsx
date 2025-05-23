@@ -1,7 +1,5 @@
-import Pill from "@/app/components/ui/Pill";
-import VerificationTick from "@/app/components/ui/VerificationTick";
+export default async function Admin() {
 
-export default function Admin() {
     return(
         <>
             {/*<div>*/}

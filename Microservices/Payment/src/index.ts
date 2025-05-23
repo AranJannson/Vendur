@@ -3,8 +3,15 @@ import dotenv from "dotenv";
 import cors from "cors";
 // @ts-ignore
 import cookieParser from "cookie-parser";
-import orderProcessing, {changeStatus, changeStatusIndividual, getOrderDetails} from "./utils/orders/orderProccessing";
+import orderProcessing, {
+    changeStatus,
+    changeStatusIndividual,
+    getAllUserOrders,
+    getOrderDetails
+} from "./utils/orders/orderProccessing";
 import Stripe from "stripe";
+
+import addToBasket, {decreaseQuantity, deleteBasket, getBasket} from "./utils/basket/newBasketSystem";
 
 dotenv.config();
 
@@ -15,15 +22,107 @@ const expiryCookieName = "expiry";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
 Payment.use(express.json());
-Payment.use(
-    cors({
-        origin: "http://localhost:3000",
-        credentials: true,
-    })
-);
+Payment.use(cors({
+    origin: "*",
+    credentials: true
+}));
 Payment.use(cookieParser());
 
+
 const portNumber = 8002;
+
+
+Payment.post('/getUserOrders', async (req: Request, res: Response) => {
+
+    const { user_id } = req.body;
+
+    console.log("//getUserOrders user_id: ", user_id)
+
+    try {
+        const orderDetails = await getAllUserOrders(user_id);
+
+        if (orderDetails) {
+            res.status(200).json({event: "Order Details Retrieved Successfully", orderDetails});
+        } else {
+            res.status(500).json({error: "Order Details Were Not Retrieved Successfully"});
+        }
+    }catch (error){
+        res.status(500).json({error: "Order Details Were Not Retrieved Successfully"});
+    }
+})
+
+
+Payment.post('/addToNewBasket', async (req: Request, res: Response) => {
+
+    const {user_id, dateTime, item_id, quantity} = req.body;
+
+    try{
+        await addToBasket(user_id, dateTime, item_id, quantity);
+
+    }catch (error){
+        console.error("Error adding to basket:", error);
+        res.status(500).json({error: "Could not add to basket"});
+    }
+
+})
+
+Payment.post('/decreaseQuantity', async (req: Request, res: Response) => {
+    const { user_id, item_id } = req.body;
+
+    console.log("//decreaseQuantity item_id: ", item_id)
+
+    try{
+        await decreaseQuantity(item_id, user_id);
+
+        res.status(200).json({event: "Item Quantity Decreased Successfully"});
+    }catch (error){
+        res.status(500).json({error: "Item Quantity Was Not Decreased Successfully"});
+    }
+})
+
+
+Payment.post('/getBasket', async (req: Request, res: Response) => {
+
+    const { user_id } = req.body;
+
+    console.log("//getBasket user_id: ", user_id)
+
+    try {
+        const basket = await getBasket(user_id);
+
+        if (basket) {
+            res.status(200).json({event: "Basket Retrieved Successfully", basket});
+        } else {
+            res.status(500).json({error: "Basket Was Not Retrieved Successfully"});
+        }
+    }catch (error){
+        res.status(500).json({error: "Basket Was Not Retrieved Successfully"});
+    }
+
+})
+
+
+Payment.post('/deleteBasket' , async (req: Request, res: Response) => {
+
+    const { user_id } = req.body;
+
+    console.log("//deleteBasket user_id: ", user_id)
+
+    try {
+        const basket = await deleteBasket(user_id);
+
+        if (basket) {
+            res.status(200).json({event: "Basket Retrieved Successfully", basket});
+        } else {
+            res.status(500).json({error: "Basket Was Not Retrieved Successfully"});
+        }
+    }catch (error){
+        res.status(500).json({error: "Basket Was Not Retrieved Successfully"});
+    }
+
+})
+
+
  
 // @ts-ignore
 Payment.post('/createPaymentIntent', async (req, res) => {
@@ -94,30 +193,35 @@ Payment.post("/updateOrderStatusIndividualItem", async (req: Request, res: Respo
 
 Payment.post("/orderProcessing", async (req: Request, res: Response) => {
 
-    const { basket, user_id } = req.body;
+    const { basket, user_id, total_cost, delivery_address, full_name } = req.body;
+
+    console.log("//orderProcessing user_id: ", user_id)
+    console.log("//orderProcessing total_cost: ", total_cost)
 
     try{
-        await orderProcessing(basket, user_id);
+        const order_group_id = await orderProcessing(basket, user_id, delivery_address, full_name, total_cost);
 
-        res.status(200).json({event: "Order Processed Successfully"});
+        res.status(200).json({event: "Order Processed Successfully", order_group_id });
     }catch (error){
         res.status(500).json({error: "Order Was Not Processed Successfully"});
     }
-
 
 });
 
 Payment.post("/getOrderDetails", async (req: Request, res: Response) => {
 
     const { order_id } = req.body;
+    
+    console.log("//getorderDetails order_id: ", order_id);
 
     try{
         const orderDetails = await getOrderDetails(order_id);
-
+        console.log("//getorderDetails orderDetails: ", orderDetails);
+        
         if (orderDetails){
-            res.status(200).json({event: "Order Details Retrieved Successfully", orderDetails});
+            res.json({orderDetails});
         }else{
-            res.status(500).json({error: "Order Details Were Not Retrieved Successfully"});
+            res.json({error: "Order Details Were Not Retrieved Successfully"});
         }
     }catch (error){
         res.status(500).json({error: "Order Details Were Not Retrieved Successfully"});
@@ -126,18 +230,18 @@ Payment.post("/getOrderDetails", async (req: Request, res: Response) => {
 });
 
 Payment.post("/setcookie", (req: Request, res: Response) => {
-    console.log("Cookie Setting...")
-    const { name, value } = req.body;
-    
-    console.log(name)
-    console.log(value)
-    
+    console.log("Cookie Setting...");
+    const { name, value, action } = req.body;
+
+    console.log(name);
+    console.log(value);
+    console.log("action: ", action);
+
     if (!name || !value) {
         return;
     }
 
     let basket = [];
-
     if (req.cookies[basketCookieName]) {
         basket = JSON.parse(req.cookies[basketCookieName]);
         if (!Array.isArray(basket)) {
@@ -145,25 +249,47 @@ Payment.post("/setcookie", (req: Request, res: Response) => {
         }
     }
 
-    console.log(typeof(value));
-
-    const existingItemIndex = basket.findIndex((item: { id: string; size?: string | null }) => 
-        item.id === value.id && item.size === value.size
+    const existingItemIndex = basket.findIndex(
+        (item: { id: string; size?: string | null }) =>
+            item.id === value.id && item.size === value.size
     );
 
-    if (existingItemIndex === -1) {
-        basket.push(value);
+    if (action === "changeQuantity") {
+        if (existingItemIndex !== -1) {
+            basket[existingItemIndex].quantity += value.quantity;
+            if (basket[existingItemIndex].quantity <= 0) {
+                basket.splice(existingItemIndex, 1);
+            }
+        } else if (value.quantity > 0) {
+            basket.push(value); // Optionally add if doesn't exist and quantity > 0
+        }
+    } else if (action === "changeSize") {
+        console.log("//setcookie Changing size to ", value.newSize)
+        if (existingItemIndex !== -1) {
+            basket[existingItemIndex].size = value.newSize;
+        } 
     } else {
-        basket[existingItemIndex].quantity += value.quantity;
+        if (existingItemIndex === -1) {
+            basket.push(value);
+        } else {
+            basket[existingItemIndex].quantity += value.quantity;
+        }
     }
-    
-    res.cookie(basketCookieName, JSON.stringify(basket), {maxAge: duration, httpOnly: true, sameSite: "lax"});
-    
-    const expiryTime = Date.now()
-    res.cookie(expiryCookieName, expiryTime, {maxAge: duration, httpOnly: true, sameSite: "lax"});
+
+    res.cookie(basketCookieName, JSON.stringify(basket), {
+        maxAge: duration,
+        httpOnly: true,
+        sameSite: "lax",
+    });
+
+    const expiryTime = Date.now();
+    res.cookie(expiryCookieName, expiryTime, {
+        maxAge: duration,
+        httpOnly: true,
+        sameSite: "lax",
+    });
 
     res.json({ message: "Cookie set", basket });
-
 });
 
 // @ts-ignore
