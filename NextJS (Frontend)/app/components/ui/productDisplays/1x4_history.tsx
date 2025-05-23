@@ -10,13 +10,6 @@ interface Item {
   price: number;
 }
 
-/*
-item_id = { item_id: number }
- */
-interface ItemID {
-    item_id: number;
-}
-
 export default async function ContinueBrowsing({ user_id }: { user_id: string }) {
   console.log("[ContinueBrowsing] Component loaded with user_id:", user_id);
 
@@ -28,9 +21,7 @@ export default async function ContinueBrowsing({ user_id }: { user_id: string })
   const res = await fetch("http://localhost:3000/api/getContinueViewing", {
     method: "POST",
     cache: "no-store",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ user_id }),
   });
 
@@ -39,42 +30,36 @@ export default async function ContinueBrowsing({ user_id }: { user_id: string })
     return null;
   }
 
-  let item_ids: number[] = await res.json();
-  console.log("[ContinueBrowsing] Raw item_ids response:", item_ids);
+  const raw: { item_id: number }[] = await res.json();
+  console.log("[ContinueBrowsing] Raw response entries:", raw);
 
-  // item_ids = item_ids.filter((id): id is number => typeof id === "number");
-  // console.log("[ContinueBrowsing] Filtered item_ids:", item_ids);
+  const item_ids: number[] = raw.map(entry => entry.item_id);
+  console.log("[ContinueBrowsing] Flattened item_ids:", item_ids);
 
+  // 3) Now map over real numbers:
   const itemFetches = await Promise.all(
-
-    item_ids.map(async (item_id) => {
-      //@ts-ignore
-      console.log(`[ContinueBrowsing] Fetching item details for ID: ${item_id.item_id}`);
-      // @ts-ignore
-      const res = await fetch("http://localhost:3000/api/getItemByID", {
+    item_ids.map(async (item_id: number) => {
+      console.log(`[ContinueBrowsing] Fetching item details for ID: ${item_id}`);
+      const r = await fetch("http://localhost:3000/api/getItemByID", {
         method: "POST",
         cache: "no-store",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: item_id.item_id }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: item_id }),
       });
-
-      if (!res.ok) {
-        console.error(`[ContinueBrowsing] Failed to fetch item ${item_id}. Status:`, res.status);
+      if (!r.ok) {
+        console.error(`[ContinueBrowsing] Failed to fetch item ${item_id}. Status:`, r.status);
         return null;
       }
-
-      const item = await res.json();
+      const item = await r.json();
       console.log(`[ContinueBrowsing] Fetched item:`, item);
-      return item;
+      return item as Item;
     })
   );
 
-  const items: Item[] = itemFetches.filter((item): item is Item => item !== null);
+  const items: Item[] = itemFetches.filter((i): i is Item => i !== null);
   console.log("[ContinueBrowsing] Final items array:", items);
 
-  if (!items || items.length === 0) {
+  if (items.length === 0) {
     console.warn("[ContinueBrowsing] No items to display.");
     return null;
   }
@@ -83,16 +68,16 @@ export default async function ContinueBrowsing({ user_id }: { user_id: string })
     <div className="bg-background-50 m-4 rounded-lg max-w-screen">
       <div className="grid md:grid-cols-1 grid-cols-1 gap-8 p-4">
         <div className="flex flex-col items-center">
-          <div className="grid grid-cols-8 grid-rows-1 gap-4 bg-secondary-200 p-5 rounded-xl border-2 border-black">
-            <h2 className="text-4xl font-semibold h-full flex justify-center items-center col-span-2">
+          <div className="grid grid-cols-8 gap-4 bg-secondary-200 p-5 rounded-xl border-2 border-black">
+            <h2 className="text-4xl font-semibold col-span-2 flex justify-center items-center">
               Continue Browsing
             </h2>
-            {items.slice(0, 6).map((item, index) => (
+            {items.slice(0, 6).map((item, idx) => (
               <div
-                key={index}
+                key={idx}
                 className="relative group aspect-square rounded-xl bg-secondary-100 p-2 flex justify-center items-center"
               >
-                <Link href={`/products/${item.name}`}>
+                <Link href={`/products/${encodeURIComponent(item.name)}`}>
                   <img
                     src={item.image}
                     alt={item.name}
