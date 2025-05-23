@@ -140,8 +140,6 @@ export default function GetBasket() {
                                 </div>
 
                                 <div className="self-start">
-                                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                                    {/*@ts-expect-error*/}
                                     <DeleteItemButton item_id={item.id} user_id={userId} refreshBasket={() => {
                                         window.location.reload()
                                     }}/>
